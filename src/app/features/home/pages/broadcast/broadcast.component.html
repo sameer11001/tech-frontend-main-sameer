@@ -1,0 +1,36 @@
+<div class="flex flex-row">
+<aside class="w-64 bg-white border-r border-gray-200 p-4">
+  <nav>
+    <ul class="space-y-4">
+      <li>
+        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
+           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
+          Template Messages
+        </a>
+      </li>
+      <li>
+        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
+           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
+          Template Library
+        </a>
+      </li>
+      <li>
+        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
+           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
+          Your Templates
+        </a>
+      </li>
+      <li>
+        <a routerLink="scheduled-broadcasts" routerLinkActive="font-medium text-blue-600" 
+           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
+          Scheduled Broadcasts
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="flex-1 p-6">
+  <router-outlet></router-outlet>
+</main>
+</div>

@@ -1,0 +1,234 @@
+/* Canvas Component Styles */
+
+.canvas-container {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
+}
+
+/* Grid patterns */
+.grid-pattern {
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.canvas-container:hover .grid-pattern {
+  opacity: 0.6;
+}
+
+/* Block styles - no animations for smoother performance */
+.flow-block {
+  transform-origin: center;
+}
+
+.flow-block.dragging {
+  z-index: 1000;
+  opacity: 0.9;
+}
+
+/* Block shadow effect - simplified */
+.block-shadow {
+  opacity: 0.1;
+}
+
+/* Connection points - simplified */
+.connection-point {
+  opacity: 0.7;
+}
+
+.flow-block:hover .connection-point {
+  opacity: 1;
+}
+
+/* Welcome message animation */
+.welcome-message {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pulse animation for new blocks */
+.animate-pulse-custom {
+  animation: pulseScale 1s ease-in-out;
+}
+
+@keyframes pulseScale {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* Control panel */
+.control-panel {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  transition: all 0.2s ease;
+}
+
+.control-panel:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.control-button {
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.control-button:hover {
+  background-color: #f3f4f6;
+  transform: translateY(-1px);
+}
+
+.control-button:active {
+  transform: translateY(0);
+}
+
+/* Ripple effect for buttons */
+.control-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+.control-button:active::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Stats panel */
+.stats-panel {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  transition: all 0.2s ease;
+}
+
+.stats-panel:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+}
+
+/* Status indicators */
+.status-dot {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Drag and drop states */
+.canvas-container.drag-over {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.canvas-container.drag-over::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px dashed #3b82f6;
+  border-radius: 8px;
+  pointer-events: none;
+  animation: dashMove 1s linear infinite;
+}
+
+@keyframes dashMove {
+  0% {
+    border-color: #3b82f6;
+  }
+  50% {
+    border-color: #60a5fa;
+  }
+  100% {
+    border-color: #3b82f6;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .control-panel {
+    padding: 0.25rem;
+  }
+  
+  .control-button {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .stats-panel {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .flow-block {
+    min-width: 160px;
+  }
+  
+  .control-panel {
+    bottom: 1rem;
+    left: 1rem;
+  }
+  
+  .stats-panel {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .flow-block {
+    border-width: 3px;
+  }
+  
+  .connection-point {
+    border-width: 3px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .flow-block,
+  .control-button,
+  .stats-panel,
+  .connection-point {
+    transition: none;
+  }
+  
+  .animate-pulse-custom,
+  .status-dot {
+    animation: none;
+  }
+} 

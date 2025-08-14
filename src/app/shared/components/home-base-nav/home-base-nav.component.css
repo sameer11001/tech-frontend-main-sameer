@@ -1,0 +1,56 @@
+:host {
+    display: block;
+    width: 100%;
+}
+
+nav.scrolled {
+    @apply shadow-lg bg-white/95 backdrop-blur-sm;
+    height: 60px; 
+}
+
+.mobile-menu-enter {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.mobile-menu-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 200ms, transform 200ms;
+}
+
+.mobile-menu-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.mobile-menu-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 200ms, transform 200ms;
+}
+
+.active-link {
+    color: #3240b2 !important;
+    font-weight: 500;
+}
+
+.nav-link {
+    color: #6b7280;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #3240b2;
+}
+
+.nav-link.active {
+    color: #3240b2;
+    font-weight: 500;
+}
+
+@media (max-width: 1023px) {
+    .nav-item-text {
+        display: none;
+    }
+}

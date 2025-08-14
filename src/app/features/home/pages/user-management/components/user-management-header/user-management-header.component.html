@@ -1,0 +1,50 @@
+<div class="bg-gray-100 p-4 sm:p-6">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+
+        <div class="order-1 sm:order-none">
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="flex divide-x divide-gray-200">
+                    <button
+                        class="px-6 py-2 rounded-l-md transition-colors"
+                        [class.bg-blue-600.text-white]="activeTab === 'users'"
+                        [class.text-white.hover:bg-gray-50]="activeTab !== 'teams'"
+                        (click)="setActiveTab(false)">
+                        Users
+                    </button>
+                    <button
+                        class="px-6 py-2 rounded-r-md transition-colors"
+                        [class.bg-blue-600.text-white]="activeTab === 'teams'"
+                        [class.text-white.hover:bg-gray-50]="activeTab !== 'users'"
+                        (click)="setActiveTab(true)">
+                        Teams
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="flex flex-1 flex-col sm:flex-row items-center gap-3 min-w-[300px] max-w-xl w-full order-3 sm:order-none">
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+
+
+                <input
+                    (input)="onSearchChange($event!.target)"
+                    type="text"
+                    [placeholder]="activeTab === 'users' ? 'Search users...' : 'Search teams...'"
+                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all">
+            </div>
+
+            <button (click)="activeTab === 'users' ? openCreateUserDialog() : openCreateTeamDialog()"
+                class="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors whitespace-nowrap">
+                {{ activeTab === 'users' ? 'Create User' : 'Create Team' }}
+            </button>
+        </div>
+    </div>
+</div>

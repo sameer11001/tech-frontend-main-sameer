@@ -1,0 +1,5 @@
+  <div class="flex flex-col h-screen">
+    <app-chat-window-header [conversation]="conversation" [reset_counter]="reset_counter" [expiry_time]="expiry_time" class="sticky top-0 h-[10%]"></app-chat-window-header>
+    <app-chat-window-body [conversation]="conversation" class="h-[80%]"></app-chat-window-body>
+    <app-chat-window-input [conversationId]="conversation.id" [isExpired]="isExpired" [recipientNumber]="conversation.country_code_phone_number + conversation.contact_phone_number" class="h-[10%]"></app-chat-window-input>
+  </div>

@@ -1,0 +1,33 @@
+.review-slider-container {
+        @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8;
+    }
+    .review-card {
+        @apply bg-gray-50 dark:bg-gray-800 p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300;
+    }
+    .review-rating {
+        @apply text-yellow-400 text-xl mb-3;
+    }
+    .review-text {
+        @apply text-gray-600 dark:text-gray-300 italic mb-4;
+    }
+    .review-author {
+        @apply flex items-center;
+    }
+    .review-avatar {
+        @apply h-10 w-10 rounded-full mr-4;
+    }
+    .review-name {
+        @apply font-medium text-gray-900 dark:text-white;
+    }
+    .review-position {
+        @apply text-sm text-gray-500 dark:text-gray-400;
+    }
+    .review-nav {
+        @apply absolute top-1/2 -translate-y-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden md:block;
+    }
+    .review-nav.prev {
+        @apply left-0 -translate-x-1/2;
+    }
+    .review-nav.next {
+        @apply right-0 translate-x-1/2;
+    }

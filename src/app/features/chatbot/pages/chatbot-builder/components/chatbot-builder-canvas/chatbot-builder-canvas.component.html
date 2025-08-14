@@ -1,0 +1,226 @@
+<div 
+  #canvas
+  class="flex-1 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden canvas-container"
+  style="min-height: 600px;"
+  (drop)="onDrop($event)"
+  (dragover)="onDragOver($event)">
+  
+  <!-- Debug Info -->
+  <div class="absolute top-4 left-4 bg-red-500 text-white p-2 rounded z-50">
+    DEBUG: Canvas is visible! Blocks: {{flowBlocks.length}}
+  </div>
+  
+  <!-- Enhanced Canvas Grid Background -->
+  <div class="absolute inset-0 pointer-events-none">
+    <svg width="100%" height="100%" class="grid-pattern">
+      <defs>
+        <!-- Dynamic Grid Pattern -->
+        <pattern id="grid" [attr.width]="getGridSize()" [attr.height]="getGridSize()" patternUnits="userSpaceOnUse">
+          <path [attr.d]="'M ' + getGridSize() + ' 0 L 0 0 0 ' + getGridSize()" fill="none" stroke="#e5e7eb" stroke-width="1"/>
+        </pattern>
+        <!-- Secondary Grid Pattern -->
+        <pattern id="grid-large" [attr.width]="getGridSize() * 4" [attr.height]="getGridSize() * 4" patternUnits="userSpaceOnUse">
+          <path [attr.d]="'M ' + (getGridSize() * 4) + ' 0 L 0 0 0 ' + (getGridSize() * 4)" fill="none" stroke="#d1d5db" stroke-width="1.5"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#grid)" />
+      <rect width="100%" height="100%" fill="url(#grid-large)" />
+    </svg>
+  </div>
+  
+  <!-- Canvas Content Container -->
+  <div class="canvas-content absolute inset-0" style="transform-origin: 0 0;">
+    
+    <!-- Canvas Center Guide -->
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none" 
+         [style.transform]="'translate(' + (-panX/zoomLevel) + 'px, ' + (-panY/zoomLevel) + 'px)'">
+      <div class="w-1 h-full bg-gradient-to-b from-transparent via-blue-200 to-transparent opacity-20"></div>
+      <div class="absolute w-full h-1 bg-gradient-to-r from-transparent via-blue-200 to-transparent opacity-20"></div>
+    </div>
+    
+    <!-- Welcome Message for Empty Canvas -->
+    <div *ngIf="flowBlocks.length === 0" class="absolute inset-0 flex items-center justify-center welcome-message"
+         [style.transform]="'translate(' + (-panX/zoomLevel) + 'px, ' + (-panY/zoomLevel) + 'px)'">
+      <div class="text-center max-w-md mx-auto p-8">
+        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Start Building Your Chatbot</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">Drag components from the sidebar to create your chatbot flow. Connect them to define the conversation path.</p>
+        <div class="mt-4 flex justify-center">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7z"/>
+            </svg>
+            Drag & Drop
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Flow Blocks -->
+    <div *ngFor="let block of flowBlocks; trackBy: trackBlocks" 
+         [style.left.px]="block.x"
+         [style.top.px]="block.y"
+         [attr.data-block-id]="block.id"
+         (click)="onBlockClick(block, $event)"
+         class="absolute group cursor-pointer flow-block">
+      
+      <!-- Block Shadow -->
+      <div class="absolute inset-0 bg-black opacity-10 rounded-xl transform translate-x-1 translate-y-1 -z-10 block-shadow"></div>
+      
+      <!-- Main Block Container -->
+      <div [class]="'relative bg-white rounded-xl border-2 shadow-lg min-w-[200px] ' + getBlockBorderColor(block.type)">
+        
+        <!-- Block Header -->
+        <div [class]="'px-4 py-3 rounded-t-xl text-white font-medium text-sm flex items-center justify-between ' + getBlockColor(block.type)">
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <!-- Icons for different block types -->
+              <path *ngIf="block.type === 'send-message'" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+              <path *ngIf="block.type === 'ask-question'" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+              <path *ngIf="block.type === 'set-condition'" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              <path *ngIf="block.type === 'start'" d="M8 5v14l11-7z"/>
+            </svg>
+            <span>{{ block.title }}</span>
+          </div>
+          <button class="opacity-0 group-hover:opacity-100 hover:bg-white hover:bg-opacity-20 rounded p-1 transition-all no-drag">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Block Content -->
+        <div class="p-4">
+          <!-- Start Block -->
+          <div *ngIf="block.type === 'start'" class="text-center">
+            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </div>
+            <p class="text-sm text-gray-600">Conversation starts here</p>
+          </div>
+          
+          <!-- Send Message Block -->
+          <div *ngIf="block.type === 'send-message'" class="space-y-4">
+            <!-- Message Type Buttons - First Row -->
+            <div class="grid grid-cols-3 gap-2">
+              <button class="px-3 py-2 bg-white border-2 border-green-500 text-green-600 rounded-lg text-sm font-medium hover:bg-green-50 transition-colors">
+                Message
+              </button>
+              <button class="px-3 py-2 bg-white border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                Image
+              </button>
+              <button class="px-3 py-2 bg-white border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                Video
+              </button>
+            </div>
+            
+            <!-- Message Type Buttons - Second Row -->
+            <div class="grid grid-cols-2 gap-2">
+              <button class="px-3 py-2 bg-white border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                Audio
+              </button>
+              <button class="px-3 py-2 bg-white border border-gray-300 text-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                Document
+              </button>
+            </div>
+          </div>
+          
+          <!-- Ask Question Block -->
+          <div *ngIf="block.type === 'ask-question'" class="space-y-3">
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+              </svg>
+              <span>Collect user input</span>
+            </div>
+            <div class="space-y-2">
+              <div class="px-3 py-2 bg-orange-50 border border-orange-200 rounded-lg text-xs text-orange-800">
+                "What's your question?"
+              </div>
+              <div class="flex space-x-2">
+                <div class="px-2 py-1 bg-white border border-gray-200 rounded text-xs text-gray-600">Option A</div>
+                <div class="px-2 py-1 bg-white border border-gray-200 rounded text-xs text-gray-600">Option B</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Set Condition Block -->
+          <div *ngIf="block.type === 'set-condition'" class="space-y-3">
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span>Logic & branching</span>
+            </div>
+            <div class="text-xs text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-2">
+              If condition is met → Path A<br>
+              Otherwise → Path B
+            </div>
+          </div>
+        </div>
+        
+        <!-- Connection Points -->
+        <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-2 border-gray-300 rounded-full shadow-sm group-hover:border-blue-500 transition-colors connection-point"></div>
+        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-2 border-gray-300 rounded-full shadow-sm group-hover:border-blue-500 transition-colors connection-point" *ngIf="block.type !== 'start'"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Enhanced Control Panel -->
+  <div class="absolute bottom-6 left-6 bg-white rounded-xl shadow-lg border border-gray-200 p-1 control-panel">
+    <div class="flex items-center space-x-1">
+      <!-- Zoom Controls -->
+      <button (click)="zoomIn()" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors group control-button">
+        <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+      </button>
+      
+      <div class="w-px h-6 bg-gray-200"></div>
+      
+      <button (click)="zoomOut()" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors group control-button">
+        <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"/>
+        </svg>
+      </button>
+      
+      <div class="w-px h-6 bg-gray-200"></div>
+      
+      <button (click)="resetZoom()" class="w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-lg transition-colors group control-button">
+        <svg class="w-5 h-5 text-gray-600 group-hover:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+        </svg>
+      </button>
+      
+      <div class="w-px h-6 bg-gray-200"></div>
+      
+      <!-- Zoom Percentage -->
+      <div class="px-3 py-2 text-xs font-mono text-gray-600 min-w-[50px] text-center">
+        {{ Math.round(zoomLevel * 100) }}%
+      </div>
+    </div>
+  </div>
+  
+  <!-- Canvas Stats -->
+  <div class="absolute top-6 right-6 bg-white rounded-lg shadow-lg border border-gray-200 px-4 py-2 stats-panel">
+    <div class="flex items-center space-x-4 text-sm">
+      <div class="flex items-center space-x-2">
+        <div class="w-2 h-2 bg-green-500 rounded-full status-dot"></div>
+        <span class="text-gray-600">{{ flowBlocks.length }} blocks</span>
+      </div>
+      <div class="flex items-center space-x-2">
+        <div class="w-2 h-2 bg-blue-500 rounded-full status-dot"></div>
+        <span class="text-gray-600">{{ connections.length }} connections</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modals will be added later -->
+<!-- Temporary placeholder for modal functionality --> 

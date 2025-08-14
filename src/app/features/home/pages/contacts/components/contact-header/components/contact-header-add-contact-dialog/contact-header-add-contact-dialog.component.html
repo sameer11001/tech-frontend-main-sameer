@@ -1,0 +1,142 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50">
+    <div class="w-full mx-4 my-4 max-w-md lg:max-w-lg bg-white rounded-lg shadow-xl 
+            transition-all transform max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-xl font-semibold text-gray-900">Add Contact</h3>
+                <button (click)="closeDialogHandler()" class="text-gray-400 hover:text-gray-600 transition-colors"
+                    aria-label="Close">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" formControlName="name" placeholder="John Doe"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400">
+                        <div *ngIf="formUtils.isFieldInvalid(contactForm, 'name')" class="text-red-500 text-sm mt-1">
+                            {{ formUtils.getFirstValidationError(contactForm, 'name') === 'required' ? 'Name is
+                            required' : '' }}
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <div class="flex gap-2 flex-col sm:flex-row">
+                            <!-- Country Code -->
+                            <div class="relative input-focus-within flex-1">
+                                <select formControlName="countryCode" id="countryCode"
+                                    class="input-field w-full p-3 border border-gray-300 rounded-lg inner-shadow text-gray-700 text-sm focus:ring-2 focus:ring-purple-200 transition-all">
+                                    <option value="" disabled selected>Select Country</option>
+                                    <option *ngFor="let country of countries" [value]="country.code">
+                                        {{ country.name }} ({{ country.dialCode }})
+                                    </option>
+                                </select>
+                                <div *ngIf="formUtils.isFieldInvalid(contactForm, 'countryCode')"
+                                    class="text-red-500 text-sm mt-1">
+                                    Country code is required
+                                </div>
+                            </div>
+
+                            <!-- Phone Number Input -->
+                            <div class="flex-1">
+                                <input type="tel" formControlName="phoneNumber" placeholder="(555) 987-6543"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400">
+                                <div *ngIf="formUtils.isFieldInvalid(contactForm, 'phoneNumber')"
+                                    class="text-red-500 text-sm mt-1">
+                                    <span *ngIf="formUtils.hasError(contactForm, 'phoneNumber', 'required')">
+                                        Phone number is required
+                                    </span>
+                                    <span *ngIf="formUtils.hasError(contactForm, 'phoneNumber', 'invalidPhone')">
+                                        Invalid phone number format
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-200 space-y-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span class="text-sm font-medium text-gray-900">Custom Attributes</span>
+                                <span class="text-sm text-gray-500 ml-2">(Optional)</span>
+                            </div>
+                        </div>
+
+                        <div formArrayName="customAttributes">
+                            <div *ngFor="let attribute of customAttributes.controls; let i = index" [formGroupName]="i"
+                                class="mb-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="flex flex-col">
+                                        <label class="pl-2 text-gray-500">Attribute</label>
+                                        <div class="relative">
+                                            <div class="bg-gray-100 p-2 border rounded-md cursor-pointer"
+                                                (click)="toggleDropdown(i)">
+                                                {{ attribute.get('attributeName')?.value || 'Select Attribute' }}
+                                            </div>
+
+                                            <div *ngIf="showDropdownMap[i]"
+                                                class="absolute top-full left-0 right-0 bg-white border mt-1 max-h-48 overflow-y-auto z-10"
+                                                (scroll)="onScroll($event)">
+                                                <div *ngFor="let attr of attributes$ | async"
+                                                    class="p-2 hover:bg-gray-100 cursor-pointer"
+                                                    (click)="selectAttribute(attr, i)">
+                                                    {{ attr.name }}
+                                                </div>
+                                                <div *ngIf="loading$ | async" class="p-2 text-center text-gray-500">
+                                                    Loading...
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label class="pl-2 text-gray-500">Value</label>
+                                        <input type="text" formControlName="value" placeholder="Value"
+                                            class="bg-gray-100 p-2 border rounded-md">
+                                        <div *ngIf="formUtils.isFieldInvalid(customAttributes.controls[i], 'value')"
+                                            class="text-red-500 text-sm mt-1">
+                                            Value is required
+                                        </div>
+                                        <div *ngIf="customAttributes.controls[i].errors?.['invalidValue']"
+                                            class="text-red-500 text-sm mt-1">
+                                            Value is required for selected attribute
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" *ngIf="i > 0" class="text-red-500 hover:text-red-700 text-sm mt-1"
+                                    (click)="removeCustomAttribute(i)">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="button" class="text-blue-600 hover:text-blue-800 font-medium flex items-center
+                                transition-colors text-sm" (click)="addCustomAttribute()">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Add Attribute
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" (click)="closeDialogHandler()" class="px-6 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md 
+                            transition-colors text-sm font-medium w-full sm:w-auto">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md 
+                            transition-colors text-sm font-medium w-full sm:w-auto">
+                        Save Contact
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

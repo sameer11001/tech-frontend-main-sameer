@@ -1,0 +1,148 @@
+<!-- HTML Template -->
+<nav class="fixed top-0 w-full bg-white text-gray-900 font-sans shadow-md border-b transition-all duration-300 z-50">
+  <div class="mx-auto flex items-center justify-between px-4 py-2">
+    <!-- Left Section - Logo and Navigation -->
+    <div class="flex items-center space-x-4">
+      <!-- Logo -->
+      <a href="/" class="flex items-center">
+        <img src="assets/features/logo_no_background.png" alt="Prog GATE Logo" class="h-15 w-20" />
+      </a>
+
+      <div class="hidden md:block w-px h-6 bg-gray-200"></div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:block">
+        <ul class="flex items-center space-x-6">
+          <li>
+            <a [routerLink]="['/dashboard', 'team-inbox']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">Team Inbox</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/dashboard', 'broadcast', 'your-templates']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">Broadcast</span>
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="['/dashboard', 'contacts']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">Contacts</span>
+            </a>
+          </li>
+          <!-- <li>
+            <a href="/defaultAction"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">Automations</span>
+            </a>
+          </li> -->
+          <!-- <li>
+            <a href="/dashboard"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">Analytics</span>
+            </a>
+          </li> -->
+          <li>
+            <a [routerLink]="['/dashboard', 'user-dashboard-table']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+              class="flex items-center nav-link transition-colors duration-200">
+              <span class="ml-1">User Management</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Right Section - Status and User Options -->
+    <div class="flex items-center space-x-4">
+      <!-- Connection Status - Only visible on larger screens -->
+      <div class="hidden md:flex items-center space-x-2">
+        <span class="text-green-600 font-medium">CONNECTED</span>
+        <div class="w-px h-2 bg-gray-200"></div>
+        <span class="text-gray-600">+966126773877</span>
+      </div>
+
+      <div class="hidden md:block w-px h-6 bg-gray-200"></div>
+
+      <!-- Action Buttons -->
+      <button type="button"
+        class="hidden md:flex items-center nav-link transition-colors duration-200">
+        WALLET
+      </button>
+
+      <div class="hidden md:block w-px h-6 bg-gray-200"></div>
+
+      <!-- Notification Button -->
+      <button type="button"
+        class="flex items-center nav-link transition-colors duration-200 relative">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 13 15" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M6.5 15C7.325 15 8 14.3077 8 13.4615H5C5 14.3077 5.6675 15 6.5 15ZM11 10.3846V6.53846C11 4.17692 9.77 2.2 7.625 1.67692V1.15385C7.625 0.515385 7.1225 0 6.5 0C5.8775 0 5.375 0.515385 5.375 1.15385V1.67692C3.2225 2.2 2 4.16923 2 6.53846V10.3846L0.5 11.9231V12.6923H12.5V11.9231L11 10.3846Z">
+          </path>
+        </svg>
+        <!-- Notification Badge (optional) -->
+        <span
+          class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">2</span>
+      </button>
+
+      <div class="hidden md:block w-px h-6 bg-gray-200"></div>
+
+      <!-- Profile Button -->
+      <button [routerLink]="['/dashboard', 'settings', 'business-profile']" type="button"
+        class="flex items-center nav-link transition-colors duration-200">
+        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M7.5 0C8.49456 0 9.44839 0.395088 10.1517 1.09835C10.8549 1.80161 11.25 2.75544 11.25 3.75C11.25 4.74456 10.8549 5.69839 10.1517 6.40165C9.44839 7.10491 8.49456 7.5 7.5 7.5C6.50544 7.5 5.55161 7.10491 4.84835 6.40165C4.14509 5.69839 3.75 4.74456 3.75 3.75C3.75 2.75544 4.14509 1.80161 4.84835 1.09835C5.55161 0.395088 6.50544 0 7.5 0ZM7.5 9.375C11.6438 9.375 15 11.0531 15 13.125V15H0V13.125C0 11.0531 3.35625 9.375 7.5 9.375Z">
+          </path>
+        </svg>
+      </button>
+
+      <!-- Mobile Menu Button (only visible on small screens) -->
+      <button type="button" class="lg:hidden flex items-center nav-link"
+        (click)="toggleMobileMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Menu (hidden by default) -->
+  <div class="lg:hidden" [ngClass]="{'hidden': !isMobileMenuOpen}">
+    <div class="px-2 pt-2 pb-3 space-y-1 bg-gray-50 border-t">
+      <a [routerLink]="['/dashboard', 'chat-main']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+        class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        Team Inbox
+      </a>
+      <a [routerLink]="['/dashboard', 'broadcast', 'your-templates']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+        class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        Broadcast
+      </a>
+      <a [routerLink]="['/dashboard', 'contacts']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+        class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        Contacts
+      </a>
+      <a href="/defaultAction" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        Automations
+      </a>
+      <a href="/dashboard" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        Analytics
+      </a>
+      <a [routerLink]="['/dashboard', 'user-dashboard-table']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
+        class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        User Management
+      </a>
+
+      <!-- Mobile-only status and wallet links -->
+      <div class="flex items-center space-x-2 px-3 py-2 text-green-600">
+        <span class="font-medium">CONNECTED: </span>
+        <span class="text-gray-600">+966126773877</span>
+      </div>
+      <a href="#" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+        WALLET
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="h-16"></div>

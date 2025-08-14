@@ -1,0 +1,123 @@
+<!-- Dark Overlay Backdrop -->
+<div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 flex items-center justify-center p-4">
+  <!-- Dialog Container -->
+  <div class="bg-white rounded-xl shadow-2xl max-w-5xl w-full max-h-[95vh] overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">Broadcast Details</h2>
+          <p class="text-blue-100 mt-1">{{ data.broadcast.name }}</p>
+        </div>
+        <button 
+          (click)="closeDialog()"
+          class="text-white hover:text-blue-100 transition-colors p-2 rounded-full hover:bg-white/10"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-h-[calc(95vh-120px)] overflow-y-auto p-6">
+      <div class="max-w-4xl mx-auto">
+        <!-- Broadcast Information -->
+        <div class="space-y-6">
+          <!-- Broadcast Status & Stats -->
+          <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Broadcast Overview</h3>
+            
+            <!-- Status -->
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 rounded-full text-sm font-semibold tracking-wide shadow-sm border border-gray-200" [ngClass]="getStatusColor(data.broadcast.status)">
+                {{ getStatusLabel(data.broadcast.status) }}
+              </span>
+            </div>
+
+            <!-- Name -->
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-sm font-medium text-gray-600">Name</span>
+              <span class="text-sm text-gray-800 font-semibold">{{ data.broadcast.name }}</span>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div class="bg-white rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600">{{ data.broadcast.total_contacts }}</div>
+                <div class="text-sm text-gray-600">Total Recipients</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600">{{ getDeliveryRate() }}%</div>
+                <div class="text-sm text-gray-600">Delivery Rate</div>
+              </div>
+              <div class="bg-white rounded-lg p-4 text-center">
+                <div class="text-2xl font-bold text-gray-700">{{ data.broadcast.status | titlecase }}</div>
+                <div class="text-sm text-gray-600">Current Status</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timing Information -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Timing Information</h3>
+            
+            <div class="space-y-3">
+              <div class="flex justify-between items-center" *ngIf="data.broadcast.scheduled_time">
+                <span class="text-sm font-medium text-gray-600">Scheduled Time</span>
+                <span class="text-sm text-gray-800">{{ data.broadcast.scheduled_time | date:'medium' }}</span>
+              </div>
+              <div class="flex justify-between items-center" *ngIf="data.broadcast.created_at">
+                <span class="text-sm font-medium text-gray-600">Created</span>
+                <span class="text-sm text-gray-800">{{ data.broadcast.created_at | date:'medium' }}</span>
+              </div>
+              <div class="flex justify-between items-center" *ngIf="data.broadcast.updated_at">
+                <span class="text-sm font-medium text-gray-600">Last Updated</span>
+                <span class="text-sm text-gray-800">{{ data.broadcast.updated_at | date:'medium' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Template Information -->
+          <div class="bg-white border border-gray-200 rounded-lg p-6" *ngIf="data.template">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Template Information</h3>
+            
+            <div class="space-y-3">
+              <div class="flex justify-between items-center" *ngIf="data.template.name">
+                <span class="text-sm font-medium text-gray-600">Template Name</span>
+                <span class="text-sm text-gray-800">{{ data.template.name }}</span>
+              </div>
+              <div class="flex justify-between items-center" *ngIf="data.template.category">
+                <span class="text-sm font-medium text-gray-600">Category</span>
+                <span class="text-sm text-gray-800">{{ data.template.category }}</span>
+              </div>
+              <div class="flex justify-between items-center" *ngIf="data.template.language">
+                <span class="text-sm font-medium text-gray-600">Language</span>
+                <span class="text-sm text-gray-800">{{ data.template.language }}</span>
+              </div>
+              <div class="flex justify-between items-center" *ngIf="data.template.status">
+                <span class="text-sm font-medium text-gray-600">Template Status</span>
+                <span class="px-2 py-1 rounded-full text-xs font-medium" [ngClass]="getStatusColor(data.template.status)">
+                  {{ data.template.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="bg-gray-50 px-6 py-5 border-t border-gray-200">
+      <div class="flex justify-end space-x-3">
+        <button 
+          (click)="closeDialog()"
+          class="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

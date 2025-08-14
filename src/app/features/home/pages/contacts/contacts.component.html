@@ -1,0 +1,17 @@
+<app-contact-header (searchChanged)="onSearchChange($event)"></app-contact-header>
+
+<app-contact-table [searchTerm]="searchTerm" [currentPage]="currentPage" [limit]="limit"
+    (paginationChange)="paginationChangeHandler($event)" (contactSelected)="onEditContact($event)"></app-contact-table>
+
+<app-pagination [currentPage]="currentPage" [totalPages]="paginationData!.totalPages"
+    [totalCount]="paginationData!.totalCount" [limit]="limit" (pageChange)="onPageChange($event)"
+    (limitChange)="onLimitChange($event)"></app-pagination>
+
+
+@if (editContactDialog){
+<app-edit-contact-dialog 
+    [contact]="contact" 
+    (closeDialog)="onEditContact()" 
+    (contactUpdated)="onContactUpdated($event)">
+</app-edit-contact-dialog>
+}

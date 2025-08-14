@@ -1,0 +1,19 @@
+<div class="flex flex-col bg-white shadow-lg justify-around py-4 h-full">
+
+  <h2 class="text-xl py-3 font-bold text-center text-gray-800">Add Attribute</h2>
+
+  <input
+    type="text"
+    placeholder="Tag Name"
+    [(ngModel)]="tagName"
+    class="border border-gray-300 rounded p-4 m-4"
+  />
+
+  <button
+    class="bg-blue-500 p-4 m-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    (click)="addAttribute()"
+  >
+    Add Attribute
+  </button>
+
+</div>

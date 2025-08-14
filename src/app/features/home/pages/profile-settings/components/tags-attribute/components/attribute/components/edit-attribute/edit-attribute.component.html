@@ -1,0 +1,18 @@
+<div class="flex flex-col bg-white shadow-lg justify-around py-4 h-full">
+
+  <h2 class="text-xl py-3 font-bold text-center text-gray-800">Edit Attribute</h2>
+
+  <div class="flex flex-col items-center gap-2 px-4">
+    <label class="text-sm font-medium text-gray-700">New Attribute Name</label>
+    <input [(ngModel)]="newName" class="border border-gray-300 rounded px-3 py-2 w-full" />
+  </div>
+
+  <button
+    class="bg-blue-500 p-4 m-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    (click)="editeAttribute()"
+    [disabled]="!newName || newName === data"
+  >
+    Edit Attribute
+  </button>
+
+</div>

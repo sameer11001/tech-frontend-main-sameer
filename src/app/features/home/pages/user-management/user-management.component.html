@@ -1,0 +1,30 @@
+<app-user-management-header (createUser)="createUserDialogHandler()" (createTeam)="addTeamDialogHandler()" [activeTab]="activeTab"
+    (tabChanged)="onTabChanged($event)" (searchChanged)="onSearchChange($event)"></app-user-management-header>
+
+<app-user-management-table [activeTab]="activeTab" (editUserHandler)="editUserClick($event)" (editTeamHandler)="editTeamClick($event)"
+    [searchQuery]="searchQuery"
+    (deleteTeamDialog)="deleteTeamDialogHandler($event)"></app-user-management-table>
+
+
+
+@if (createUserDialog) {
+<app-create-user-dialog (close)="createUserDialogHandler()"></app-create-user-dialog>
+}
+
+@if (editUserDialog && user) {
+<app-edit-user-dialog [user]="user" (close)="editUserDialogHandler()"></app-edit-user-dialog>
+}
+
+@if (addTeamDialog) {
+<app-add-team (close)="addTeamDialogHandler()"></app-add-team>
+}
+
+@if (editTeamDialog && team) {
+<app-edit-team [team]="team" (close)="editTeamDialogHandler()"></app-edit-team>
+}
+
+@if(deleteTeamDialog){
+<app-confirm-dialog [header]="'Delete Team'" [message]="'Are you sure you want to delete this team?'"
+    [confirmText]="'Delete'" [cancelText]="'Cancel'" [dialogStyle]="'danger'"
+    (cancelled)="deleteTeamDialogHandler('')" (confirmed)="confirmDeleteTeam()"></app-confirm-dialog>
+}

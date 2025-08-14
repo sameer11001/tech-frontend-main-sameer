@@ -1,0 +1,211 @@
+<div class="fixed inset-0 flex items-center justify-center bg-black/70 z-50" (click)="closeDialog()">
+    <div class="bg-white rounded-lg shadow-lg p-6 max-w-md w-full max-h-[85vh] flex flex-col dialog-container"
+        (click)="$event.stopPropagation()">
+        <div class="mb-4 border-b pb-3">
+            <h1 class="text-xl font-semibold text-gray-800">
+                Create New User
+            </h1>
+        </div>
+
+        <form [formGroup]="createUserForm" class="flex-1 overflow-y-auto py-1 px-1 space-y-4">
+
+            <div class="space-y-4">
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">First Name</label>
+                    <input type="text" name="firstName" formControlName="firstName" id="firstName"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'firstName')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('firstName')?.hasError('required')">
+                            First name is required
+                        </div>
+                        <div *ngIf="createUserForm.get('firstName')?.hasError('pattern')">
+                            The name must contain only letters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">Last Name</label>
+                    <input type="text" name="lastName" formControlName="lastName" id="lastName"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'lastName')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('lastName')?.hasError('required')">
+                            Last name is required
+                        </div>
+                        <div *ngIf="createUserForm.get('lastName')?.hasError('pattern')">
+                            The last name must contain only letters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">Email</label>
+                    <input type="email" name="email" formControlName="email" id="email"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:bg-gray-100">
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'email')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('email')?.hasError('required')">
+                            Email is required
+                        </div>
+                        <div *ngIf="createUserForm.get('email')?.hasError('email')">
+                            Please enter a valid email address
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">Password</label>
+                    <input type="password" name="password" formControlName="password" id="password"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500">
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'password')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('password')?.hasError('required')">
+                            Password is required
+                        </div>
+                        <div *ngIf="createUserForm.get('password')?.hasError('minlength')">
+                            Password must be at least 8 characters long
+                        </div>
+                        <div *ngIf="createUserForm.get('password')?.hasError('pattern')">
+                            Password must contain at least one uppercase letter, one lowercase letter, and one number
+                        </div>
+                    </div>
+                </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                      <div class="flex gap-2 flex-col sm:flex-row">
+                          <!-- Country Code -->
+                          <div class="relative input-focus-within flex-1">
+                              <select formControlName="countryCode" id="countryCode"
+                                  class="input-field w-full p-3 border border-gray-300 rounded-lg inner-shadow text-gray-700 text-sm focus:ring-2 focus:ring-purple-200 transition-all">
+                                  <option value="" disabled selected>Select Country</option>
+                                  <option *ngFor="let country of countries" [value]="country.code">
+                                      {{ country.name }} ({{ country.dialCode }})
+                                  </option>
+                              </select>
+                              <div *ngIf="formValidationUtils.isFieldInvalid(createUserForm, 'countryCode')"
+                                  class="text-red-500 text-sm mt-1">
+                                  Country code is required
+                              </div>
+                          </div>
+
+                          <!-- Phone Number Input -->
+                          <div class="flex-1">
+                              <input type="tel" formControlName="phoneNumber" placeholder="(555) 987-6543"
+                                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400">
+                              <div *ngIf="formValidationUtils.isFieldInvalid(createUserForm, 'phoneNumber')"
+                                  class="text-red-500 text-sm mt-1">
+                                  <span *ngIf="formValidationUtils.hasError(createUserForm, 'phoneNumber', 'required')">
+                                      Phone number is required
+                                  </span>
+                                  <span *ngIf="formValidationUtils.hasError(createUserForm, 'phoneNumber', 'invalidPhone')">
+                                      Invalid phone number format
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+
+
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">Roles</label>
+                    <div (click)="toggleRolesDropdown()"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md flex items-center justify-between cursor-pointer">
+                        <span class="text-gray-500">Select roles</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div *ngIf="showRolesDropdown"
+                        class="mt-1 max-h-48 overflow-y-auto bg-white border rounded-md shadow-lg z-10">
+                        <div *ngFor="let role of roles$ | async" (click)="selectRole(role)"
+                            class="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm">
+                            {{ role.role_name }}
+                        </div>
+                        <div *ngIf="(roles$ | async)?.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                            No roles available
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-2" *ngIf="selectedRoles.length > 0">
+                        <div *ngFor="let role of selectedRoles"
+                            class="flex items-center bg-blue-100 rounded-full px-3 py-1 text-sm">
+                            {{ role.role_name }}
+                            <button type="button" class="ml-1 text-blue-600 hover:text-blue-800"
+                                (click)="removeRole(role)">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'role')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('role')?.hasError('required')">
+                            Role is required
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1">
+                    <label class="text-sm font-medium text-gray-700 block">Teams</label>
+                    <div (click)="toggleTeamsDropdown()"
+                        class="w-full px-3 py-1.5 text-sm border rounded-md flex items-center justify-between cursor-pointer">
+                        <span class="text-gray-500">Select teams</span>
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+
+                    <div *ngIf="showTeamsDropdown"
+                        class="mt-1 max-h-48 overflow-y-auto bg-white border rounded-md shadow-lg z-10">
+                        <div *ngFor="let team of teams$ | async" (click)="selectTeam(team)"
+                            class="px-4 py-2 hover:bg-blue-50 cursor-pointer text-sm">
+                            {{ team.name }}
+                        </div>
+                        <div *ngIf="(teams$ | async)?.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                            No teams available
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-2" *ngIf="selectedTeams.length > 0">
+                        <div *ngFor="let team of selectedTeams"
+                            class="flex items-center bg-blue-100 rounded-full px-3 py-1 text-sm">
+                            {{ team.name }}
+                            <button type="button" class="ml-1 text-blue-600 hover:text-blue-800"
+                                (click)="removeTeam(team)">
+                                ×
+                            </button>
+                        </div>
+                    </div>
+
+                    <div *ngIf="formValidationUtils.isFieldFilled(createUserForm, 'team')"
+                        class="text-red-500 text-sm mt-2">
+                        <div *ngIf="createUserForm.get('team')?.hasError('required')">
+                            Team is required
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex mt-6 pt-4 border-t w-full justify-end gap-3">
+                <button type="button" class="px-4 py-1.5 text-sm bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300
+                        focus:outline-none focus:ring-1 focus:ring-gray-500 transition-colors" (click)="closeDialog()">
+                    Cancel
+                </button>
+                <button (click)="onSubmit()" type="submit" class="px-4 py-1.5 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600
+                            focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

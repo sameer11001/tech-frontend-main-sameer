@@ -1,0 +1,33 @@
+<div class="h-screen flex flex-col bg-gray-50">
+  <!-- Header -->
+  <app-chatbot-builder-header
+    (save)="onSave()"
+    (testChatbot)="onTestChatbot()">
+  </app-chatbot-builder-header>
+  
+  <!-- Main Content -->
+  <div class="flex-1 flex overflow-hidden" style="min-height: 600px;">
+    <!-- Left Sidebar -->
+    <app-chatbot-builder-sidebar
+      (dragStart)="onSidebarDragStart($event)">
+    </app-chatbot-builder-sidebar>
+    
+    <!-- Canvas Area -->
+    <div class="flex-1 bg-yellow-200 relative">
+      <!-- Debug info for main container -->
+      <div class="absolute top-2 right-2 bg-blue-500 text-white p-1 text-xs rounded z-50">
+        Main Canvas Container - FlowBlocks: {{flowBlocks.length}}
+      </div>
+      
+      <app-chatbot-builder-canvas
+        [flowBlocks]="flowBlocks"
+        [connections]="connections"
+        (blockAdded)="onBlockAdded($event)"
+        (blockUpdated)="onBlockUpdated($event)"
+        (blockDeleted)="onBlockDeleted($event)"
+        (connectionCreated)="onConnectionCreated($event)"
+        (connectionsUpdated)="onConnectionsUpdated($event)">
+      </app-chatbot-builder-canvas>
+    </div>
+  </div>
+</div> 

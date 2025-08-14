@@ -1,0 +1,206 @@
+<div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+  <!-- Header Section with Subtle Accent -->
+  <div class="bg-gradient-to-r from-blue-50 to-indigo-50 px-8 py-6 border-b border-gray-200">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-semibold text-gray-800 font-serif">Business Profile</h2>
+        <p class="text-sm text-gray-500 mt-1">Manage your professional presence</p>
+      </div>
+    
+    </div>
+  </div>
+
+  <div class="p-8">
+    <!-- Profile Picture Section -->
+    <div class="flex flex-col items-center mb-10">
+      <div class="relative group mb-4">
+        <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 blur-sm opacity-75 -z-10"></div>
+        <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Profile picture"
+          class="w-28 h-28 object-cover rounded-full border-4 border-white shadow-lg hover:border-blue-50 transition-all duration-300" />
+        <button (click)="fileInput.click()" class="absolute -bottom-2 -right-2 bg-white p-2 rounded-full shadow-md hover:bg-blue-50 transition-colors duration-200 border border-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+          </svg>
+        </button>
+      </div>
+      <input type="file" #fileInput style="display:none" (change)="onFileChange($event)" accept="image/*" />
+      <span *ngIf="imageFile" class="text-xs text-gray-500 mt-2 px-3 py-1 bg-gray-50 rounded-full">
+        {{ imageFile.name.length > 20 ? (imageFile.name | slice:0:17) + '...' : imageFile.name }}
+      </span>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <div class="inline-flex flex-col items-center">
+        <div class="relative w-12 h-12">
+          <div class="absolute inset-0 rounded-full border-4 border-blue-100"></div>
+          <div class="absolute inset-0 rounded-full border-t-4 border-blue-500 animate-spin"></div>
+        </div>
+        <span class="mt-4 text-gray-600 font-medium">Loading your profile...</span>
+      </div>
+    </div>
+
+    <!-- Form Content -->
+    <div *ngIf="!loading && businessProfile$ && businessProfile$.data && businessProfile$.data.business_profile && businessProfile$.data.business_profile.data && businessProfile$.data.business_profile.data.length > 0">
+      @for (item of businessProfile$.data.business_profile.data; track $index) {
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="space-y-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Phone Number -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">PHONE NUMBER</label>
+              <div class="relative">
+                <input type="text" [value]="businessProfile$.data.business_profile.phone_number || ''" disabled
+                  class="block w-full rounded-lg border-gray-200 shadow-sm bg-gray-50 text-gray-600 px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- About -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">ABOUT</label>
+              <input type="text" formControlName="about"
+                class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+            </div>
+
+            <!-- Business Address -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">BUSINESS ADDRESS</label>
+              <div class="relative">
+                <input type="text" formControlName="address"
+                  class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">CONTACT EMAIL</label>
+              <div class="relative">
+                <input type="text" formControlName="email"
+                  class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Industry -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">BUSINESS INDUSTRY</label>
+              <div class="text-xs text-blue-500 mb-1 font-medium">
+                Current: {{ item.vertical || 'Not specified' }}
+              </div>
+              <select formControlName="vertical"
+                class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300 bg-white appearance-none">
+                <option value="" disabled selected>Select your industry</option>
+                <option value="automotive">Automotive</option>
+                <option value="beauty-spa-salon">Beauty & Wellness</option>
+                <option value="clothing-apparel">Fashion & Apparel</option>
+                <option value="education">Education</option>
+                <option value="entertainment">Entertainment</option>
+                <option value="restaurant">Restaurant & Food</option>
+                <option value="others">Other Industry</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </div>
+
+            <!-- Business Website 1 -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">PRIMARY WEBSITE</label>
+              <div class="relative">
+                <input type="text" formControlName="websites1"
+                  class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+             <!-- Business Website 2 -->
+             <div class="space-y-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">SECONDARY WEBSITE</label>
+              <div class="relative">
+                <input type="text" formControlName="websites2"
+                  class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300" />
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Business Description -->
+            <div class="space-y-2 md:col-span-2">
+              <label class="block text-sm font-medium text-gray-600 tracking-wide">BUSINESS DESCRIPTION</label>
+              <textarea rows="4" formControlName="description"
+                class="block w-full rounded-lg border-gray-200 shadow-sm px-4 py-3 focus:ring-2 focus:ring-blue-200 focus:border-blue-300"></textarea>
+            </div>
+
+           
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex justify-end space-x-4 pt-8 mt-8 border-t border-gray-100">
+            <button type="button" 
+                    class="px-6 py-3 border border-gray-200 rounded-lg shadow-sm text-sm font-medium text-gray-600 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-100 focus:ring-offset-2 transition-all duration-200">
+              Discard Changes
+            </button>
+            <button type="submit" [disabled]="loading || !canSave" 
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200">
+              <span *ngIf="loading" class="loader border-2 border-white border-t-transparent rounded-full w-4 h-4 animate-spin mr-2"></span>
+              {{ loading ? 'Saving...' : 'Save Profile' }}
+            </button>
+          </div>
+        </div>
+      </form>
+      }
+    </div>
+
+    <!-- No Data State -->
+    <div *ngIf="!loading && (!businessProfile$ || !businessProfile$.data || !businessProfile$.data.business_profile || !businessProfile$.data.business_profile.data || businessProfile$.data.business_profile.data.length === 0)" 
+          class="text-center py-16">
+      <div class="max-w-md mx-auto">
+        <div class="h-24 w-24 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-medium text-gray-800 mb-2">No business profile yet</h3>
+        <p class="text-gray-500 mb-6">Create your professional profile to showcase your business to customers</p>
+        <button type="button" 
+                class="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:ring-offset-2 transition-all duration-200">
+          <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+          </svg>
+          Create Business Profile
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .loader {
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>

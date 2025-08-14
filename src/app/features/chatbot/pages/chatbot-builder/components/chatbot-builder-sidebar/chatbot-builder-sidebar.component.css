@@ -1,0 +1,92 @@
+/* Sidebar Component Styles */
+
+.sidebar-container {
+  background: linear-gradient(to bottom, #ffffff, #fafafa);
+}
+
+.drag-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.drag-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.drag-item:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.icon-container {
+  transition: all 0.2s ease;
+}
+
+.drag-item:hover .icon-container {
+  transform: scale(1.1);
+}
+
+.feature-tag {
+  transition: all 0.15s ease;
+}
+
+.feature-tag:hover {
+  transform: scale(1.05);
+  background-color: #f8fafc;
+}
+
+.tip-container {
+  backdrop-filter: blur(10px);
+  background: rgba(239, 246, 255, 0.8);
+}
+
+.drag-handle {
+  transition: all 0.2s ease;
+}
+
+.drag-item:hover .drag-handle {
+  transform: translateX(2px);
+}
+
+/* Animation for dragging */
+.drag-item.dragging {
+  opacity: 0.7;
+  transform: rotate(2deg) scale(1.05);
+  z-index: 1000;
+}
+
+/* Scroll bar styling */
+.sidebar-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 2px;
+}
+
+.sidebar-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sidebar-container {
+    width: 16rem; /* 256px */
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 14rem; /* 224px */
+  }
+  
+  .drag-item {
+    padding: 0.75rem;
+  }
+} 

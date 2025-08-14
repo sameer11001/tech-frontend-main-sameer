@@ -1,0 +1,192 @@
+<div class="max-w-full md:max-w-[280px] h-[520px] mx-auto bg-[#f0f2f5] rounded-2xl shadow-xl flex flex-col items-center relative overflow-hidden border border-gray-200">
+  <!-- WhatsApp Header -->
+  <div class="w-full flex items-center bg-[#008069] px-3 sm:px-4 py-2 sm:py-3 rounded-t-2xl shadow-sm z-10">
+    <div class="w-8 sm:w-9 h-8 sm:h-9 rounded-full bg-white flex items-center justify-center mr-2 sm:mr-3">
+      <span class="text-[#008069] font-bold text-xs sm:text-sm">TG</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-white font-semibold text-xs sm:text-sm flex items-center gap-1 truncate">
+        Prog Gate <span class="text-green-300 ml-1">✔️✔️</span>
+      </div>
+      <div class="text-[10px] sm:text-xs text-gray-100 flex items-center">
+        <span class="w-2 h-2 bg-green-400 rounded-full mr-1"></span> online
+      </div>
+    </div>
+    <div class="flex gap-2 sm:gap-3 text-white/80">
+      <svg class="w-4 sm:w-5 h-4 sm:h-5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 3c-4.97 0-9 3.185-9 7.115 0 2.557 1.522 4.82 3.889 6.115l-.78 2.77 3.116-1.65c.88.275 1.823.425 2.775.425 4.97 0 9-3.186 9-7.115C21 6.186 16.97 3 12 3z"/>
+      </svg>
+    </div>
+  </div>
+  
+  <!-- Chat Background -->
+  <div class="absolute inset-0 bg-[#e5ddd6] opacity-30 mt-12 sm:mt-14"></div>
+  
+  <!-- Chat Area -->
+  <div class="flex-1 w-full flex flex-col justify-end pb-6 sm:pb-8 px-3 sm:px-4 relative overflow-y-auto">
+    <!-- Date Indicator -->
+    <div class="w-full flex justify-center my-1 sm:my-2">
+      <div class="bg-black/10 text-black/70 text-[10px] sm:text-xs px-2 py-0.5 sm:py-1 rounded-full">TODAY</div>
+    </div>
+    
+    <!-- Message Bubble -->
+    <div class="flex flex-row justify-end w-full mb-2 sm:mb-3">
+      <div class="relative max-w-[90%] sm:max-w-[85%] min-w-0">
+        <!-- Bubble Tail -->
+        <div class="absolute right-0 bottom-0 translate-x-1/2 translate-y-1/2 w-0 h-0 border-t-8 border-t-[#005c4b] border-l-8 border-l-transparent"></div>
+        <div class="bg-[#005c4b] text-white rounded-xl rounded-br-sm shadow-sm px-2.5 sm:px-3 py-2 sm:py-2.5 relative break-words">
+          <!-- Media Display -->
+          <ng-container *ngIf="mediaUrl">
+            <!-- Image Preview -->
+            <div *ngIf="isImage(mediaUrl)" class="mb-2 sm:mb-3 rounded-lg overflow-hidden">
+              <div class="relative group cursor-pointer">
+                <img [src]="mediaUrl" 
+                     alt="media" 
+                     class="w-full max-w-[160px] sm:max-w-[180px] h-auto object-cover rounded-lg" 
+                     (error)="onImageError($event)"
+                     (load)="onImageLoad($event)" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
+              </div>
+            </div>
+            
+            <!-- Video Preview -->
+            <div *ngIf="isVideo(mediaUrl)" class="mb-2 sm:mb-3 rounded-lg overflow-hidden">
+              <div class="relative group cursor-pointer">
+                <video [src]="mediaUrl" class="w-full max-w-[160px] sm:max-w-[180px] h-auto bg-black rounded-lg">
+                  Your browser does not support the video tag.
+                </video>
+                <div class="absolute inset-0 flex items-center justify-center rounded-lg">
+                  <div class="w-8 sm:w-10 h-8 sm:h-10 bg-white/30 rounded-full flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-4 sm:w-5 h-4 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="absolute bottom-1.5 sm:bottom-2 right-1.5 sm:right-2 bg-black/70 text-white text-[10px] sm:text-xs px-1 sm:px-1.5 py-0.5 rounded">
+                  {{ videoDuration }}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Document Preview -->
+            <div *ngIf="isDocument(mediaUrl)" class="mb-2 sm:mb-3">
+              <div class="bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 p-2 sm:p-3 group cursor-pointer max-w-[160px] sm:max-w-[180px]">
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                  <div class="flex-shrink-0">
+                    <div class="w-8 sm:w-10 h-8 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                      <svg class="w-4 sm:w-5 h-4 sm:h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-xs sm:text-sm font-medium text-white truncate">{{ getDocumentName(mediaUrl) }}</div>
+                    <div class="text-[10px] sm:text-xs text-white/70">{{ getDocumentType(mediaUrl) }} • {{ getFileSize() }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          
+          <!-- Header Text -->
+          <div *ngIf="header" class="text-[10px] sm:text-xs text-white/80 mb-1 sm:mb-2 font-medium break-words leading-relaxed">
+            {{ header }}
+          </div>
+          
+          <!-- Body Text -->
+          <div class="text-xs sm:text-sm text-white mb-1 sm:mb-2 leading-relaxed break-words whitespace-pre-wrap">
+            {{ body || 'Your message preview will appear here.' }}
+          </div>
+          
+          <!-- Footer Text -->
+          <div *ngIf="footer" class="text-[10px] sm:text-xs text-white/70 mt-1 sm:mt-2 break-words leading-relaxed">
+            {{ footer }}
+          </div>
+          
+          <!-- Buttons -->
+          <div *ngIf="buttons && buttons.length" class="flex flex-col gap-1.5 sm:gap-2 mt-2 sm:mt-3">
+            <ng-container *ngFor="let btn of buttons; let i = index">
+              <!-- Quick Reply Button -->
+              <button
+                *ngIf="btn.type === 'QUICK_REPLY'"
+                type="button"
+                class="w-full rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-left transition-all duration-150 bg-white/10 hover:bg-white/20 border border-white/20 break-words">
+                <div class="flex items-center gap-1 sm:gap-2">
+                  <svg class="w-3 sm:w-4 h-3 sm:h-4 text-white/80 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="getButtonIcon(btn.type)"></path>
+                  </svg>
+                  <span class="text-white break-words">{{ btn.text }}</span>
+                </div>
+              </button>
+              
+              <!-- URL Button -->
+              <a
+                *ngIf="btn.type === 'URL'"
+                [href]="btn.url || '#'"
+                target="_blank"
+                class="w-full rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-center transition-all duration-150 bg-[#008069] hover:bg-[#006e5a] break-words">
+                <div class="flex items-center gap-1 sm:gap-2 justify-center">
+                  <svg class="w-3 sm:w-4 h-3 sm:h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="getButtonIcon(btn.type)"></path>
+                  </svg>
+                  <span class="text-white break-words">{{ btn.text }}</span>
+                </div>
+              </a>
+              
+              <!-- Phone Number Button -->
+              <a
+                *ngIf="btn.type === 'PHONE_NUMBER'"
+                [href]="btn.phoneNumber ? 'tel:' + btn.phoneNumber : '#'"
+                class="w-full rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-center transition-all duration-150 bg-[#25D366] hover:bg-[#20bd5a] break-words">
+                <div class="flex items-center gap-1 sm:gap-2 justify-center">
+                  <svg class="w-3 sm:w-4 h-3 sm:h-4 text-white flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="getButtonIcon(btn.type)"></path>
+                  </svg>
+                  <span class="text-white break-words">{{ btn.text }}</span>
+                </div>
+              </a>
+            </ng-container>
+          </div>
+          
+          <!-- Message Footer -->
+          <div class="flex items-center justify-end mt-1 sm:mt-2 gap-1 sm:gap-1.5">
+            <span class="text-[9px] sm:text-[10px] text-white/50">{{ time || '18:27' }}</span>
+            <div class="flex items-center">
+              <svg class="w-3 sm:w-3.5 h-3 sm:h-3.5 text-blue-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Reply Area -->
+    <!-- <div class="flex items-center justify-start w-full mt-1 sm:mt-2">
+      <div class="bg-white rounded-xl rounded-bl-sm shadow-sm px-2.5 sm:px-3 py-1.5 sm:py-2 max-w-[85%] sm:max-w-[80%] break-words">
+        <div class="text-xs sm:text-sm text-gray-800 break-words">Thanks for your message!</div>
+        <div class="flex items-center justify-start mt-0.5 sm:mt-1 gap-1 sm:gap-1.5">
+          <span class="text-[9px] sm:text-[10px] text-gray-500">10:42 AM</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  
+  <!-- Input Area -->
+  <div class="w-full bg-[#f0f2f5] px-2 sm:px-3 py-2 border-t border-gray-200 rounded-b-2xl flex items-center">
+    <div class="flex items-center gap-1 sm:gap-2 text-gray-500 mr-1 sm:mr-2">
+      <svg class="w-5 sm:w-6 h-5 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+      </svg>
+    </div>
+    <div class="flex-1 bg-white rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-gray-700">
+      Type a message
+    </div>
+    <div class="ml-1 sm:ml-2 text-gray-500">
+      <svg class="w-5 sm:w-6 h-5 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 15c1.66 0 3-1.34 3-3V6c0-1.66-1.34-3-3-3S9 4.34 9 6v6c0 1.66 1.34 3 3 3z"/>
+        <path d="M17 12c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-2.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+      </svg>
+    </div>
+  </div>
+</div>

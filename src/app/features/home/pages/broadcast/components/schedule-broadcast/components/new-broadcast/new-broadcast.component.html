@@ -1,0 +1,257 @@
+<!-- broadcast-message.component.html -->
+<div class="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow-md flex flex-col lg:flex-row gap-8">
+  <!-- Left: Form -->
+  <div class="flex-1 min-w-0">
+    <form [formGroup]="broadcastForm">
+      <!-- Message Composition Section -->
+      <section class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">What message do you want to send?</h1>
+        <p class="text-gray-600 mb-6">Add broadcast name and template below</p>
+    
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2" for="broadcast-name">Broadcast name</label>
+          <input 
+            id="broadcast-name"
+            type="text"
+            formControlName="broadcast_name"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter broadcast name"
+          >
+          <div *ngIf="broadcastForm.get('broadcast_name')?.invalid && broadcastForm.get('broadcast_name')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            Broadcast name is required
+          </div>
+        </div>
+    
+        <div class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2" for="template-select">Select template message</label>
+          <div class="flex items-center">
+            <select 
+              id="template-select"
+              formControlName="template_id"
+              class="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select a template</option>
+              <option *ngFor="let template of (templates$ | async)?.data" [value]="template._id">
+                {{ template.name }}
+              </option>
+            </select>
+            <button type="button" 
+                    (click)="onAddNewTemplate()"
+                    class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              + Add New Template
+            </button>
+          </div>
+          <div *ngIf="broadcastForm.get('template_id')?.invalid && broadcastForm.get('template_id')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            Template selection is required
+          </div>
+        </div>
+    
+        <!-- <div class="mb-6" *ngIf="selectedTemplate">
+          <label class="block text-gray-700 font-medium mb-2" for="template-message">Template Message</label>
+          <textarea 
+            id="template-message"
+            formControlName="parameters"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter template parameters..."
+          ></textarea>
+        </div> -->
+      </section>
+  
+      <!-- Contact Selection Section -->
+      <section class="mb-8 border-t border-gray-200 pt-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Who do you want to send it to?</h2>
+        <p class="text-gray-600 mb-4">Select contacts below or Download sample format for contact upload</p>
+        
+        <div class="flex flex-col space-y-4 mb-6">
+          <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            Import Contacts
+          </button>
+          
+          <div class="flex items-center">
+            <input type="checkbox" id="exclude-invalid" class="mr-2 h-4 w-4 text-blue-500 rounded">
+            <label for="exclude-invalid" class="text-gray-700">Exclude invalid contacts</label>
+          </div>
+          
+          <div class="text-sm text-gray-600">
+            Valid contacts : <span class="font-medium">{{ (contacts$ | async)?.length || 0 }}/{{ (contacts$ | async)?.length || 0 }} contacts</span>
+          </div>
+        </div>
+        
+        <div class="mb-4">
+          <input 
+            type="text" 
+            placeholder="Search..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
+        
+        <!-- Contacts Table -->
+        <div class="mt-6 overflow-x-auto">
+          <div class="flex justify-between items-center mb-4">
+            <div class="text-sm text-gray-600">
+              Selected: <span class="font-medium">{{ selectedContacts.length }} / 999</span> Contacts remaining
+            </div>
+            <div class="text-xs text-gray-500">
+              Current limits: 1000 unique contacts/24 hours
+            </div>
+          </div>
+    
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <input 
+                    type="checkbox" 
+                    (change)="onSelectAllChange($event)"
+                    class="mr-2 h-4 w-4 text-blue-500 rounded">
+                </th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country Code</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Phone Number</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr *ngFor="let contact of (contacts$ | async)">
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <input 
+                    type="checkbox" 
+                    [checked]="selectedContacts.includes(contact.phone_number)"
+                    (change)="onContactToggle(contact.phone_number, contact)"
+                    class="mr-2 h-4 w-4 text-blue-500 rounded">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ contact.name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ contact.country_code || 'N/A' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">{{ contact.phone_number }}</td>
+              </tr>
+            </tbody>
+          </table>
+    
+          <div class="flex items-center justify-between mt-4">
+            <div class="text-sm text-gray-500">
+              Rows per page: <span class="font-medium">5</span> <span class="mx-2">1-5 of {{ (contacts$ | async)?.length || 0 }}</span>
+            </div>
+            <div class="flex space-x-2">
+              <button type="button" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                Previous
+              </button>
+              <button type="button" class="px-3 py-1 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50">
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Selected Phone Numbers Display Section -->
+      <section *ngIf="selectedContacts.length > 0" class="mb-8 border-t border-gray-200 pt-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">Selected Phone Numbers</h2>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-sm font-medium text-blue-800">
+              Total Selected: {{ selectedContacts.length }} contacts
+            </span>
+            <button 
+              type="button" 
+              (click)="selectedContacts = []; formattedPhoneNumbers = []"
+              class="text-sm text-red-600 hover:text-red-800 font-medium">
+              Clear All
+            </button>
+          </div>
+          
+          <!-- Phone Numbers List -->
+          <div class="space-y-2">
+            <div *ngFor="let phoneNumber of formattedPhoneNumbers; let i = index" 
+                 class="flex items-center justify-between bg-white rounded-md px-3 py-2 border border-blue-100">
+              <span class="text-sm font-mono text-gray-700">{{ phoneNumber }}</span>
+              <button 
+                type="button" 
+                (click)="onContactToggle(selectedContacts[i])"
+                class="text-red-500 hover:text-red-700 text-sm">
+                ✕
+              </button>
+            </div>
+          </div>
+          
+          <!-- Copy to Clipboard -->
+          <div class="mt-4 pt-3 border-t border-blue-200">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-blue-700 font-medium">All Numbers (comma-separated):</span>
+              <button 
+                type="button" 
+                (click)="copyToClipboard(getSelectedPhoneNumbersAsString())"
+                class="text-sm bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition-colors">
+                Copy
+              </button>
+            </div>
+            <div class="mt-2 p-2 bg-white rounded border border-blue-200">
+              <code class="text-xs text-gray-600 break-all">{{ getSelectedPhoneNumbersAsString() }}</code>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <!-- Scheduling Section -->
+      <section class="border-t border-gray-200 pt-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">When do you want to send it?</h2>
+        
+        <div class="space-y-4 mb-6">
+          <div class="flex items-center">
+            <input type="radio" id="send-now" name="schedule" [checked]="broadcastForm.get('is_now')?.value" 
+                   (change)="onScheduleChange(true)" class="mr-2 h-4 w-4 text-blue-500">
+            <label for="send-now" class="text-gray-700">Send now</label>
+          </div>
+          <div class="flex items-center">
+            <input type="radio" id="schedule-later" name="schedule" [checked]="!broadcastForm.get('is_now')?.value"
+                   (change)="onScheduleChange(false)" class="mr-2 h-4 w-4 text-blue-500">
+            <label for="schedule-later" class="text-gray-700">Schedule for a specific time</label>
+          </div>
+        </div>
+
+        <div *ngIf="!broadcastForm.get('is_now')?.value" class="mb-6">
+          <label class="block text-gray-700 font-medium mb-2">Scheduled Time</label>
+          <input 
+            type="datetime-local" 
+            formControlName="scheduled_time"
+            class="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          <div *ngIf="broadcastForm.get('scheduled_time')?.invalid && broadcastForm.get('scheduled_time')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            Scheduled time is required
+          </div>
+        </div>
+    
+        <div class="flex justify-end mt-8">
+          <button type="button" (click)="onCancel()" 
+                  class="px-6 py-2 bg-gray-200 text-gray-700 rounded-md mr-4 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500">
+            Cancel
+          </button>
+          <button type="button" (click)="onAddBroadcast()" 
+                  [disabled]="(publishLoading$ | async)"
+                  class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+            <span *ngIf="!(publishLoading$ | async)">Add Broadcast</span>
+            <span *ngIf="publishLoading$ | async">Publishing...</span>
+          </button>
+        </div>
+      </section>
+    </form>
+  </div>
+  
+  <!-- Right: WhatsApp Preview -->
+  <div class="w-full lg:w-[320px] flex-shrink-0 flex flex-col items-center border-l border-gray-200 pl-6">
+    <div class="sticky top-8 w-full">
+      <app-whatsapp-preview
+        *ngIf="selectedTemplate"
+        [header]="waHeader"
+        [body]="waBody"
+        [footer]="waFooter"
+        [buttons]="waButtons"
+      ></app-whatsapp-preview>
+      <div *ngIf="!selectedTemplate" class="text-gray-400 text-center mt-8 p-8">
+        <div class="text-lg mb-2">📱</div>
+        <div>Select a template to preview</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,414 @@
+<div
+  #scrollContainer
+  class="flex flex-col h-full w-full bg-gray-100 p-4 pt-2 space-y-2 overflow-y-auto"
+  (scroll)="onScroll()"
+>
+  <!-- Messages List -->
+  <ng-container *ngIf="messages$ | async as messages; else noMessages">
+    <ng-container *ngIf="messages.length; else noMessages">
+      <div
+        *ngFor="let msg of messages.slice().reverse()"
+        class="flex flex-col items-start"
+        [ngClass]="{
+          'items-end': !msg.is_from_contact,
+          'items-center': msg.message_type === 'assign',
+          'my-2': msg.message_type === 'assign',
+        }"
+      >
+
+          <!-- Timestamp + Sender -->
+          <div class="flex items-center space-x-2 mb-1">
+            <span class="text-xs text-gray-400">
+              {{ msg.created_at | date : "shortTime" }}
+            </span>
+            <span
+              class="text-xs"
+              [ngClass]="
+                msg.is_from_contact ? 'text-blue-600' : 'text-green-600'
+              "
+            >
+              {{ msg.is_from_contact ? "Contact" : "You" }}
+            </span>
+          </div>
+
+        <div class="flex flex-row" [ngClass]="{
+          'flex-row-reverse': !msg.is_from_contact && msg.message_type !== 'assign'
+        }">
+
+
+          @if (msg.message_type != 'assign') {
+          <!-- Message Bubble -->
+          <div
+            class="rounded-lg p-3 max-w-xs shadow-md mx-2"
+            [ngClass]="
+              msg.is_from_contact
+                ? 'bg-white text-gray-900'
+                : 'bg-green-100 text-gray-900'
+            "
+          >
+            <!-- Text -->
+            <ng-container *ngIf="msg.message_type === 'text'">
+              <div>{{ msg.content?.text || msg.content?.text_body }}</div>
+            </ng-container>
+
+            <!-- Image -->
+            <ng-container *ngIf="msg.message_type === 'image'">
+              <div class="text-[10px] text-gray-400 mb-1">
+                {{ msg.message_type }}
+              </div>
+              <img
+                [src]="msg.content?.cdn_url"
+                alt="image"
+                class="rounded mb-1 max-w-full max-h-48"
+              />
+              <div
+                *ngIf="msg.content?.caption"
+                class="text-xs text-gray-600 mt-1"
+              >
+                {{ msg.content.caption }}
+              </div>
+            </ng-container>
+
+            <!-- Video -->
+            <ng-container *ngIf="msg.message_type === 'video'">
+              <div class="text-[10px] text-gray-400 mb-1">
+                {{ msg.message_type }}
+              </div>
+              <video controls class="rounded mb-1 max-w-full max-h-48">
+                <source
+                  [src]="msg.content?.cdn_url"
+                  [type]="msg.content?.mime_type"
+                />
+                Your browser does not support the video tag.
+              </video>
+              <div
+                *ngIf="msg.content?.caption"
+                class="text-xs text-gray-600 mt-1"
+              >
+                {{ msg.content.caption }}
+              </div>
+            </ng-container>
+
+            <!-- Audio (modern design) -->
+            <ng-container *ngIf="msg.message_type === 'audio'">
+              <div
+                class="bg-gray-800 text-white rounded-lg p-4 flex items-center space-x-4 max-w-md mx-auto"
+              >
+                <!-- ▶️ / ⏸️ -->
+                <button
+                  (click)="toggleAudio(msg._id)"
+                  class="focus:outline-none"
+                >
+                  <span *ngIf="!isPlaying[msg._id]">▶️</span>
+                  <span *ngIf="isPlaying[msg._id]">⏸️</span>
+                </button>
+
+                <!-- Progress bar + times -->
+                <div class="flex-1">
+                  <div class="h-1 bg-gray-600 rounded overflow-hidden">
+                    <div
+                      class="h-full bg-blue-400 transition-[width]"
+                      [style.width.%]="progress[msg._id] || 0"
+                    ></div>
+                  </div>
+                  <div class="flex justify-between text-xs text-gray-300 mt-1">
+                    <span>{{ formatTime(currentTime[msg._id]) }}</span>
+                    <span>{{ formatTime(duration[msg._id]) }}</span>
+                  </div>
+                </div>
+
+                <!-- Download -->
+                <button
+                  (click)="downloadAudio(msg._id)"
+                  class="text-gray-400 hover:text-white focus:outline-none"
+                  title="Download"
+                >
+                  ⬇️
+                </button>
+              </div>
+            </ng-container>
+
+            <!-- Location -->
+            <ng-container *ngIf="msg.message_type === 'location'">
+              <div class="flex flex-col items-center space-y-2">
+                <a
+                  [href]="
+                    'https://maps.google.com/?q=' +
+                    msg.content?.latitude +
+                    ',' +
+                    msg.content?.longitude
+                  "
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    [src]="
+                      'https://maps.googleapis.com/maps/api/staticmap?' +
+                      'center=' +
+                      msg.content?.latitude +
+                      ',' +
+                      msg.content?.longitude +
+                      '&zoom=15&size=300x150&markers=color:red%7C' +
+                      msg.content?.latitude +
+                      ',' +
+                      msg.content?.longitude
+                    "
+                    alt="Location Map"
+                    class="rounded shadow border"
+                  />
+                </a>
+                <span class="text-xs">
+                  Location: {{ msg.content?.latitude }},
+                  {{ msg.content?.longitude }}
+                </span>
+                <a
+                  [href]="
+                    'https://maps.google.com/?q=' +
+                    msg.content?.latitude +
+                    ',' +
+                    msg.content?.longitude
+                  "
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-blue-600 underline text-xs"
+                >
+                  Open in Google Maps
+                </a>
+              </div>
+            </ng-container>
+
+            <!-- Template Message (handles both payload shapes) -->
+            <ng-container *ngIf="msg.message_type === 'template'">
+              <ng-container *ngIf="getTemplateView(msg) as tv">
+                <div class="flex flex-col space-y-1">
+                  <!-- Header -->
+                  <div
+                    *ngIf="tv.headerText"
+                    class="font-semibold text-gray-800"
+                  >
+                    {{ tv.headerText }}
+                  </div>
+                  <!-- Body lines -->
+                  <div *ngFor="let line of tv.bodyTexts" class="text-gray-700">
+                    {{ line }}
+                  </div>
+                  <!-- Footer -->
+                  <div *ngIf="tv.footerText" class="text-xs text-gray-500 mt-1">
+                    {{ tv.footerText }}
+                  </div>
+                  <!-- Quick-reply Buttons (old style only) -->
+                  <div
+                    *ngIf="tv.buttons.length"
+                    class="flex flex-col space-y-2 mt-2"
+                  >
+                    <button
+                      *ngFor="let btn of tv.buttons"
+                      (click)="onTemplateButton(msg, btn.index)"
+                      class="px-3 py-1 bg-blue-400 text-white rounded"
+                    >
+                      {{ btn.text }}
+                    </button>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- Document -->
+            <ng-container *ngIf="msg.message_type === 'document'">
+              <div
+                class="bg-gray-50 border border-gray-200 rounded-lg shadow-sm p-4 flex items-center max-w-md mx-auto"
+              >
+                <!-- File Info -->
+                <div class="flex min-w-0">
+                  <a
+                    [href]="msg.content?.cdn_url"
+                    download="{{ msg.content?.filename }}"
+                    target="_blank"
+                    rel="noopener"
+                    class="block text-sm font-medium text-gray-900 truncate hover:underline mx-1"
+                  >
+                    {{ msg.content?.filename || "Document" }}
+                  </a>
+                  <div
+                    *ngIf="msg.content?.caption"
+                    class="mt-1 text-xs text-gray-500 truncate"
+                  >
+                    {{ msg.content.caption }}
+                  </div>
+                </div>
+
+                <!-- Download Button -->
+                <a
+                  [href]="msg.content?.cdn_url"
+                  download="{{ msg.content?.file_name }}"
+                  class="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none"
+                  title="Download {{ msg.content?.file_name }}"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </ng-container>
+
+            <!-- Button Reply Message -->
+            <ng-container *ngIf="msg.message_type === 'button'">
+              <ng-container *ngIf="getButtonView(msg) as bv">
+                <div
+                  class="inline-block rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800"
+                  [title]="'Replied to: ' + bv.contextId"
+                >
+                  {{ bv.text }}
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- Fallback -->
+            <ng-container
+              *ngIf="
+                [
+                  'text',
+                  'image',
+                  'video',
+                  'audio',
+                  'location',
+                  'template',
+                  'button',
+                  'document',
+                  'assign'
+                ].indexOf(msg.message_type) === -1
+              "
+            >
+              <div class="italic text-xs text-gray-400">
+                Unsupported message type: {{ msg.message_type }}
+              </div>
+            </ng-container>
+
+            <!-- Message Status -->
+            <ng-container *ngIf="msg.message_status && !msg.is_from_contact">
+              <div class="flex items-center space-x-1 mt-1">
+                <ng-container [ngSwitch]="msg.message_status">
+                  <!-- Loading: spinner -->
+                  <div
+                    *ngSwitchCase="'loading'"
+                    class="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"
+                  ></div>
+
+                  <!-- Sent: single check -->
+                  <svg
+                    *ngSwitchCase="'sent'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-2 h-2 text-gray-600"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="1 7 4 10 11 3"></polyline>
+                  </svg>
+
+                  <!-- Delivered: double check -->
+                  <svg
+                    *ngSwitchCase="'delivered'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-2 h-2 text-gray-600"
+                    viewBox="0 0 14 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="1 7 4 10 11 3"></polyline>
+                    <polyline points="3 7 6 10 13 3"></polyline>
+                  </svg>
+
+                  <!-- Read: double check in blue -->
+                  <svg
+                    *ngSwitchCase="'read'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-2 h-2 text-blue-500"
+                    viewBox="0 0 14 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="1 7 4 10 11 3"></polyline>
+                    <polyline points="3 7 6 10 13 3"></polyline>
+                  </svg>
+
+                  <!-- Failed: X icon -->
+                  <svg
+                    *ngSwitchCase="'failed'"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="w-2 h-2 text-red-500"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="1" y1="1" x2="11" y2="11"></line>
+                    <line x1="11" y1="1" x2="1" y2="11"></line>
+                  </svg>
+                </ng-container>
+
+                <span
+                  class="text-xs"
+                  [ngClass]="{
+                    'text-red-500': msg.message_status === 'failed',
+                    'text-gray-600': msg.message_status !== 'failed'
+                  }"
+                >
+                  {{
+                    msg.message_status === "failed"
+                      ? "Failed"
+                      : (msg.message_status | titlecase)
+                  }}
+                </span>
+              </div>
+            </ng-container>
+          </div>
+          }
+
+
+
+          <!-- ─────── ASSIGN DIVIDER ─────── -->
+          <ng-container *ngIf="msg.message_type === 'assign'">
+            <div class="flex items-center ">
+              <hr class="flex-grow border-t border-gray-300" />
+              <span
+                class="px-2 text-gray-500 italic text-[0.7rem] items-center justify-center"
+              >
+                ` {{ msg.content?.message }} `
+              </span>
+              <hr class="flex-grow border-t border-gray-300" />
+            </div>
+          </ng-container>
+
+        </div>
+
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #noMessages>
+    <div class="p-4 text-center text-gray-400">No messages found.</div>
+  </ng-template>
+</div>

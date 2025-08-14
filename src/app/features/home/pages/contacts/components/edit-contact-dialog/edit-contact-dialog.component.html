@@ -1,0 +1,107 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50">
+    <div class="w-full mx-4 my-4 max-w-md lg:max-w-lg bg-white rounded-lg shadow-xl transition-all transform max-h-[90vh] overflow-y-auto text-sm">
+
+
+        <div class="flex items-center justify-between p-4 border-b text-sm">
+            <h2 class="text-xl font-semibold text-gray-800">Edit Contact</h2>
+            <button (click)="closeDialogHandler()"
+                class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="p-6">
+
+            <h3 class="text-lg font-medium text-gray-700 mb-4 text-sm">Basic Information</h3>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-2 p-2 hover:bg-gray-50 rounded-md">
+                    <div class="text-gray-500 font-medium text-sm">Name</div>
+                    <input type="text" [(ngModel)]="contact!.name" class="w-full px-4 py-1 rounded-sm border border-gray-300 text-gray-800" placeholder="Name">
+                </div>
+                <div class="grid grid-cols-2 gap-2 p-2 hover:bg-gray-50 rounded-md">
+                    <div class="text-gray-500 font-medium">Phone Number</div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-gray-600">{{ contact!.country_code }}</span>
+                        <input type="text" [(ngModel)]="contact!.phone_number" class="w-full px-4 py-1 rounded-sm border border-gray-300 text-gray-800" placeholder="Phone Number">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 p-2 hover:bg-gray-50 rounded-md">
+                    <div class="text-gray-500 font-medium">Source</div>
+                    <div class="text-gray-800 text-sm">WhatsApp</div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="broadcast" class="w-4 h-4 text-blue-600 rounded"
+                            [(ngModel)]="contact!.allow_broadcast">
+                        <label for="broadcast" class="text-gray-700 text-sm">Allow Broadcast</label>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="sms" class="w-4 h-4 text-blue-600 rounded"
+                            [(ngModel)]="contact!.allow_sms">
+                        <label for="sms" class="text-gray-700 text-sm">Allow SMS</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <div class="mb-2 flex items-center space-x-1">
+                    <span class="text-sm font-medium text-gray-700">Contact attributes</span>
+                    <span class="text-gray-400 cursor-pointer" title="Attributes are key-value pairs for this contact.">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="inline h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <text x="12" y="16" text-anchor="middle" font-size="12" fill="currentColor">i</text>
+                        </svg>
+                    </span>
+                </div>
+                <div *ngFor="let attribute of contact!.attribute_links; let i = index" class="flex items-center space-x-2 mb-2">
+                    <input
+                        type="text"
+                        [(ngModel)]="attribute.attribute.name"
+                        class="w-1/3 px-2 py-1 rounded border border-gray-300 text-sm"
+                        placeholder="Attribute"
+                    />
+                    <input
+                        type="text"
+                        [(ngModel)]="attribute.value"
+                        class="w-2/3 px-2 py-1 rounded border border-gray-300 text-sm"
+                        placeholder="Value"
+                    />
+                    <button type="button" (click)="onRemoveAttribute(i)" class="text-gray-400 hover:text-red-500 p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="flex justify-start mt-4">
+                    <button class="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm" (click)="onAddAttribute()">
+                        Add Attributes
+                    </button>
+                </div>
+                <hr class="my-4 border-gray-200">
+                <div class="mt-8 flex justify-end space-x-3">
+                    <button (click)="closeDialogHandler()"
+                        class="px-3 py-1 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors text-sm">
+                        Cancel
+                    </button>
+                    <button 
+                        (click)="onSave()" 
+                        [disabled]="isLoading"
+                        class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2">
+                        <span *ngIf="isLoading" class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                        <span>{{ isLoading ? 'Saving...' : 'Save' }}</span>
+                    </button>
+                </div>
+                
+                
+
+            </div>
+        </div>
+    </div>

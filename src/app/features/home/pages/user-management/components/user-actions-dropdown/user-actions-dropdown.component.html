@@ -1,0 +1,51 @@
+<div class=" relative flex gap-2">
+    <!-- Dropdown Trigger -->
+    <button (click)="toggleDropdown()" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+        </svg>
+    </button>
+
+    <!-- Actions Menu -->
+    <div *ngIf="isDropDownOpen" class="absolute right-0 mt-6 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+        <button (click)="handleEdit()" class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            Edit User
+        </button>
+        <button (click)="openResetPasswordDialog()"
+            class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+            Reset Password
+        </button>
+        <ng-container *ngIf="currentUser$ | async as currentUser">
+            <button *ngIf="canManageUser(currentUser) && !isCurrentUser(currentUser)" 
+                (click)="openRemoveUserDialog()"
+                class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Remove User
+            </button>
+            <button *ngIf="canManageUser(currentUser) && !isCurrentUser(currentUser)"  
+                (click)="openLogoutConfirmation()"
+                class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                Logout Sessions
+            </button>
+        </ng-container>
+    </div>
+
+    <!-- Dialogs -->
+    @if (showConfirmDialog) {
+    <app-confirm-dialog header="Logout User Sessions" message="Are you sure you want to logout all active sessions for this user? This action requires administrator privileges."
+        confirmText="Logout Sessions" cancelText="Cancel" dialogStyle="danger" (confirmed)="onLogoutConfirmed()"
+        (cancelled)="onLogoutCancelled()">
+    </app-confirm-dialog>
+    }
+
+    @if (showResetPasswordDialog) {
+    <app-reset-password-dialog (confirmed)="onPasswordConfirmed($event)" (cancelled)="onPasswordCancelled()">
+    </app-reset-password-dialog>
+    }
+
+    @if (removeUserDialog) {
+    <app-confirm-dialog header="Remove User" message="Are you sure you want to remove this user?" confirmText="Remove"
+        cancelText="Cancel" dialogStyle="danger" (confirmed)="handleRemove()" (cancelled)="onCloseRemoveUserDialog()">
+    </app-confirm-dialog>
+    }
+</div>

@@ -1,0 +1,99 @@
+<div class="bg-white p-6 rounded shadow-sm">
+  <h2 class="text-xl font-semibold mb-6">Personal Profile</h2>
+
+  <!-- Form -->
+  <form [formGroup]="profileForm" (ngSubmit)="onSave()">
+    <div class="grid grid-cols-2 gap-4">
+      <!-- First Name -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">First Name</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      <!-- Last Name -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Last Name</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- Phone Number -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Phone Number</label>
+        <input
+          type="text"
+          formControlName="phoneNumber"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- Email -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- new Password -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">New Password</label>
+        <input
+          type="password"
+          formControlName="newPassword"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- Confirm Password -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Confirm Password *</label>
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+      <!-- Roles -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Roles</label>
+        <input
+          type="text"
+          formControlName="roles"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+
+      <!-- Teams -->
+      <div class="flex flex-col">
+        <label class="font-medium mb-1">Teams</label>
+        <input
+          type="text"
+          formControlName="teams"
+          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-6 flex justify-end space-x-4">
+      <button
+        type="button"
+        class="px-4 py-2 border border-gray-400 rounded hover:bg-gray-100"
+      >
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</div>

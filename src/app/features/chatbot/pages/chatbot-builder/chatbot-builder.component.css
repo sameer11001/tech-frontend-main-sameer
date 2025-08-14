@@ -1,0 +1,40 @@
+/* Chatbot Builder Styles */ 
+
+/* Canvas cursor styles */
+.canvas-container {
+  cursor: grab;
+}
+
+.canvas-container.panning {
+  cursor: grabbing;
+}
+
+.canvas-container.dragging {
+  cursor: grabbing;
+}
+
+/* Block styles */
+.flow-block {
+  cursor: move;
+}
+
+.flow-block:hover {
+  cursor: grab;
+}
+
+.flow-block.dragging {
+  cursor: grabbing;
+}
+
+/* Prevent text selection during dragging */
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth transitions for canvas transform */
+.canvas-transform {
+  transition: transform 0.1s ease-out;
+} 

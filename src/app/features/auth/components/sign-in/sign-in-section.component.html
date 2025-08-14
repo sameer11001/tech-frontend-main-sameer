@@ -1,0 +1,268 @@
+<section class="flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 transition-colors duration-300 min-h-[calc(100vh-80px)]">
+  <!-- Background decorative elements -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-20 -right-20 w-40 h-40 bg-blue-100 dark:bg-blue-900/20 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+    <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-indigo-100 dark:bg-indigo-900/20 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+  </div>
+
+  <div class="relative w-full max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-2xl">
+      <div class="grid lg:grid-cols-2">
+        
+        <!-- Left Side: Login Form -->
+        <div class="p-6 lg:p-8 flex flex-col justify-center">
+          <!-- Logo and Header -->
+          <div class="text-center lg:text-left mb-6">
+            <div class="flex justify-center lg:justify-start mb-4">
+              <img src="assets/features/logo_no_background.png" 
+                   class="h-8 w-auto transition-transform duration-300 hover:scale-105" 
+                   alt="Prog Gate Logo">
+            </div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-1 transition-colors duration-300">
+              Welcome back
+            </h1>
+            <p class="text-gray-600 dark:text-gray-300 text-sm transition-colors duration-300">
+              Sign in to your Prog Gate account
+            </p>
+          </div>
+
+          <!-- Form -->
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
+            
+            <!-- Email Field -->
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-200 transition-colors duration-300">
+                Email address
+              </label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-blue-500">
+                  <svg class="h-4 w-4 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                  </svg>
+                </div>
+                <input
+                  formControlName="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  placeholder="Enter your email"
+                  class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-300 transform focus:scale-[1.01]"
+                  [ngClass]="{
+                    'border-red-500 focus:ring-red-500 animate-pulse': loginForm.get('email')?.invalid && loginForm.get('email')?.touched,
+                    'border-green-500 focus:ring-green-500': loginForm.get('email')?.valid && loginForm.get('email')?.touched
+                  }"
+                />
+              </div>
+              <div
+                *ngIf="formValidator.isFieldFilled(loginForm, 'email')"
+                class="text-red-500 text-xs mt-1 flex items-center animate-bounce"
+              >
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span *ngIf="loginForm.get('email')?.hasError('required')">Email is required</span>
+                <span *ngIf="loginForm.get('email')?.hasError('email')">Please enter a valid email address</span>
+              </div>
+            </div>
+
+            <!-- Password Field -->
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-200 transition-colors duration-300">
+                Password
+              </label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-blue-500">
+                  <svg class="h-4 w-4 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
+                </div>
+                <input
+                  formControlName="password"
+                  type="password"
+                  required
+                  autocomplete="current-password"
+                  placeholder="Enter your password"
+                  class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-300 transform focus:scale-[1.01]"
+                  [ngClass]="{
+                    'border-red-500 focus:ring-red-500 animate-pulse': loginForm.get('password')?.invalid && loginForm.get('password')?.touched,
+                    'border-green-500 focus:ring-green-500': loginForm.get('password')?.valid && loginForm.get('password')?.touched
+                  }"
+                />
+              </div>
+              <div
+                *ngIf="formValidator.isFieldFilled(loginForm, 'password')"
+                class="text-red-500 text-xs mt-1 flex items-center animate-bounce"
+              >
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span *ngIf="loginForm.get('password')?.hasError('required')">Password is required</span>
+                <span *ngIf="loginForm.get('password')?.hasError('minlength')">Password must be at least 8 characters long</span>
+                <span *ngIf="loginForm.get('password')?.hasError('pattern')">Password must contain at least one uppercase letter, one lowercase letter, and one number</span>
+              </div>
+            </div>
+
+            <!-- Client ID Field -->
+            <div class="space-y-1">
+              <label class="block text-xs font-medium text-gray-700 dark:text-gray-200 transition-colors duration-300">
+                Client ID
+              </label>
+              <div class="relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-blue-500">
+                  <svg class="h-4 w-4 text-gray-400 group-focus-within:text-blue-500 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V4a2 2 0 114 0v2m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/>
+                  </svg>
+                </div>
+                <input
+                  formControlName="client_id"
+                  type="text"
+                  required
+                  autocomplete="client_id"
+                  placeholder="Enter your Client ID"
+                  class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-all duration-300 transform focus:scale-[1.01]"
+                  [ngClass]="{
+                    'border-red-500 focus:ring-red-500 animate-pulse': loginForm.get('client_id')?.invalid && loginForm.get('client_id')?.touched,
+                    'border-green-500 focus:ring-green-500': loginForm.get('client_id')?.valid && loginForm.get('client_id')?.touched
+                  }"
+                />
+              </div>
+              <div
+                *ngIf="formValidator.isFieldFilled(loginForm, 'client_id')"
+                class="text-red-500 text-xs mt-1 flex items-center animate-bounce"
+              >
+                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span *ngIf="loginForm.get('client_id')?.hasError('required')">Client ID is required</span>
+                <span *ngIf="loginForm.get('client_id')?.hasError('pattern')">Client ID must contain only alphanumeric characters</span>
+              </div>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input
+                  id="remember_me"
+                  formControlName="remember_me"
+                  type="checkbox"
+                  class="h-3 w-3 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600 transition-colors duration-300"
+                />
+                <label
+                  for="remember_me"
+                  class="ml-2 text-xs text-gray-700 dark:text-gray-200 transition-colors duration-300"
+                >
+                  Remember me
+                </label>
+              </div>
+              <a
+                href="#"
+                class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-300 hover:underline"
+              >
+                Forgot password?
+              </a>
+            </div>
+
+            <!-- Error Message -->
+            <div *ngIf="error$ | async as error" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 animate-pulse">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-xs text-red-700 dark:text-red-300">{{ "Login Failed Please Check Your Credentials and Try Again" }}</span>
+              </div>
+            </div>
+
+            <!-- Success Message -->
+            <div *ngIf="response$ | async as response" class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 animate-pulse">
+              <div class="flex items-center">
+                <svg class="w-4 h-4 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-xs text-green-700 dark:text-green-300">{{ "Login Success" }}</span>
+              </div>
+            </div>
+
+            <!-- Login Button -->
+            <div class="pt-1">
+              <app-loading-button
+                type="submit"
+                [customClasses]="'w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white py-2 px-4 rounded-lg font-medium text-sm transition-all duration-300 transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-md hover:shadow-lg'"
+                [buttonText]="'Sign In'"
+                [isLoading]="(loading$ | async) ?? false"
+              ></app-loading-button>
+            </div>
+
+            <!-- Divider -->
+            <div class="relative my-4">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
+              </div>
+             
+            </div>
+
+            
+          </form>
+
+          <!-- Footer -->
+          <div class="mt-4 text-center">
+            <p class="text-xs text-gray-600 dark:text-gray-300 transition-colors duration-300">
+              Don't have an account? 
+              <a href="#" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors duration-300 hover:underline">
+                Sign up
+              </a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Side: Image and Content -->
+        <div class="hidden lg:block relative bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
+          <div class="absolute inset-0 bg-black/20"></div>
+          <!-- Animated background elements -->
+          <div class="absolute inset-0">
+            <div class="absolute top-6 left-6 w-12 h-12 bg-white/10 rounded-full animate-bounce"></div>
+            <div class="absolute bottom-12 right-6 w-10 h-10 bg-white/10 rounded-full animate-bounce" style="animation-delay: 0.5s;"></div>
+            <div class="absolute top-1/2 left-1/4 w-8 h-8 bg-white/10 rounded-full animate-bounce" style="animation-delay: 1s;"></div>
+          </div>
+          <div class="relative z-10 flex flex-col justify-center h-full p-8 text-white">
+            <div class="max-w-sm">
+              <h2 class="text-xl font-bold mb-3 transition-all duration-300 hover:scale-105">
+                Power Your Business Conversations
+              </h2>
+              <p class="text-sm text-blue-100 mb-6 transition-colors duration-300">
+                Access your Prog Gate dashboard to manage customer communications, track analytics, and grow your business with our powerful messaging platform.
+              </p>
+              
+              <!-- Features List -->
+              <div class="space-y-3">
+                <div class="flex items-center group">
+                  <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-2 transition-all duration-300 group-hover:bg-white/30 group-hover:scale-110">
+                    <svg class="w-3 h-3 text-white transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <span class="text-sm text-blue-100 transition-colors duration-300 group-hover:text-white">Multi-channel messaging</span>
+                </div>
+                <div class="flex items-center group">
+                  <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-2 transition-all duration-300 group-hover:bg-white/30 group-hover:scale-110">
+                    <svg class="w-3 h-3 text-white transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <span class="text-sm text-blue-100 transition-colors duration-300 group-hover:text-white">AI-powered automation</span>
+                </div>
+                <div class="flex items-center group">
+                  <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mr-2 transition-all duration-300 group-hover:bg-white/30 group-hover:scale-110">
+                    <svg class="w-3 h-3 text-white transition-transform duration-300 group-hover:rotate-12" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                  </div>
+                  <span class="text-sm text-blue-100 transition-colors duration-300 group-hover:text-white">Advanced analytics</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

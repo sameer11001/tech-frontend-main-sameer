@@ -1,0 +1,88 @@
+<nav class="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <!-- Logo with better hover effect -->
+            <a href="#" class="flex-shrink-0 flex items-center group">
+                <img src="assets/features/logo_no_background.png" 
+                     class="h-12 w-auto transition-transform group-hover:scale-105" 
+                     alt="Prog Gate Logo">
+            </a>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                
+                <!-- Enhanced dark mode toggle -->
+                <button (click)="onToggleDarkMode()" type="button" 
+                        class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
+                        aria-label="Toggle dark mode">
+                    <svg *ngIf="!isDarkMode" class="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg *ngIf="isDarkMode" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.22a1 1 0 011.415 1.415l-.707.707a1 1 0 11-1.414-1.414l.707-.707zM18 9a1 1 0 100 2h-1a1 1 0 100-2h1zM4 9a1 1 0 100 2H3a1 1 0 100-2h1zM15.657 14.657a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM6.343 14.657a1 1 0 001.414 1.414l.707-.707a1 1 0 10-1.414-1.414l-.707-.707zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM10 5a5 5 0 100 10A5 5 0 0010 5z"/>
+                    </svg>
+                </button>
+                
+                <!-- CTA Button -->
+                <a (click)="goToLogin()"  class="ml-4 btn-primary">Get Started</a>
+            </div>
+
+            <!-- Mobile menu button - improved accessibility -->
+            <div class="md:hidden flex items-center space-x-2">
+                <!-- Mobile dark mode toggle -->
+                <button (click)="onToggleDarkMode()" type="button" 
+                        class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Toggle dark mode">
+                    <svg *ngIf="!isDarkMode" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg *ngIf="isDarkMode" class="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4.22 2.22a1 1 0 011.415 1.415l-.707.707a1 1 0 11-1.414-1.414l.707-.707zM18 9a1 1 0 100 2h-1a1 1 0 100-2h1zM4 9a1 1 0 100 2H3a1 1 0 100-2h1zM15.657 14.657a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM6.343 14.657a1 1 0 001.414 1.414l.707-.707a1 1 0 10-1.414-1.414l-.707-.707zM10 16a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM10 5a5 5 0 100 10A5 5 0 0010 5z"/>
+                    </svg>
+                </button>
+                
+                <button id="mobile-menu-button" type="button" 
+                        class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-expanded="false" aria-controls="mobile-menu">
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu - redesigned with transitions -->
+    <div id="mobile-menu" class="md:hidden hidden transition-all duration-300 ease-out">
+        <div class="px-2 pt-2 pb-4 space-y-1 sm:px-3">
+            <a href="#" class="mobile-nav-link">Home</a>
+            <a href="#features" class="mobile-nav-link">Features</a>
+            <a href="#pricing" class="mobile-nav-link">Pricing</a>
+        </div>
+        <div class="px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+            <a href="#" class="w-full btn-primary block text-center">Get Started</a>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .nav-link {
+        @apply px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors relative;
+    }
+    .nav-link:after {
+        @apply content-[''] absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300;
+    }
+    .nav-link:hover:after {
+        @apply left-0 w-full;
+    }
+    .mobile-nav-link {
+        @apply block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700;
+    }
+    .btn-primary {
+        @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors;
+    }
+</style>
