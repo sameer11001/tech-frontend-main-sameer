@@ -1,280 +1,32 @@
-<div class="flex flex-col top-0 right-0 h-screen  bg-white border-l border-gray-200 overflow-y-auto">
+<div class="flex flex-col top-2 right-0 h-screen bg-[#ffffff] border-l border-[#EEF0FF] overflow-y-auto">
+  <app-contact-header [conversation]="conversation"></app-contact-header>
 
-    <div class="p-4 border-b border-gray-200">
-        <div class="flex items-center gap-4">
-            <img src="/assets/placeholder.jpg" alt="avatar"
-                class="w-10 h-10 rounded-full bg-gray-100">
-            <div class="font-medium text-gray-900">{{ conversation.contact_name }}</div>
-        </div>
-    </div>
-
-
-    <div class="p-4 space-y-4">
-
-        <div class="border rounded-lg">
-            <div class="flex items-center gap-2 p-3">
-                <svg class="w-5 h-5 text-gray-500">
-                    <path id="Vector"
-                        d="M3.54163 3.33301C2.5135 3.33301 1.66663 4.17988 1.66663 5.20801V14.7913C1.66663 15.8195 2.5135 16.6663 3.54163 16.6663H16.4583C17.4864 16.6663 18.3333 15.8195 18.3333 14.7913V5.20801C18.3333 4.17988 17.4864 3.33301 16.4583 3.33301H3.54163ZM3.54163 4.58301H16.4583C16.811 4.58301 17.0833 4.8553 17.0833 5.20801V14.7913C17.0833 15.144 16.811 15.4163 16.4583 15.4163H3.54163C3.18892 15.4163 2.91663 15.144 2.91663 14.7913V5.20801C2.91663 4.8553 3.18892 4.58301 3.54163 4.58301ZM6.66663 7.08301C6.33511 7.08301 6.01716 7.2147 5.78274 7.44912C5.54832 7.68354 5.41663 8.00149 5.41663 8.33301C5.41663 8.66453 5.54832 8.98247 5.78274 9.21689C6.01716 9.45131 6.33511 9.58301 6.66663 9.58301C6.99815 9.58301 7.31609 9.45131 7.55051 9.21689C7.78493 8.98247 7.91663 8.66453 7.91663 8.33301C7.91663 8.00149 7.78493 7.68354 7.55051 7.44912C7.31609 7.2147 6.99815 7.08301 6.66663 7.08301ZM11.0416 7.91634C10.9588 7.91517 10.8766 7.93047 10.7997 7.96135C10.7229 7.99224 10.6529 8.03809 10.5939 8.09624C10.535 8.15439 10.4881 8.22369 10.4562 8.3001C10.4242 8.37651 10.4077 8.45851 10.4077 8.54134C10.4077 8.62417 10.4242 8.70617 10.4562 8.78258C10.4881 8.85899 10.535 8.92829 10.5939 8.98644C10.6529 9.04459 10.7229 9.09044 10.7997 9.12133C10.8766 9.15221 10.9588 9.16751 11.0416 9.16634H14.7916C14.8744 9.16751 14.9567 9.15221 15.0335 9.12133C15.1104 9.09044 15.1803 9.04459 15.2393 8.98644C15.2983 8.92829 15.3451 8.85899 15.3771 8.78258C15.4091 8.70617 15.4255 8.62417 15.4255 8.54134C15.4255 8.45851 15.4091 8.37651 15.3771 8.3001C15.3451 8.22369 15.2983 8.15439 15.2393 8.09624C15.1803 8.03809 15.1104 7.99224 15.0335 7.96135C14.9567 7.93047 14.8744 7.91517 14.7916 7.91634H11.0416ZM5.20829 10.4163C4.86329 10.4163 4.58329 10.6963 4.58329 11.0413C4.58329 11.6663 4.58346 12.9163 6.62512 12.9163H6.70813C8.7498 12.9163 8.74996 11.6663 8.74996 11.0413C8.74996 10.6963 8.46996 10.4163 8.12496 10.4163H5.20829ZM11.0416 10.833C10.9588 10.8318 10.8766 10.8471 10.7997 10.878C10.7229 10.9089 10.6529 10.9548 10.5939 11.0129C10.535 11.0711 10.4881 11.1404 10.4562 11.2168C10.4242 11.2932 10.4077 11.3752 10.4077 11.458C10.4077 11.5408 10.4242 11.6228 10.4562 11.6992C10.4881 11.7757 10.535 11.845 10.5939 11.9031C10.6529 11.9613 10.7229 12.0071 10.7997 12.038C10.8766 12.0689 10.9588 12.0842 11.0416 12.083H14.7916C14.8744 12.0842 14.9567 12.0689 15.0335 12.038C15.1104 12.0071 15.1803 11.9613 15.2393 11.9031C15.2983 11.845 15.3451 11.7757 15.3771 11.6992C15.4091 11.6228 15.4255 11.5408 15.4255 11.458C15.4255 11.3752 15.4091 11.2932 15.3771 11.2168C15.3451 11.1404 15.2983 11.0711 15.2393 11.0129C15.1803 10.9548 15.1104 10.9089 15.0335 10.878C14.9567 10.8471 14.8744 10.8318 14.7916 10.833H11.0416Z"
-                        fill="#848A86"></path>
-                </svg>
-                <span class="text-sm font-medium">Contact Info</span>
-            </div>
-
-            <div class="px-4 pb-4 space-y-3">
-                <div>
-                    <div class="text-xs text-gray-500 mb-1">Phone Number</div>
-                    <div class="flex items-center gap-2">
-                        <span>{{conversation.country_code_phone_number}} {{conversation.contact_phone_number}}</span>
-                    </div>
-                </div>
-                <div>
-                    <div class="text-xs text-gray-500 mb-1">User Name</div>
-                    <div>{{conversation.contact_name}}</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" (click)="openAttributesDialog()">
-            <div class="flex items-center justify-between p-3">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-gray-500">
-                        <g id="Address Book">
-                            <path id="Vector"
-                                d="M5.20834 1.66699C4.18021 1.66699 3.33334 2.51387 3.33334 3.54199V15.5228C3.32232 15.5899 3.32232 15.6583 3.33334 15.7254V16.4587C3.33334 17.4868 4.18021 18.3337 5.20834 18.3337H16.4583C16.5412 18.3348 16.6234 18.3195 16.7002 18.2886C16.7771 18.2578 16.847 18.2119 16.906 18.1538C16.965 18.0956 17.0118 18.0263 17.0438 17.9499C17.0758 17.8735 17.0922 17.7915 17.0922 17.7087C17.0922 17.6258 17.0758 17.5438 17.0438 17.4674C17.0118 17.391 16.965 17.3217 16.906 17.2636C16.847 17.2054 16.7771 17.1596 16.7002 17.1287C16.6234 17.0978 16.5412 17.0825 16.4583 17.0837H5.20834C4.85563 17.0837 4.58334 16.8114 4.58334 16.4587V16.2503H16.4583C16.6241 16.2503 16.7831 16.1845 16.9003 16.0672C17.0175 15.95 17.0833 15.7911 17.0833 15.6253V3.54199C17.0833 2.51387 16.2365 1.66699 15.2083 1.66699H5.20834ZM5.20834 2.91699H15.2083C15.561 2.91699 15.8333 3.18928 15.8333 3.54199V15.0003H4.58334V3.54199C4.58334 3.18928 4.85563 2.91699 5.20834 2.91699ZM10.1017 4.16862C7.79041 4.1696 5.83681 6.15236 5.83497 8.74951C5.83308 11.3403 7.77238 13.3337 10.2083 13.3337H12.7083C12.7912 13.3348 12.8734 13.3195 12.9502 13.2886C13.0271 13.2578 13.097 13.2119 13.156 13.1538C13.215 13.0956 13.2618 13.0263 13.2938 12.9499C13.3258 12.8735 13.3422 12.7915 13.3422 12.7087C13.3422 12.6258 13.3258 12.5438 13.2938 12.4674C13.2618 12.391 13.215 12.3217 13.156 12.2636C13.097 12.2054 13.0271 12.1596 12.9502 12.1287C12.8734 12.0978 12.7912 12.0825 12.7083 12.0837H10.2083C8.4318 12.0837 7.08352 10.7437 7.08497 8.75114V8.75033C7.08605 6.76455 8.49912 5.4193 10.1025 5.41862C11.2742 5.41787 12.0444 5.76942 12.5537 6.30729C13.0631 6.84518 13.3333 7.61251 13.3333 8.54199V8.95866C13.3333 9.31137 13.061 9.58366 12.7083 9.58366C12.3556 9.58366 12.0833 9.31137 12.0833 8.95866V7.29199C12.0852 7.16623 12.049 7.04284 11.9796 6.93795C11.9102 6.83306 11.8107 6.75156 11.6942 6.70409C11.5778 6.65662 11.4497 6.64539 11.3267 6.67188C11.2038 6.69836 11.0917 6.76133 11.0051 6.85254C10.7667 6.73639 10.4963 6.66699 10.2083 6.66699C9.60938 6.66699 9.08338 6.96272 8.77361 7.3693C8.46383 7.77588 8.33334 8.2667 8.33334 8.75033C8.33334 9.23396 8.46383 9.72477 8.77361 10.1313C9.08338 10.5379 9.60938 10.8337 10.2083 10.8337C10.6992 10.8337 11.1386 10.6336 11.4526 10.3381C11.7866 10.6426 12.2256 10.8337 12.7083 10.8337C13.7365 10.8337 14.5833 9.98678 14.5833 8.95866V8.54199C14.5833 7.36523 14.2283 6.25807 13.4611 5.44792C12.6939 4.63777 11.5363 4.1677 10.1017 4.16862ZM10.2083 7.91699C10.4427 7.91699 10.5417 7.98584 10.6486 8.12614C10.7555 8.26643 10.8333 8.50479 10.8333 8.75033C10.8333 8.99586 10.7555 9.23422 10.6486 9.37451C10.5417 9.51481 10.4427 9.58366 10.2083 9.58366C9.97397 9.58366 9.87496 9.51481 9.76807 9.37451C9.66118 9.23422 9.58334 8.99586 9.58334 8.75033C9.58334 8.50479 9.66118 8.26643 9.76807 8.12614C9.87496 7.98584 9.97397 7.91699 10.2083 7.91699Z"
-                                fill="#848A86"></path>
-                        </g>
-                    </svg>
-                    <span class="text-sm font-medium">Contact Attributes</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-gray-500">Click to view</span>
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="px-4 pb-4">
-                <div *ngIf="contactAttributesLoading$ | async">
-                    <div class="mb-3" *ngFor="let item of [1,2,3]">
-                        <app-skeleton-loader type="paragraph" width="w-16" height="h-3" class="mb-1"></app-skeleton-loader>
-                        <app-skeleton-loader type="paragraph" width="w-32" height="h-4"></app-skeleton-loader>
-                    </div>
-                </div>
-                <div *ngIf="!(contactAttributesLoading$ | async)">
-                    <ng-container *ngIf="contactAttributes$ | async as attributes">
-                        <div *ngIf="attributes.length === 0" class="text-sm text-gray-500">
-                            No attributes found
-                        </div>
-                                                 <div *ngIf="attributes.length > 0" class="space-y-2">
-                             <div *ngFor="let attribute of attributes.slice(0, 2)" class="mb-2">
-                                 <div class="text-xs font-semibold text-blue-600 mb-1">{{ attribute.name }}</div>
-                             </div>
-                             <div *ngIf="attributes.length > 2" class="text-xs text-blue-600 font-medium">
-                                 +{{ attributes.length - 2 }} more attributes
-                             </div>
-                         </div>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-
-        <div class="border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors" (click)="openTagsDialog()">
-            <div class="flex items-center justify-between p-3">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-gray-500">
-                        <g id="Price Tag">
-                            <path id="Vector"
-                                d="M11.6667 1.66699C11.0036 1.66699 10.368 1.93052 9.89913 2.39941L2.39913 9.89941C1.42832 10.8702 1.42832 12.4638 2.39913 13.4346L6.5658 17.6012C7.0347 18.0701 7.67031 18.3337 8.33338 18.3337C8.99644 18.3337 9.63205 18.0701 10.101 17.6012L17.601 10.1012C18.07 9.63216 18.3334 8.99591 18.3334 8.33284V3.75033C18.3334 2.60721 17.3932 1.66699 16.25 1.66699H11.6667ZM11.6667 2.91699H16.25C16.7153 2.91699 17.0834 3.28511 17.0834 3.75033V8.33284C17.0834 8.67145 16.9564 8.97819 16.7172 9.21745L9.21716 16.7174C8.97773 16.9569 8.67198 17.0837 8.33338 17.0837C7.99477 17.0837 7.68902 16.9569 7.44959 16.7174L3.28292 12.5508C2.79123 12.0591 2.79123 11.2749 3.28292 10.7832L10.7829 3.2832C11.0224 3.04377 11.3281 2.91699 11.6667 2.91699ZM14.1667 4.58366C13.4763 4.58366 12.9167 5.14324 12.9167 5.83366C12.9167 6.52408 13.4763 7.08366 14.1667 7.08366C14.8571 7.08366 15.4167 6.52408 15.4167 5.83366C15.4167 5.14324 14.8571 4.58366 14.1667 4.58366Z"
-                                fill="#848A86"></path>
-                        </g>
-                    </svg>
-                    <span class="text-sm font-medium">Tags</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="text-xs text-gray-500">Click to view</span>
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <div class="px-4 pb-4">
-                <div *ngIf="contactTagsLoading$ | async">
-                    <div class="flex gap-2 mb-3">
-                        <app-skeleton-loader type="card" width="w-16" height="h-6"></app-skeleton-loader>
-                        <app-skeleton-loader type="card" width="w-20" height="h-6"></app-skeleton-loader>
-                        <app-skeleton-loader type="card" width="w-14" height="h-6"></app-skeleton-loader>
-                    </div>
-                </div>
-                <div *ngIf="!(contactTagsLoading$ | async)">
-                    <ng-container *ngIf="contactTags$ | async as tags">
-                        <div *ngIf="tags.length === 0" class="text-sm text-gray-500">
-                            No tags found
-                        </div>
-                                                 <div *ngIf="tags.length > 0" class="space-y-3">
-                             <div class="flex flex-wrap gap-2">
-                                 <div *ngFor="let tag of tags.slice(0, 2)" class="mb-2">
-                                     <span class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xs font-semibold px-3 py-2 rounded-full shadow-sm">
-                                         {{ tag.name }}
-                                     </span>
-                                 </div>
-                             </div>
-                             <div *ngIf="tags.length > 2" class="text-xs text-blue-600 font-medium">
-                                 +{{ tags.length - 2 }} more tags
-                             </div>
-                         </div>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-
-        <div class="border rounded-lg">
-            <div class="flex items-center justify-between p-3">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-gray-500">
-                        <g id="Task">
-                            <path id="Vector"
-                                d="M8.54171 1.25C7.58479 1.25 6.79408 1.98609 6.68787 2.91667H5.20837C4.18025 2.91667 3.33337 3.76354 3.33337 4.79167V16.0417C3.33337 17.0698 4.18025 17.9167 5.20837 17.9167H14.7917C15.8198 17.9167 16.6667 17.0698 16.6667 16.0417V4.79167C16.6667 3.76354 15.8198 2.91667 14.7917 2.91667H13.3122C13.206 1.98609 12.4153 1.25 11.4584 1.25H8.54171ZM8.54171 2.5H11.4584C11.8111 2.5 12.0834 2.77229 12.0834 3.125C12.0834 3.47771 11.8111 3.75 11.4584 3.75H8.54171C8.189 3.75 7.91671 3.47771 7.91671 3.125C7.91671 2.77229 8.189 2.5 8.54171 2.5ZM5.20837 4.16667H6.98735C7.32556 4.66746 7.89784 5 8.54171 5H11.4584C12.1022 5 12.6745 4.66746 13.0127 4.16667H14.7917C15.1444 4.16667 15.4167 4.43896 15.4167 4.79167V16.0417C15.4167 16.3944 15.1444 16.6667 14.7917 16.6667H5.20837C4.85567 16.6667 4.58337 16.3944 4.58337 16.0417V4.79167C4.58337 4.43896 4.85567 4.16667 5.20837 4.16667ZM11.9174 7.0874C11.4472 7.0874 10.9777 7.2645 10.6226 7.61963L6.97595 11.2663C6.89447 11.3476 6.83702 11.4498 6.80994 11.5617L6.26713 13.8118C6.24197 13.916 6.24399 14.0248 6.27299 14.1279C6.30198 14.231 6.35699 14.3249 6.43272 14.4007C6.50845 14.4764 6.60238 14.5314 6.70548 14.5604C6.80859 14.5894 6.91742 14.5914 7.02152 14.5662L9.27169 14.0226C9.38348 13.9958 9.48569 13.9386 9.5671 13.8574L13.2129 10.2108H13.2137C13.9237 9.5002 13.9232 8.32989 13.2129 7.61963C12.8578 7.2645 12.3875 7.0874 11.9174 7.0874ZM11.9174 8.32926C12.0651 8.32926 12.213 8.3873 12.3291 8.50342C12.5614 8.73566 12.5617 9.09504 12.3291 9.3278L8.80782 12.8491L7.72302 13.1104L7.98425 12.0256L11.5064 8.50342C11.6225 8.3873 11.7696 8.32926 11.9174 8.32926Z"
-                                fill="#848A86"></path>
-                        </g>
-                    </svg>
-                    <span class="text-sm font-medium">Notes</span>
-                </div>
-                <button 
-                    (click)="toggleNoteInput()"
-                    class="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    [class.text-blue-600]="showNoteInput"
-                >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <div class="px-4 pb-4">
-                <!-- Note Input Section -->
-                <div *ngIf="showNoteInput" class="mb-4">
-                    <textarea
-                        [(ngModel)]="noteContent"
-                        placeholder="Write your note here..."
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                        rows="3"
-                    ></textarea>
-                    <div class="flex gap-2 mt-2">
-                        <button 
-                            (click)="addNote()"
-                            [disabled]="!noteContent.trim()"
-                            class="flex items-center gap-1 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                        >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Add Note
-                        </button>
-                        <button 
-                            (click)="cancelNote()"
-                            class="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Notes List -->
-                <div *ngIf="contactNotesLoading$ | async" class="space-y-3">
-                    <div *ngFor="let item of [1,2,3]" class="animate-pulse">
-                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                        <div class="h-3 bg-gray-200 rounded w-1/2"></div>
-                    </div>
-                </div>
-
-                <div *ngIf="!(contactNotesLoading$ | async)">
-                    <ng-container *ngIf="contactNotes$ | async as notes">
-                        <div *ngIf="notes.length === 0" class="text-sm text-gray-500 text-center py-4">
-                            No notes yet. Click the + icon to add a note.
-                        </div>
-                        <div *ngIf="notes.length > 0" class="space-y-3">
-                            <div *ngFor="let note of notes" class="p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                <!-- Edit Mode -->
-                                <div *ngIf="editingNoteId === note.id" class="space-y-2">
-                                    <textarea
-                                        [(ngModel)]="editingContent"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                                        rows="3"
-                                    ></textarea>
-                                    <div class="flex gap-2">
-                                        <button 
-                                            (click)="saveEditNote()"
-                                            [disabled]="!editingContent.trim()"
-                                            class="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                            Save
-                                        </button>
-                                        <button 
-                                            (click)="cancelEditNote()"
-                                            class="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded hover:bg-gray-300 transition-colors"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </div>
-                                
-                                <!-- View Mode -->
-                                <div *ngIf="editingNoteId !== note.id">
-                                    <div class="text-sm text-gray-800 mb-1">{{ note.content }}</div>
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex items-center gap-2">
-                                            <div class="text-xs text-gray-500">
-                                                {{ note.updated_at | date:'short' }}
-                                            </div>
-                                            <div class="text-xs text-blue-600 font-medium">
-                                                {{ note.user.username }}
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center gap-1">
-                                            <button 
-                                                (click)="startEditNote(note)"
-                                                class="p-1 hover:bg-gray-200 rounded-full transition-colors"
-                                                title="Edit note"
-                                            >
-                                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                            </button>
-                                            <button 
-                                                (click)="deleteNote(note.id)"
-                                                class="p-1 hover:bg-red-100 rounded-full transition-colors"
-                                                title="Delete note"
-                                            >
-                                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Load More Button -->
-                            <div *ngIf="notes.length > 0" class="mt-4 text-center">
-                                <button 
-                                    (click)="loadMoreNotes()"
-                                    [disabled]="contactNotesLoading$ | async"
-                                    class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    <span *ngIf="!(contactNotesLoading$ | async)">Load More Notes</span>
-                                    <span *ngIf="contactNotesLoading$ | async">Loading...</span>
-                                </button>
-                            </div>
-                        </div>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-    </div>
+  <div class="p-4 space-y-6">
+    <app-contact-info [conversation]="conversation"></app-contact-info>
+    
+    <div class="h-2"></div>  <!-- Spacer -->
+    
+    <app-attributes-card
+      [attributes$]="contactAttributes$"
+      [loading$]="contactAttributesLoading$"
+      [conversation]="conversation">
+    </app-attributes-card>
+    
+    <div class="h-2"></div>  <!-- Spacer -->
+    
+    <app-tags-card
+      [tags$]="contactTags$"
+      [loading$]="contactTagsLoading$"
+      [conversation]="conversation">
+    </app-tags-card>
+    
+    <div class="h-4"></div>  <!-- Spacer -->
+    
+    <app-notes-card
+      [notes$]="contactNotes$"
+      [loading$]="contactNotesLoading$"
+      [conversation]="conversation"
+      [currentUser$]="currentUser$">
+    </app-notes-card>
+  </div>
 </div>

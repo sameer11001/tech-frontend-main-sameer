@@ -38,7 +38,7 @@
             </select>
             <button type="button" 
                     (click)="onAddNewTemplate()"
-                    class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    class="ml-2 px-4 py-2 bg-indigo-300 border border-[#E6E8FF] hover:bg-[#4A5BD1] transition-colors text-white rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500">
               + Add New Template
             </button>
           </div>
@@ -61,18 +61,18 @@
   
       <!-- Contact Selection Section -->
       <section class="mb-8 border-t border-gray-200 pt-6">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Who do you want to send it to?</h2>
-        <p class="text-gray-600 mb-4">Select contacts below or Download sample format for contact upload</p>
+        <!-- <h2 class="text-xl font-bold text-gray-800 mb-4">Who do you want to send it to?</h2> -->
+        <!-- <p class="text-gray-600 mb-4">Select contacts below or Download sample format for contact upload</p> -->
         
         <div class="flex flex-col space-y-4 mb-6">
-          <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <!-- <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
             Import Contacts
-          </button>
+          </button> -->
           
-          <div class="flex items-center">
+          <!-- <div class="flex items-center">
             <input type="checkbox" id="exclude-invalid" class="mr-2 h-4 w-4 text-blue-500 rounded">
             <label for="exclude-invalid" class="text-gray-700">Exclude invalid contacts</label>
-          </div>
+          </div> -->
           
           <div class="text-sm text-gray-600">
             Valid contacts : <span class="font-medium">{{ (contacts$ | async)?.length || 0 }}/{{ (contacts$ | async)?.length || 0 }} contacts</span>
@@ -89,14 +89,14 @@
         
         <!-- Contacts Table -->
         <div class="mt-6 overflow-x-auto">
-          <div class="flex justify-between items-center mb-4">
+          <!-- <div class="flex justify-between items-center mb-4">
             <div class="text-sm text-gray-600">
               Selected: <span class="font-medium">{{ selectedContacts.length }} / 999</span> Contacts remaining
             </div>
             <div class="text-xs text-gray-500">
               Current limits: 1000 unique contacts/24 hours
             </div>
-          </div>
+          </div> -->
     
           <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -229,7 +229,7 @@
           </button>
           <button type="button" (click)="onAddBroadcast()" 
                   [disabled]="(publishLoading$ | async)"
-                  class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
+                  class="px-6 py-2 bg-indigo-300 border border-[#E6E8FF] hover:bg-[#4A5BD1] transition-colors text-white rounded-md mr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed">
             <span *ngIf="!(publishLoading$ | async)">Add Broadcast</span>
             <span *ngIf="publishLoading$ | async">Publishing...</span>
           </button>

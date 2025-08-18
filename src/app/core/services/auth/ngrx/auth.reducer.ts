@@ -26,7 +26,6 @@ export const authReducer = createReducer(
         ...state,
         loading: false,
         response: token,
-        user: { id: 'user', token }, // Add a default user object
         error: ''
     })),
     on(AuthActions.loginFailure, (state, { error }) => ({
@@ -46,5 +45,4 @@ export const authReducer = createReducer(
       ...state,
       user
     }))
-
 );

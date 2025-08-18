@@ -1,381 +1,82 @@
-<!-- Loading Overlay -->
-<div *ngIf="isLoading" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-  <div class="text-center">
-    <img src="/assets/features/loader_logo.gif" alt="Loading..." class="w-32 h-32 mx-auto mb-6" />
-    <h2 class="text-2xl font-semibold text-gray-800 mb-2">Creating Template...</h2>
-    <p class="text-gray-600">Please wait while we process your template</p>
-  </div>
-</div>
+<app-loading-overlay
+  [isVisible]="isLoading"
+  title="Creating Template..."
+  message="Please wait while we process your template">
+</app-loading-overlay>
 
-<!-- Success Message Overlay -->
-<div *ngIf="showSuccess" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-  <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center shadow-2xl transform transition-all duration-500 scale-100">
-    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-      <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-      </svg>
-    </div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-4">Template Created Successfully!</h2>
-    <p class="text-gray-600 mb-6">Your WhatsApp template has been created and is ready to use.</p>
-    <div class="flex justify-center">
-      <div class="w-8 h-8 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
-    </div>
-  </div>
-</div>
+<app-success-message
+  [isVisible]="showSuccess"
+  title="Template Created Successfully!"
+  message="Your WhatsApp template has been created and is ready to use.">
+</app-success-message>
 
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 py-8 px-2">
+<div class="flex items-center  justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 py-8 px-2">
   <div class="w-full max-w-6xl flex flex-col md:flex-row rounded-2xl shadow-2xl overflow-hidden bg-white/80 backdrop-blur-lg">
     <!-- Left: Form Card -->
     <div class="flex-1 p-8 bg-white rounded-l-2xl shadow-lg min-w-0">
       <form [formGroup]="templateForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <!-- SECTION: Template Info -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <!-- Template Name -->
-          <div>
-            <label for="templateName" class="block text-sm font-medium text-gray-700 mb-1">
-              Template Name
-            </label>
-            <input id="templateName" type="text" formControlName="templateName"
-              class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-              placeholder="Enter template name" />
-            <div *ngIf="templateForm.get('templateName')?.invalid && templateForm.get('templateName')?.touched"
-              class="text-red-600 text-sm mt-1">
-              Template Name is required.
-            </div>
-          </div>
 
-          <!-- Category -->
-          <div>
-            <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <select id="category" formControlName="category"
-              class="block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-              <option value="" disabled>Select a category</option>
-              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-            </select>
-            <div *ngIf="templateForm.get('category')?.invalid && templateForm.get('category')?.touched"
-              class="text-red-600 text-sm mt-1">
-              Category is required.
-            </div>
-          </div>
+        <!-- Template Info Section -->
+        <app-template-info-section
+          [form]="templateForm"
+          [categories]="categories"
+          [languages]="languages">
+        </app-template-info-section>
 
-          <!-- Language -->
-          <div>
-            <label for="language" class="block text-sm font-medium text-gray-700 mb-1">
-              Language
-            </label>
-            <select id="language" formControlName="language"
-              class="block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-              <option value="" disabled>Select a language</option>
-              <option *ngFor="let lang of languages" [value]="lang[1]">
-                {{ lang[0] }}
-              </option>
-            </select>
-            <div *ngIf="templateForm.get('language')?.invalid && templateForm.get('language')?.touched"
-              class="text-red-600 text-sm mt-1">
-              Language is required.
-            </div>
+        <!-- Media Upload Section -->
+<form [formGroup]="templateForm" (ngSubmit)="onSubmit()">
+  <app-media-upload-section
+    [form]="templateForm"
+    [selectedMedia]="selectedMedia"
+    [mediaPreviewUrls]="mediaPreviewUrls"
+    [previewMediaType]="previewMediaType"
+    (mediaSelected)="onMediaSelected($event.event, $event.mediaType)">
+  </app-media-upload-section>
+</form>
 
-          </div>
-        </div>
+        <!-- Body and Footer Section -->
+        <app-body-footer-section
+          [form]="templateForm"
+          (addVariable)="onAddVariableToBody()">
+        </app-body-footer-section>
 
-        <!-- SECTION: Broadcast Title -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
-            Broadcast title
-          </label>
-          <p class="text-sm text-gray-500 mb-2">
-            Choose a title for your broadcast message.
-          </p>
-          
-          <div class="flex flex-wrap gap-4">
-            <label *ngFor="let option of broadcastOptions" class="flex items-center space-x-2 text-gray-700">
-              <input type="radio" formControlName="broadcastTitle" [value]="option" (change)="onBroadcastTitleChange($event)"
-                class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" />
-              <span>{{ option }}</span>
-            </label>
-          </div>
+        <!-- Buttons Section -->
+        <app-buttons-section
+          [shouldShowButtonSection]="shouldShowButtonSection"
+          [showButton]="showButton"
+          [buttonTypes]="buttonTypes"
+          [visitWebsiteButton]="visitWebsiteButton"
+          [callPhoneButton]="callPhoneButton"
+          [copyOfferButton]="copyOfferButton"
+          [quickReplyButton]="quickReplyButton"
+          [marketingButtonRequired]="marketingButtonRequired"
+          [isAuthenticationCategory]="isAuthenticationCategory"
+          [form]="templateForm"
+          (toggle)="onToggle($event)"
+          (addButton)="onAddButton($event)"
+          (deleteQuickReplyButton)="onDeleteQuickReplyButton($event)">
+        </app-buttons-section>
 
-          <div [ngSwitch]="templateForm.get('broadcastTitle')?.value">
-            <!-- Text Option -->
-            <div *ngSwitchCase="'Text'" class="mt-4">
-              <input id="text" type="text" formControlName="text"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                placeholder="Enter text" />
-            </div>
-
-            <!-- Image Option -->
-            <div *ngSwitchCase="'Image'">
-              <!-- Active Media Indicator -->
-              <div *ngIf="previewMediaType === 'image'" class="mt-4 mb-2 p-2 bg-green-100 border border-green-300 rounded-md">
-                <div class="flex items-center text-green-700 text-sm">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span class="font-medium">Image is currently selected</span>
-                </div>
-              </div>
-              
-              <div class="flex flex-row mt-4">
-                <input id="image" type="text" formControlName="image"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                  placeholder="Enter image URL" [value]="selectedMedia['image']?.name" />
-                <p class="px-2 py-3">or</p>
-                <label for="file-upload"
-                  [ngClass]="'text-sm font-bold py-2 px-4 rounded inline-block cursor-pointer transition-all duration-200 ' +
-                            (selectedMedia['image'] ? 'bg-green-500 hover:bg-green-700 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white')">
-                  {{ selectedMedia['image'] ? '✓ Image Selected' : 'Upload Image' }}
-                </label>
-                <input id="file-upload" type="file" class="hidden" (change)="onMediaSelected($event, 'image')"
-                  accept="image/*" />
-              </div>
-              <!-- Image Preview -->
-              <div *ngIf="mediaPreviewUrls['image']"
-                class="flex mt-2 h-60 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
-                <img [src]="mediaPreviewUrls['image']" alt="Image Preview" class="max-w-full h-auto rounded" />
-              </div>
-            </div>
-
-            <!-- Video Option -->
-            <div *ngSwitchCase="'Video'">
-              <!-- Active Media Indicator -->
-              <div *ngIf="previewMediaType === 'video'" class="mt-4 mb-2 p-2 bg-green-100 border border-green-300 rounded-md">
-                <div class="flex items-center text-green-700 text-sm">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span class="font-medium">Video is currently selected</span>
-                </div>
-              </div>
-              
-              <div class="flex flex-row mt-4">
-                <input id="video" type="text" formControlName="video"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                  placeholder="Enter video URL" [value]="selectedMedia['video']?.name" />
-                <p class="px-2 py-3">or</p>
-                <label for="video-upload"
-                  [ngClass]="'text-sm font-bold py-2 px-4 rounded inline-block cursor-pointer transition-all duration-200 ' +
-                            (selectedMedia['video'] ? 'bg-green-500 hover:bg-green-700 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white')">
-                  {{ selectedMedia['video'] ? '✓ Video Selected' : 'Upload Video' }}
-                </label>
-                <input id="video-upload" type="file" class="hidden" (change)="onMediaSelected($event, 'video')"
-                  accept="video/*" />
-              </div>
-              <!-- Video Preview -->
-              <div *ngIf="mediaPreviewUrls['video']"
-                class="flex mt-2 h-60 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
-                <video [src]="mediaPreviewUrls['video']" controls class="max-w-full h-auto rounded"></video>
-              </div>
-            </div>
-
-            <!-- Document Option -->
-            <div *ngSwitchCase="'Document'">
-              <!-- Active Media Indicator -->
-              <div *ngIf="previewMediaType === 'document'" class="mt-4 mb-2 p-2 bg-green-100 border border-green-300 rounded-md">
-                <div class="flex items-center text-green-700 text-sm">
-                  <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                  </svg>
-                  <span class="font-medium">Document is currently selected</span>
-                </div>
-              </div>
-              
-              <div class="flex flex-row mt-4">
-                <input id="document" type="text" formControlName="document"
-                  class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                  placeholder="Enter document URL" [value]="selectedMedia['document'] ? selectedMedia['document'].name : ''" />
-                <p class="px-2 py-3">or</p>
-                <label for="doc-upload"
-                  [ngClass]="'text-sm font-bold py-2 px-4 rounded inline-block cursor-pointer transition-all duration-200 ' +
-                            (selectedMedia['document'] ? 'bg-green-500 hover:bg-green-700 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white')">
-                  {{ selectedMedia['document'] ? '✓ Document Selected' : 'Upload Document' }}
-                </label>
-                <input id="doc-upload" type="file" class="hidden" (change)="onMediaSelected($event, 'document')"
-                  accept=".pdf,.doc,.docx" />
-              </div>
-              <!-- Document Preview -->
-              <div *ngIf="selectedMedia['document']"
-                class="flex mt-2 h-24 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
-                <div class="text-center">
-                  <svg class="w-8 h-8 text-green-600 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                  </svg>
-                  <div class="text-sm text-green-700 font-medium">{{ selectedMedia['document'] ? selectedMedia['document'].name : '' }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SECTION: Body -->
-        <div>
-          <label for="body" class="block text-sm font-medium text-gray-700 mb-1">
-            Body
-          </label>
-          <textarea id="body" formControlName="body" rows="4"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            placeholder="Enter your message..."></textarea>
-          <button type="button" (click)="onAddVariableToBody()"
-            class="mt-2 inline-flex items-center px-3 py-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            Add Variable
-          </button>
-          <div *ngIf="templateForm.get('body')?.invalid && templateForm.get('body')?.touched"
-            class="text-red-600 text-sm mt-1">
-            Body is required.
-          </div>
-        </div>
-
-        <!-- SECTION: Footer (Optional) -->
-        <div>
-          <label for="footer" class="block text-sm font-medium text-gray-700 mb-1">
-            Footer (Optional)
-          </label>
-          <textarea id="footer" formControlName="footer" rows="2"
-            class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            placeholder="Enter footer text..."></textarea>
-        </div>
-
-        <!-- SECTION: Buttons (Recommended) -->
-        <div *ngIf="shouldShowButtonSection">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              Buttons
-            </label>
-            <!-- Toggle Switch -->
-            <label for="toggleSwitch" class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" id="toggleSwitch" class="sr-only peer" (change)="onToggle($event)" [disabled]="isAuthenticationCategory" />
-              <div
-                class="w-11 h-6 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 dark:bg-gray-700 peer-checked:bg-blue-600 transition-colors duration-200 ease-in-out">
-              </div>
-              <span class="ml-3 text-sm font-medium text-gray-900">{{ showButton ? "ON" : "OFF" }}</span>
-            </label>
-          </div>
-
-          <!-- Conditionally display the Add Button -->
-          <div *ngIf="showButton">
-            <div class="mt-4 flex flex-col"></div>
-
-            <!-- Using Angular's *ngFor for button types -->
-            <div *ngFor="let item of buttonTypes; let i = index" class="flex flex-row my-3">
-              <div class="flex rounded-md p-2 justify-center w-32 transition-all duration-200"
-                   [ngClass]="{
-                     'bg-green-100 border-2 border-green-300': (item === 'visit website' && visitWebsiteButton) ||
-                                                              (item === 'call phone' && callPhoneButton) ||
-                                                              (item === 'copy offer code' && copyOfferButton),
-                     'bg-gray-100': !((item === 'visit website' && visitWebsiteButton) ||
-                                     (item === 'call phone' && callPhoneButton) ||
-                                     (item === 'copy offer code' && copyOfferButton))
-                   }">
-                <label class="block text-sm font-medium"
-                       [ngClass]="{
-                         'text-green-700': (item === 'visit website' && visitWebsiteButton) ||
-                                          (item === 'call phone' && callPhoneButton) ||
-                                          (item === 'copy offer code' && copyOfferButton),
-                         'text-gray-700': !((item === 'visit website' && visitWebsiteButton) ||
-                                           (item === 'call phone' && callPhoneButton) ||
-                                           (item === 'copy offer code' && copyOfferButton))
-                       }">{{ item }}</label>
-              </div>
-              <button (click)="onAddButton(item)" type="button"
-                [disabled]="isAuthenticationCategory"
-                [ngClass]="'flex text-sm rounded-md p-2 justify-center mx-4 shadow-md transition-all duration-200 ' +
-                          ((item === 'visit website' && visitWebsiteButton) ||
-                           (item === 'call phone' && callPhoneButton) ||
-                           (item === 'copy offer code' && copyOfferButton) ? 
-                           'bg-red-500 text-white hover:bg-red-600' : 
-                           'bg-blue-500 text-white hover:bg-blue-600')">
-                <span *ngIf="(item === 'visit website' && visitWebsiteButton) ||
-                              (item === 'call phone' && callPhoneButton) ||
-                              (item === 'copy offer code' && copyOfferButton)">
-                  Delete Button
-                </span>
-                <span *ngIf="!( (item === 'visit website' && visitWebsiteButton) ||
-                                (item === 'call phone' && callPhoneButton) ||
-                                (item === 'copy offer code' && copyOfferButton) )">
-                  Add Button
-                </span>
-              </button>
-            </div>
-            <!-- Fields for specific buttons -->
-            <div *ngIf="visitWebsiteButton" class="flex flex-row my-3 px-2 gap-2">
-              <input type="text" placeholder="button text" formControlName="websiteButtonText"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-              <input type="text" placeholder="https://example.com" formControlName="websiteUrl"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-            </div>
-
-            <div *ngIf="callPhoneButton" class="flex flex-row my-3 px-2 gap-2">
-              <input type="text" placeholder="button text" formControlName="callButtonText"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-              <input type="text" placeholder="phone number" formControlName="phoneNumber"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-              </div>
-
-            <div *ngIf="copyOfferButton" class="flex flex-row my-3 px-2 gap-2">
-              <input type="text" value="Copy Offer Code" disabled
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-              <input type="text" placeholder="enter coupon code to copy" formControlName="offerCode"
-                class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-            </div>
-
-            <div *ngIf="quickReplyButton > 0" class="my-3 px-2">
-              <div class="flex items-center gap-2 mb-2">
-                <div class="flex bg-green-100 border-2 border-green-300 rounded-md p-2">
-                  <label class="block text-sm font-medium text-green-700">Quick Reply Buttons ({{ quickReplyButton }}/4)</label>
-                </div>
-              </div>
-              <div formArrayName="quickReplyTexts">
-                <div *ngFor="let control of quickReplyTexts.controls; let i = index" class="flex flex-row my-3 px-2 gap-2">
-                  <input type="text" placeholder="button text" [formControlName]="i"
-                    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
-                  <button (click)="onDeleteQuickReplyButton(i)" type="button"
-                    [disabled]="isAuthenticationCategory"
-                    class="flex text-sm text-white bg-red-500 rounded-md p-2 justify-center mx-4 shadow-md hover:bg-red-600 transition-all duration-200">
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add this error message near the button section -->
-        <div *ngIf="marketingButtonRequired" class="error-message" style="color: red; margin-bottom: 10px;">
-          At least one button is required for Marketing templates.
-        </div>
-
-        <!-- SECTION: Form Actions -->
-        <div class="flex space-x-4 justify-end">
-          
-          <button type="submit" [disabled]="templateForm.invalid || isAuthenticationCategory || isLoading"
-            class="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-200">
-            <span *ngIf="!isLoading">Create Template</span>
-            <span *ngIf="isLoading" class="flex items-center">
-              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Creating...
-            </span>
-          </button>
-          <button type="button" (click)="resetForm()" [disabled]="isLoading"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 disabled:opacity-50 transition-all duration-200">
-            Cancel
-          </button>
-        </div>
+        <!-- Form Actions -->
+        <app-form-actions-section
+          [form]="templateForm"
+          [isLoading]="isLoading"
+          [isAuthenticationCategory]="isAuthenticationCategory"
+          submitButtonText="Create Template"
+          cancelButtonText="Cancel"
+          loadingText="Creating..."
+          (submit)="onSubmit()"
+          (cancel)="resetForm()">
+        </app-form-actions-section>
       </form>
     </div>
+
     <!-- Vertical Divider -->
     <div class="hidden md:flex items-center">
       <div class="h-96 w-1 bg-gradient-to-b from-blue-200 via-gray-200 to-green-200 mx-2 rounded-full"></div>
     </div>
-    <!-- Right: WhatsApp Preview Card -->
-    <div class="w-full md:w-[350px] flex flex-col items-center justify-center bg-gradient-to-br from-green-50 via-white to-blue-50 p-8 rounded-r-2xl relative">
-      <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-1 rounded-full shadow-lg text-xs font-semibold tracking-wide z-10">
-        Preview
-      </div>
-      <div class="mt-8 md:mt-0 w-full flex flex-col items-center">
+
+    <!-- Right: Preview Section -->
         <app-whatsapp-preview
           [header]="templateForm.get('text')?.value"
           [body]="templateForm.get('body')?.value || ''"
@@ -385,9 +86,5 @@
           [buttons]="previewButtons"
           [time]="''"
         ></app-whatsapp-preview>
-
-        
-      </div>
-    </div>
   </div>
 </div>

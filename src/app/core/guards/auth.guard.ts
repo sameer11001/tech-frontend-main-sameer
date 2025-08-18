@@ -20,7 +20,7 @@ import {
   filter
 } from 'rxjs/operators';
 
-import { GetUserRepo } from '../services/auth/getUser.service';
+import { UserService } from '../services/auth/user.service';
 import { selectAuthUser } from '../services/auth/ngrx/auth.selector';
 import { setAuthUser } from '../services/auth/ngrx/auth.action';
 import * as SocketActions from '../services/chat/ngrx/socket.actions';
@@ -29,7 +29,7 @@ import * as SocketActions from '../services/chat/ngrx/socket.actions';
 export class AuthGuard implements CanActivate, CanMatch {
   constructor(
     private store: Store,
-    private getUserRepo: GetUserRepo,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate, CanMatch {
     return this.store.select(selectAuthUser).pipe(
       take(1),
       switchMap(authUser =>
-        this.getUserRepo.getUser().pipe(
+        this.userService.fetchUserFromAPI().pipe(
           map(response => response.data),
           tap(user => {
             if (!authUser) {

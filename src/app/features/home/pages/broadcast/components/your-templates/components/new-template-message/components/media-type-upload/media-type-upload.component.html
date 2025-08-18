@@ -1,0 +1,110 @@
+<!-- media-type-upload.component.html -->
+<div class="media-upload-container">
+  <!-- Active Media Indicator -->
+  <div *ngIf="previewMediaType === mediaType" class="mt-4 mb-2 p-2 bg-green-100 border border-green-300 rounded-md">
+    <div class="flex items-center text-green-700 text-sm">
+      <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+      </svg>
+      <span class="font-medium">{{ mediaType | titlecase }} is currently selected</span>
+    </div>
+  </div>
+
+  <!-- Upload Input and Button -->
+  <div class="flex flex-row mt-4 items-center gap-2">
+    <div class="flex-1">
+      <label [for]="mediaType" class="sr-only">{{ mediaType | titlecase }} URL</label>
+      <input
+        [id]="mediaType"
+        type="url"
+        [formControlName]="mediaType"
+        class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+        [placeholder]="'Enter ' + mediaType + ' URL'"
+        (input)="onUrlInputChange($event)"
+        [attr.aria-describedby]="mediaType + '-help'" />
+    </div>
+
+    <span class="px-2 py-3 text-gray-500 font-medium">or</span>
+
+    <div class="flex-shrink-0">
+      <label
+        [for]="mediaType + '-upload'"
+        class="upload-button text-sm font-bold py-2 px-4 rounded inline-block cursor-pointer transition-all duration-200"
+        [ngClass]="selectedMedia[mediaType] ? 'bg-green-500 hover:bg-green-700 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'"
+        [attr.aria-describedby]="mediaType + '-upload-help'">
+        {{ selectedMedia[mediaType] ? '✓ ' + (mediaType | titlecase) + ' Selected' : 'Upload ' + (mediaType | titlecase) }}
+      </label>
+      <input
+        [id]="mediaType + '-upload'"
+        type="file"
+        class="file-input-hidden"
+        (change)="onFileSelected($event)"
+        [accept]="getAcceptString()"
+        [attr.aria-describedby]="mediaType + '-upload-help'" />
+    </div>
+
+    <!-- Clear button (optional) -->
+    <button
+      *ngIf="getPreviewContent()"
+      type="button"
+      (click)="clearMedia()"
+      class="flex-shrink-0 p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+      title="Clear media"
+      aria-label="Clear selected media">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Help text -->
+  <div [id]="mediaType + '-help'" class="mt-1 text-xs text-gray-500">
+    Max file size: {{ getMaxFileSize() }}
+  </div>
+
+  <!-- Media Preview -->
+  <div *ngIf="getPreviewContent()" class="preview-container">
+    <!-- Image Preview -->
+    <div *ngIf="mediaType === 'image' && mediaPreviewUrls[mediaType]"
+      class="flex mt-2 h-60 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
+      <img
+        [src]="mediaPreviewUrls[mediaType]"
+        [alt]="'Preview of selected ' + mediaType"
+        class="max-w-full h-auto rounded"
+        loading="lazy" />
+    </div>
+
+    <!-- Video Preview -->
+    <div *ngIf="mediaType === 'video' && mediaPreviewUrls[mediaType]"
+      class="flex mt-2 h-60 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
+      <video
+        [src]="mediaPreviewUrls[mediaType]"
+        controls
+        class="max-w-full h-auto rounded"
+        [attr.aria-label]="'Preview of selected ' + mediaType">
+      </video>
+    </div>
+
+    <!-- Document Preview -->
+    <div *ngIf="mediaType === 'document' && selectedMedia[mediaType]"
+      class="flex mt-2 h-24 w-60 border-2 border-green-300 rounded-md overflow-hidden items-center justify-center bg-green-50">
+      <div class="text-center p-2">
+        <svg class="w-8 h-8 text-green-600 mx-auto mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+        </svg>
+        <div class="text-sm text-green-700 font-medium truncate max-w-full" [title]="selectedMedia[mediaType]?.name || ''">
+          {{ selectedMedia[mediaType]?.name || '' }}
+        </div>
+        <div class="text-xs text-green-600 mt-1" *ngIf="selectedMedia[mediaType]">
+          {{ getFileSize(selectedMedia[mediaType]!) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error message area (if you want to show validation errors) -->
+  <div *ngIf="form.get(mediaType)?.errors?.['required'] && form.get(mediaType)?.touched"
+       class="mt-1 text-sm text-red-600">
+    {{ mediaType | titlecase }} is required.
+  </div>
+</div>

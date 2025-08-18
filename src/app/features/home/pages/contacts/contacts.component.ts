@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ContactHeaderComponent } from './components/contact-header/contact-header.component';
 import { ContactTableComponent } from "./components/contact-table/contact-table.component";
@@ -18,6 +18,7 @@ import { getContacts } from '../../../../core/services/contact/ngrx/contact.acti
 export class ContactsComponent {
   contact: ContactModel | null = null;
   editContactDialog: boolean = false;
+@Input() sortBy: string = 'Last Updated';
 
   searchTerm: string = '';
   currentPage: number = 1;
@@ -31,6 +32,7 @@ export class ContactsComponent {
 
   constructor(private store: Store) {}
 
+  
   onSearchChange(searchTerm: string) {
     this.searchTerm = searchTerm;
     this.currentPage = 1;
@@ -70,5 +72,10 @@ export class ContactsComponent {
       searchTerm: this.searchTerm
     }));
   }
+
+  onSortChange(sortBy: string) {
+  this.sortBy = sortBy;
+  this.currentPage = 1; // إعادة التصفّح لأول صفحة
+}
 
 }

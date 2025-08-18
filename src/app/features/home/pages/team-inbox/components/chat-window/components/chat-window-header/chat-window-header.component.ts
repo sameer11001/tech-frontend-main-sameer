@@ -71,7 +71,7 @@ export class ChatWindowHeaderComponent implements OnInit, OnDestroy, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['conversation'] && this.conversation) {
       this.selectedStatus = this.conversation.status;
-      this.selectedUserId = this.conversation.assignments_id;
+      this.selectedUserId = this.conversation.user_assignments_id;
       this.isExpired = this.conversation.conversation_is_expired;
       this.expiry_time = this.conversation.conversation_expiration_time;
     }

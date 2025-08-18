@@ -1,50 +1,64 @@
-<div class="bg-gray-100 p-4 sm:p-6">
-    <div class="flex flex-wrap items-center justify-between gap-4">
-
-        <div class="order-1 sm:order-none">
-            <div class="bg-white rounded-lg shadow-sm">
-                <div class="flex divide-x divide-gray-200">
-                    <button
-                        class="px-6 py-2 rounded-l-md transition-colors"
-                        [class.bg-blue-600.text-white]="activeTab === 'users'"
-                        [class.text-white.hover:bg-gray-50]="activeTab !== 'teams'"
-                        (click)="setActiveTab(false)">
-                        Users
-                    </button>
-                    <button
-                        class="px-6 py-2 rounded-r-md transition-colors"
-                        [class.bg-blue-600.text-white]="activeTab === 'teams'"
-                        [class.text-white.hover:bg-gray-50]="activeTab !== 'users'"
-                        (click)="setActiveTab(true)">
-                        Teams
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div
-            class="flex flex-1 flex-col sm:flex-row items-center gap-3 min-w-[300px] max-w-xl w-full order-3 sm:order-none">
-            <div class="relative w-full">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+<div class="p-6 max-w-md mx-auto">
+    <!-- Tab Navigation -->
+    <div class="mb-8">
+        <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3 select-none">View Options</h3>
+        <div class="bg-indigo-200 rounded-lg p-1">
+            <div class="flex">
+                <!-- Users -->
+                <button
+                    class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all select-none duration-200 flex items-center justify-center space-x-2"
+                    [class.bg-[#4A5BD1].text-white.shadow-md]="activeTab === 'users'"
+                    [class.text-indigo-600.hover:text-indigo-700]="activeTab !== 'users'"
+                    (click)="setActiveTab(false)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
                     </svg>
-                </div>
-
-
-                <input
-                    (input)="onSearchChange($event!.target)"
-                    type="text"
-                    [placeholder]="activeTab === 'users' ? 'Search users...' : 'Search teams...'"
-                    class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all">
+                    <span>Users</span>
+                </button>
+                
+                <!-- Teams -->
+                <button
+                    class="flex-1 px-4 py-2 text-sm font-medium rounded-md transition-all duration-200 flex items-center justify-center space-x-2 select-none"
+                    [class.bg-[#4A5BD1].text-white.shadow-md]="activeTab === 'teams'"
+                    [class.text-indigo-600.hover:text-indigo-700]="activeTab !== 'teams'"
+                    (click)="setActiveTab(true)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                    </svg>
+                    <span>Teams</span>
+                </button>
             </div>
-
-            <button (click)="activeTab === 'users' ? openCreateUserDialog() : openCreateTeamDialog()"
-                class="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors whitespace-nowrap">
-                {{ activeTab === 'users' ? 'Create User' : 'Create Team' }}
-            </button>
         </div>
+    </div>
+
+    <!-- Search Section -->
+    <div class="mb-8 select-none">
+        <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3 select-none">Search</h3>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 select-none">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+            <input
+                (input)="onSearchChange($event!.target)"
+                type="text"
+                [placeholder]="activeTab === 'users' ? 'Search users...' : 'Search teams...'"
+                class="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all bg-white placeholder-gray-400 ">
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="mb-8 select-none">
+        <h3 class="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3 select-none">Quick Actions</h3>
+        <button 
+            (click)="activeTab === 'users' ? openCreateUserDialog() : openCreateTeamDialog()"
+            class="w-full px-5 py-3 rounded-lg font-medium flex items-center justify-center gap-2 bg-indigo-200 border border-[#E6E8FF] hover:bg-[#4A5BD1] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+        >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            {{ activeTab === 'users' ? 'Add New User' : 'Create Team' }}
+        </button>
     </div>
 </div>

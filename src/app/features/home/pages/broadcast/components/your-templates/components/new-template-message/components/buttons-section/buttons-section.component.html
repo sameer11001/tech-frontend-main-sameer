@@ -1,0 +1,69 @@
+    <div *ngIf="shouldShowButtonSection">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Buttons
+        </label>
+
+        <!-- Toggle Switch -->
+        <label for="toggleSwitch" class="relative inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            id="toggleSwitch"
+            class="sr-only peer"
+            (change)="onToggle($event)"
+            [disabled]="isAuthenticationCategory"
+            [checked]="showButton" />
+          <div class="w-11 h-6 bg-gray-200 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 dark:bg-gray-700 peer-checked:bg-blue-600 transition-colors duration-200 ease-in-out">
+          </div>
+          <span class="ml-3 text-sm font-medium text-gray-900">{{ showButton ? "ON" : "OFF" }}</span>
+        </label>
+      </div>
+
+      <!-- Button Controls -->
+      <div *ngIf="showButton">
+        <div class="mt-4 flex flex-col"></div>
+
+        <!-- Button Types -->
+        <div *ngFor="let item of buttonTypes; let i = index" class="flex flex-row my-3">
+          <div class="flex rounded-md p-2 justify-center w-32 transition-all duration-200"
+               [ngClass]="{
+                 'bg-green-100 border-2 border-green-300': isButtonActive(item),
+                 'bg-gray-100': !isButtonActive(item)
+               }">
+            <label class="block text-sm font-medium"
+                   [ngClass]="{
+                     'text-green-700': isButtonActive(item),
+                     'text-gray-700': !isButtonActive(item)
+                   }">{{ item }}</label>
+          </div>
+
+          <button
+            (click)="onAddButton(item)"
+            type="button"
+            [disabled]="isAuthenticationCategory"
+            [ngClass]="'flex text-sm rounded-md p-2 justify-center mx-4 shadow-md transition-all duration-200 ' +
+                      (isButtonActive(item) ?
+                       'bg-red-500 text-white hover:bg-red-600' :
+                       'bg-blue-500 text-white hover:bg-blue-600')">
+            <span *ngIf="isButtonActive(item)">Delete Button</span>
+            <span *ngIf="!isButtonActive(item)">Add Button</span>
+          </button>
+        </div>
+
+        <!-- Button Configuration Fields -->
+        <app-button-config-fields
+          [form]="form"
+          [visitWebsiteButton]="visitWebsiteButton"
+          [callPhoneButton]="callPhoneButton"
+          [copyOfferButton]="copyOfferButton"
+          [quickReplyButton]="quickReplyButton"
+          [isAuthenticationCategory]="isAuthenticationCategory"
+          (deleteQuickReply)="onDeleteQuickReplyButton($event)"
+        ></app-button-config-fields>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="marketingButtonRequired" class="error-message" style="color: red; margin-bottom: 10px;">
+        At least one button is required for Marketing templates.
+      </div>
+    </div>

@@ -1,0 +1,114 @@
+<svg
+  class="connection-overlay absolute inset-0 pointer-events-none"
+  width="100%"
+  height="100%"
+>
+  <!-- Arrow markers -->
+  <defs>
+    <marker
+      id="arrowhead"
+      markerWidth="10"
+      markerHeight="7"
+      refX="9"
+      refY="3.5"
+      orient="auto"
+    >
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280" />
+    </marker>
+    <marker
+      id="preview-arrowhead"
+      markerWidth="12"
+      markerHeight="8"
+      refX="11"
+      refY="4"
+      orient="auto"
+    >
+      <polygon points="0 0, 12 4, 0 8" fill="#3b82f6" />
+    </marker>
+    <!-- Button-specific arrow markers -->
+    <marker
+      id="button-arrowhead-0"
+      markerWidth="10"
+      markerHeight="7"
+      refX="9"
+      refY="3.5"
+      orient="auto"
+    >
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
+    </marker>
+    <marker
+      id="button-arrowhead-1"
+      markerWidth="10"
+      markerHeight="7"
+      refX="9"
+      refY="3.5"
+      orient="auto"
+    >
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981" />
+    </marker>
+    <marker
+      id="button-arrowhead-2"
+      markerWidth="10"
+      markerHeight="7"
+      refX="9"
+      refY="3.5"
+      orient="auto"
+    >
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f59e0b" />
+    </marker>
+  </defs>
+
+  <!-- Existing connections -->
+  <g *ngFor="let connection of connections; trackBy: trackByConnection">
+    <!-- Invisible clickable line (thicker for easier clicking) -->
+    <line
+      class="connection-line-clickable stroke-transparent stroke-8 pointer-events-auto cursor-pointer"
+      [attr.x1]="getConnectionStartPoint(connection)?.x"
+      [attr.y1]="getConnectionStartPoint(connection)?.y"
+      [attr.x2]="getConnectionEndPoint(connection)?.x"
+      [attr.y2]="getConnectionEndPoint(connection)?.y"
+      (click)="connectionClick.emit({connection, event: $event})" />
+
+    <!-- Visible connection line -->
+    <line
+      class="connection-line stroke-2"
+      [attr.stroke]="getConnectionColor(connection)"
+      [attr.marker-end]="connection.buttonIndex !== undefined ? 'url(#button-arrowhead-' + connection.buttonIndex + ')' : 'url(#arrowhead)'"
+      [attr.x1]="getConnectionStartPoint(connection)?.x"
+      [attr.y1]="getConnectionStartPoint(connection)?.y"
+      [attr.x2]="getConnectionEndPoint(connection)?.x"
+      [attr.y2]="getConnectionEndPoint(connection)?.y" />
+
+    <text
+      *ngIf="connection.buttonIndex !== undefined"
+      class="connection-label text-xs font-medium pointer-events-none"
+      [attr.x]="((getConnectionStartPoint(connection)?.x || 0) + (getConnectionEndPoint(connection)?.x || 0)) / 2"
+      [attr.y]="((getConnectionStartPoint(connection)?.y || 0) + (getConnectionEndPoint(connection)?.y || 0)) / 2 - 8"
+      text-anchor="middle"
+      [attr.fill]="getConnectionColor(connection)"
+    >
+      {{ getButtonLabel(connection) }}
+    </text>
+  </g>
+
+  <!-- Connection preview line -->
+  <line
+    *ngIf="previewLine"
+    class="connection-preview-line stroke-blue-500 stroke-2 stroke-dashed marker-end-[url(#preview-arrowhead)]"
+    [attr.x1]="previewLine.x1"
+    [attr.y1]="previewLine.y1"
+    [attr.x2]="previewLine.x2"
+    [attr.y2]="previewLine.y2" />
+</svg>
+
+
+<!-- Connection Delete Button -->
+<div
+  *ngIf="deleteButton"
+  class="absolute w-6 h-6 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white cursor-pointer shadow-lg transition-colors z-20"
+  [style.left.px]="deleteButton.x - 12"
+  [style.top.px]="deleteButton.y - 12"
+  (click)="deleteConnection.emit()"
+  title="Delete connection">
+  <span class="material-icons text-xs">close</span>
+</div>

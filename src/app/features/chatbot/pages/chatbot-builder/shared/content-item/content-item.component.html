@@ -1,0 +1,78 @@
+    <!-- Content Item Header -->
+    <div class="flex justify-between items-center mb-2">
+      <div class="flex items-center gap-2">
+        <span class="material-icons text-sm" [ngClass]="getContentTypeIconClass(item.type)">
+          {{ getContentTypeIcon(item.type) }}
+        </span>
+        <span class="text-sm font-medium capitalize">{{ item.type }}</span>
+      </div>
+      <button
+        (click)="remove.emit(index)"
+        class="w-5 h-5 bg-red-100 hover:bg-red-200 rounded-full flex items-center justify-center">
+        <span class="material-icons text-xs text-red-600">close</span>
+      </button>
+    </div>
+
+    <!-- Text Content -->
+    <div *ngIf="item.type === 'text'" class="space-y-2">
+      <textarea
+        [(ngModel)]="item.content.text_body"
+        (ngModelChange)="change.emit()"
+        placeholder="Enter your message..."
+        class="w-full p-2 border border-gray-300 rounded text-sm resize-none"
+        rows="3">
+      </textarea>
+      <div class="bg-white border border-gray-200 rounded p-2">
+        <div class="text-xs text-gray-500 mb-1">Preview:</div>
+        <div class="text-sm">{{ item.content.text_body || 'Enter your message...' }}</div>
+      </div>
+    </div>
+
+    <!-- Media Content -->
+    <div *ngIf="item.type === 'image' || item.type === 'video' || item.type === 'audio'" class="space-y-2">
+      <input
+        type="file"
+        [accept]="getFileAccept(item.type)"
+        (change)="handleFileUpload($event)"
+        class="w-full p-2 border border-gray-300 rounded text-sm">
+      <input
+        [(ngModel)]="item.content.file_name"
+        (ngModelChange)="change.emit()"
+        placeholder="File name"
+        class="w-full p-2 border border-gray-300 rounded text-sm">
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500 mb-2">Preview:</div>
+        <div class="flex items-center gap-2 text-sm">
+          <span class="material-icons text-gray-400">{{ getContentTypeIcon(item.type) }}</span>
+          <span>{{ item.content.file_name || 'No file selected' }}</span>
+        </div>
+        <div *ngIf="item.content.preview_url" class="mt-2">
+          <img
+            *ngIf="item.type === 'image'"
+            [src]="item.content.preview_url"
+            class="max-w-full h-20 object-cover rounded"
+            alt="Preview">
+        </div>
+      </div>
+    </div>
+
+    <!-- Document Content -->
+    <div *ngIf="item.type === 'document'" class="space-y-2">
+      <input
+        type="file"
+        accept=".pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx"
+        (change)="handleFileUpload($event)"
+        class="w-full p-2 border border-gray-300 rounded text-sm">
+      <input
+        [(ngModel)]="item.content.file_name"
+        (ngModelChange)="change.emit()"
+        placeholder="Document name"
+        class="w-full p-2 border border-gray-300 rounded text-sm">
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500 mb-2">Preview:</div>
+        <div class="flex items-center gap-2 text-sm">
+          <span class="material-icons text-blue-500">description</span>
+          <span>{{ item.content.file_name || 'No document selected' }}</span>
+        </div>
+      </div>
+    </div>

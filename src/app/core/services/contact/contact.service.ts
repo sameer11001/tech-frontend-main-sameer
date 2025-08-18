@@ -63,15 +63,14 @@ export class ContactService {
     }
 
     getContactTags(contactId: string): Observable<ContactTagsResponse> {
-        let params = new HttpParams()
-            .set('contact_id', contactId);
-         
-        return this.apiService.get('v1/tags/', { params });
+        return this.apiService.get(`v1/tags/contact_id/${contactId}`);
     }
 
         createContactTag(tagData: { name: string; contact_id: string }): Observable<any> {
         return this.apiService.post('v1/tags/', tagData);
     }
+
+
 
     createContactAttribute(attributeData: { name: string; value: string; contact_id: string }): Observable<any> {
         return this.apiService.post(`v1/attributes/`, {

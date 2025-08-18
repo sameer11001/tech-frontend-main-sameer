@@ -24,3 +24,8 @@ export const selectConversationsError = createSelector(
   selectConversationsFeature,
   state => state.error
 );
+
+export const selectConversationsTotalItems = createSelector(
+  selectConversationsMeta,
+  (meta) => meta ? meta.total_items : 0
+);

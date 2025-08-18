@@ -9,11 +9,12 @@ export interface Conversation {
   client_id: string;
   created_at: string;
   status: 'open' | 'solved' | 'pending' | string;
-  assignments_id: string;
+  user_assignments_id: string;
   last_message: string;
   last_message_time: string;
   conversation_expiration_time: string;
   conversation_is_expired: boolean;
+  unread_count: number;
 }
 
 export interface Meta {

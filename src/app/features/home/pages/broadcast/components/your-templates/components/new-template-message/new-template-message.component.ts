@@ -1,39 +1,57 @@
-    import { CommonModule, NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { FormsModule, FormBuilder, FormGroup, Validators, FormArray, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as TemplateActions from '../../../../../../../../core/services/broadcast/template/ngrx/your-template.actions';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
 import {
   selectCreateNewTemplate,
   selectNewTemplateError,
   selectMediaIds,
 } from '../../../../../../../../core/services/broadcast/template/ngrx/your-template.selectors';
-import { TemplateLanguageConstant } from '../../../../../../../../core/utils/TemplateLanguageConstant';
 import { Actions, ofType } from '@ngrx/effects';
-import { WhatsAppPreviewComponent, WhatsAppButton } from '../../../whatsapp-preview/whatsapp-preview.component';
+import {
+  WhatsAppButton,
+  WhatsAppPreviewComponent,
+} from '../../../whatsapp-preview/whatsapp-preview.component';
 import { AuthService } from '../../../../../../../../core/services/auth/auth.service';
 import { ToastService } from '../../../../../../../../core/services/toast-message.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import {
-  CreateTemplateRequest,
-  HeaderComponent,
-  TemplateButton,
-  TemplateComponent,
-  BodyComponent,
-} from '../../../../../../../../core/models/whatsapp-yourtemplate.model';
 import { TemplateFacadeService } from './services/template-facade.service';
+import { LoadingOverlayComponent } from './components/loading-overlay/loading-overlay.component';
+import { SuccessMessageComponent } from './components/success-message/success-message.component';
+import { TemplateInfoSectionComponent } from './components/template-info-section/template-info-section.component';
+import { MediaUploadSectionComponent } from './components/media-upload-section/media-upload-section.component';
+import { BodyFooterSectionComponent } from './components/body-footer-section/body-footer-section.component';
+import { ButtonsSectionComponent } from './components/buttons-section/buttons-section.component';
+import { FormActionsSectionComponent } from './components/form-actions-section/form-actions-section.component';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgFor, FormsModule, NgSwitch, NgSwitchCase, WhatsAppPreviewComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FormsModule,
+    WhatsAppPreviewComponent,
+    TemplateInfoSectionComponent,
+    MediaUploadSectionComponent,
+    BodyFooterSectionComponent,
+    ButtonsSectionComponent,
+    FormActionsSectionComponent,
+    SuccessMessageComponent,
+    LoadingOverlayComponent
+],
   selector: 'app-new-template',
   templateUrl: './new-template-message.component.html',
 })
 export class NewTemplateComponent implements OnInit, OnDestroy {
   templateForm!: FormGroup;
-  
+
   // These will be populated from services
   categories: string[] = [];
   languages: [string, string][] = [];
@@ -91,13 +109,9 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
     return this.templateFacade.shouldShowButtonSection;
   }
 
-  get quickReplyTexts() {
-    return this.templateForm.get('quickReplyTexts') as FormArray;
-  }
-
   constructor(
-    private fb: FormBuilder, 
-    private store: Store, 
+    private fb: FormBuilder,
+    private store: Store,
     private actions$: Actions,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
@@ -111,29 +125,29 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
     this.mediaIds$ = this.store.select(selectMediaIds);
 
     // Listen for successful template creation
-    this.actions$.pipe(
-      ofType(TemplateActions.createTemplateSuccess)
-    ).subscribe(() => {
-      console.log('Template created successfully!');
-      this.isLoading = false;
-      this.showSuccess = true;
-      this.cdr.detectChanges();
-      
-      // Hide success message after 3 seconds
-      setTimeout(() => {
-        this.showSuccess = false;
-        this.resetForm();
+    this.actions$
+      .pipe(ofType(TemplateActions.createTemplateSuccess))
+      .subscribe(() => {
+        console.log('Template created successfully!');
+        this.isLoading = false;
+        this.showSuccess = true;
         this.cdr.detectChanges();
-      }, 3000);
-    });
+
+        // Hide success message after 3 seconds
+        setTimeout(() => {
+          this.showSuccess = false;
+          this.resetForm();
+          this.cdr.detectChanges();
+        }, 3000);
+      });
 
     // Listen for template creation failure
-    this.actions$.pipe(
-      ofType(TemplateActions.createTemplateFailure)
-    ).subscribe(() => {
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    });
+    this.actions$
+      .pipe(ofType(TemplateActions.createTemplateFailure))
+      .subscribe(() => {
+        this.isLoading = false;
+        this.cdr.detectChanges();
+      });
   }
 
   ngOnInit(): void {
@@ -156,21 +170,24 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
     }
 
     // Subscribe to loading and error states
-    this.loading$.subscribe(loading => {
+    this.loading$.subscribe((loading) => {
       console.log('Template creation loading:', loading);
       this.isLoading = loading;
       this.cdr.detectChanges();
     });
 
-    this.error$.subscribe(error => {
+    this.error$.subscribe((error) => {
       if (error) {
         console.error('Template creation error:', error);
-        this.toastService.showToast(`Template creation failed: ${error.message || error}`, 'error');
+        this.toastService.showToast(
+          `Template creation failed: ${error.message || error}`,
+          'error'
+        );
       }
     });
 
     // Subscribe to media IDs
-    this.mediaIds$.subscribe(mediaIds => {
+    this.mediaIds$.subscribe((mediaIds) => {
       this.mediaIds = mediaIds;
       console.log('Current media IDs:', mediaIds);
     });
@@ -223,10 +240,10 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
   onBroadcastTitleChange(event: Event): void {
     const target = event.target as HTMLInputElement;
     const value = target.value;
-    
+
     console.log('=== Broadcast Title Change ===');
     console.log('New broadcast title:', value);
-    
+
     // Clear media when switching to None, Text, or when switching between different media types
     if (value === 'None' || value === 'Text') {
       console.log('Clearing media due to broadcast title change to:', value);
@@ -234,14 +251,19 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
     } else if (value === 'Image' || value === 'Video' || value === 'Document') {
       // Check if we're switching from one media type to another
       const currentMediaType = this.previewMediaType;
-      const newMediaType = value.toLowerCase() as 'image' | 'video' | 'document';
-      
+      const newMediaType = value.toLowerCase() as
+        | 'image'
+        | 'video'
+        | 'document';
+
       if (currentMediaType && currentMediaType !== newMediaType) {
-        console.log(`Clearing media due to switch from ${currentMediaType} to ${newMediaType}`);
+        console.log(
+          `Clearing media due to switch from ${currentMediaType} to ${newMediaType}`
+        );
         this.templateFacade.clearPreviousMedia();
       }
     }
-    
+
     this.updateLocalState();
     this.cdr.detectChanges();
   }
@@ -251,22 +273,25 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      
+
       // Use the media manager service to handle file selection
       this.templateFacade.selectMedia(file, mediaType);
       this.updateLocalState();
-      
+
       // Update broadcast title to match the selected media type
       this.templateFacade.updateBroadcastTitleForMedia(mediaType);
-      
+
       console.log(`Selected media updated:`, this.selectedMedia);
       console.log(`Media preview URLs:`, this.mediaPreviewUrls);
-      console.log(`Broadcast title:`, this.templateForm.get('broadcastTitle')?.value);
+      console.log(
+        `Broadcast title:`,
+        this.templateForm.get('broadcastTitle')?.value
+      );
       console.log(`Preview media URL:`, this.previewMediaUrl);
       console.log(`=== End Media Selection Debug ===`);
-      
+
       this.cdr.detectChanges();
-      
+
       console.log(`Media selected for ${mediaType}:`, file.name);
       console.log('Preview updated immediately');
     }
@@ -280,29 +305,35 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
   // Form submission
   onSubmit() {
     if (this.isAuthenticationCategory) {
-      this.toastService.showToast('Buttons are disabled and submission is not allowed for AUTHENTICATION category.', 'error');
+      this.toastService.showToast(
+        'Buttons are disabled and submission is not allowed for AUTHENTICATION category.',
+        'error'
+      );
       return;
     }
-    
+
     // Enforce button requirement for Marketing
     if (
       this.templateForm.get('category')?.value?.toUpperCase() === 'MARKETING' &&
       !this.templateFacade.hasAtLeastOneButton()
     ) {
       this.marketingButtonRequired = true;
-      this.toastService.showToast('At least one button is required for Marketing templates.', 'error');
+      this.toastService.showToast(
+        'At least one button is required for Marketing templates.',
+        'error'
+      );
       return;
     } else {
       this.marketingButtonRequired = false;
     }
-    
+
     if (this.templateForm.valid) {
       // Set loading state
       this.isLoading = true;
       this.cdr.detectChanges();
-      
+
       // Use the submission service to handle template creation
-      this.templateFacade.submitTemplate(this.mediaIds).then(result => {
+      this.templateFacade.submitTemplate(this.mediaIds).then((result) => {
         if (result.success) {
           console.log('Template created successfully!');
           // Success state will be handled by the action listener
@@ -326,7 +357,10 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
   }
 
   mapButtonsToForm(buttons: any[]) {
-    const buttonState = this.templateFacade.templateBuilderService.mapButtonsFromTemplate(buttons);
+    const buttonState =
+      this.templateFacade.templateBuilderService.mapButtonsFromTemplate(
+        buttons
+      );
     this.templateFacade.applyButtonState(buttonState);
     this.updateLocalState();
   }
@@ -334,7 +368,7 @@ export class NewTemplateComponent implements OnInit, OnDestroy {
   // Helper methods
   private getFormValidationErrors(): any {
     const errors: any = {};
-    Object.keys(this.templateForm.controls).forEach(key => {
+    Object.keys(this.templateForm.controls).forEach((key) => {
       const control = this.templateForm.get(key);
       if (control?.errors) {
         errors[key] = control.errors;

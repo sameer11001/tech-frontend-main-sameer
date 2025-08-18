@@ -5,6 +5,8 @@ import { profileSettingsRoutes } from "./pages/profile-settings/profile-settings
 import { broadcastRoutes } from "./pages/broadcast/broadcast.routes";
 import { contactsRoutes } from "./pages/contacts/contacts.routes";
 import { teamInboxRoutes } from "./pages/team-inbox/team-inbox.routes";
+import { ChatbotRoutes } from "../chatbot/chatbot.routes";
+import { automationsRoutes } from "./pages/automations/automations.routes";
 
 
 export const HomeBaseRoutes = {
@@ -15,7 +17,9 @@ export const HomeBaseRoutes = {
     profileSettingsRoutes,
     broadcastRoutes,
     contactsRoutes,
-    teamInboxRoutes
+    teamInboxRoutes,
+    automationsRoutes,
+    ...ChatbotRoutes
   ],
   canActivate: [AuthGuard],
   canMatch: [AuthGuard]

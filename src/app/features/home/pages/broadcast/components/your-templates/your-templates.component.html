@@ -2,25 +2,30 @@
 <router-outlet></router-outlet>
 <!-- Show the template list UI only when not on the 'new-template' child route -->
 <div *ngIf="!router.url.endsWith('/new-template') && !router.url.endsWith('/new-template/')">
-  <div class="flex items-center justify-between mb-6">
-    <div>
-      <h1 class="text-2xl font-bold text-gray-800">Your Templates</h1>
-      
+  <div class="h-24 bg-[#F5F6FF] border border-[#E6E8FF] shadow-md border-b  px-8 flex items-center select-none">
+  <div class="w-full flex items-center justify-between gap-4 cursor-default ">
+    <div class="flex items-center gap-4">
+      <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+      <h1 class="text-2xl font-bold text-black">Your Templates</h1>
     </div>
-    <!-- Buttons: Watch Tutorial & New Template Message -->
-    <div class="flex items-center space-x-3">
+    <div class="flex items-center gap-4">
+      <!-- <span class="text-sm text-white bg-indigo-100 border border-[#E6E8FF] px-6 py-2 rounded-full select-none">
+        {{ ((template$ | async)?.data?.length || 0) }} templates
+      </span> -->
       <button
         routerLink="new-template"
         (click)="onNewTemplate()"
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        class="w-full text-white px-5 py-3 rounded-lg font-semibold flex items-center justify-center gap-3 bg-indigo-300 border border-[#E6E8FF] hover:bg-[#4A5BD1] transition-colors duration-200 focus:outline-none"
       >
         New Template Message
       </button>
     </div>
   </div>
+</div>
+
 
   <!-- Search & Sort Bar -->
-  <div class="flex items-center justify-between mb-4">
+  <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 select-none">
     <!-- Search -->
     <div class="relative">
       <input
@@ -64,16 +69,16 @@
   </div>
 
   <!-- Templates Table -->
-  <div class="overflow-x-auto bg-white rounded shadow-sm">
+  <div class="overflow-auto bg-white shadow-sm px-6 select-none">
     <table class="min-w-full divide-y divide-gray-200 text-sm text-left">
-      <thead class="bg-gray-50">
+      <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
         <tr>
-          <th class="px-4 py-2 font-medium text-gray-600">Template Name</th>
-          <th class="px-4 py-2 font-medium text-gray-600">Category</th>
-          <th class="px-4 py-2 font-medium text-gray-600">Status</th>
-          <th class="px-4 py-2 font-medium text-gray-600">Language</th>
+          <th class="px-6 py-4 font-medium text-black">Template Name</th>
+          <th class="px-6 py-4 font-medium text-black">Category</th>
+          <th class="px-6 py-4 font-medium text-black">Status</th>
+          <th class="px-6 py-4 font-medium text-black">Language</th>
           <!-- <th class="px-4 py-2 font-medium text-gray-600">Last Updated</th> -->
-          <th class="px-4 py-2 font-medium text-gray-600">Actions</th>
+          <th class="px-6 py-4 font-medium text-black">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-100">
@@ -81,7 +86,7 @@
           *ngFor="let template of (template$ | async)?.data; let i = index"
           class="hover:bg-gray-50"
         >
-          <td class="px-4 py-2 text-blue-600">
+          <td class="px-6 py-4 text-blue-600">
             <span
               (click)="openDialog(template)"
               class="cursor-pointer hover:underline"
@@ -89,8 +94,8 @@
               {{ template.name }}
             </span>
           </td>
-          <td class="px-4 py-2 text-gray-700 font-medium">{{ template.category }}</td>
-          <td class="px-4 py-2">
+          <td class="px-6 py-4 text-gray-700 font-medium">{{ template.category }}</td>
+          <td class="px-6 py-4">
             <span
               class="px-2 py-1 rounded text-xs"
               [ngClass]="{
@@ -101,9 +106,9 @@
               >{{ template.status }}</span
             >
           </td>
-          <td class="px-4 py-2 text-gray-700 font-medium">{{ template.language }}</td>
+          <td class="px-6 py-4 text-gray-700 font-medium">{{ template.language }}</td>
           <!-- <td class="px-4 py-2 text-gray-700">{{ template.id }}</td> -->
-          <td class="px-4 py-2">
+          <td class="px-6 py-4">
             <div class="flex space-x-2">
               <button
                 (click)="sendBroadcast(template)"
@@ -146,7 +151,7 @@
   </div>
 
   <!-- Pagination -->
-  <div class="flex items-center justify-between mt-4 text-sm text-gray-600">
+  <div class="bg-white border-t border-gray-200 px-6 py-4 shadow-sm flex items-center justify-between text-sm text-gray-600 select-none">
     <div class="flex items-center space-x-2">
       <span>Rows per page:</span>
       <select
@@ -163,13 +168,13 @@
     <div>
       <button
         (click)="onPreviousPage()"
-        class="ml-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        class="ml-2 px-4 py-2 bg-[#F5F6FF] border border-[#E6E8FF] text-black rounded hover:bg-[#4A5BD1]"
       >
         Previous
       </button>
       <button
         (click)="onNextPage()"
-        class="ml-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        class="ml-1 px-4 py-2 bg-[#F5F6FF] border border-[#E6E8FF] text-black rounded hover:bg-[#4A5BD1]"
       >
         Next
       </button>

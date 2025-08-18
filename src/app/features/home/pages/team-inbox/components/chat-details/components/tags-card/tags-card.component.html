@@ -1,0 +1,38 @@
+<div class="border border-[#EEF0FF] rounded-lg cursor-pointer hover:bg-[#F5F6FF] bg-white transition-colors shadow-md" (click)="openTagsDialog()">
+      <div class="flex items-center justify-between p-3">
+        <div class="flex items-center gap-2">
+          <span class="text-sm font-semibold text-black">Tags</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-[#4A5BD1]">Click to view</span>
+        </div>
+      </div>
+
+      <div class="px-4 pb-4">
+        <div *ngIf="loading$ | async">
+          <div class="flex gap-2 mb-3">
+            <app-skeleton-loader type="card" width="w-16" height="h-6"></app-skeleton-loader>
+            <app-skeleton-loader type="card" width="w-20" height="h-6"></app-skeleton-loader>
+            <app-skeleton-loader type="card" width="w-14" height="h-6"></app-skeleton-loader>
+          </div>
+        </div>
+
+        <div *ngIf="!(loading$ | async)">
+          <ng-container *ngIf="tags$ | async as tags">
+            <div *ngIf="tags.length === 0" class="text-sm text-[#4A5BD1]">No tags found</div>
+            <div *ngIf="tags.length > 0" class="space-y-3">
+              <div class="flex flex-wrap gap-2">
+                <div *ngFor="let tag of tags.slice(0,2)" class="mb-2">
+                  <span class="inline-block bg-gradient-to-r from-[#3240B2] to-[#4A5BD1] text-[#E6E8FF] text-xs font-semibold px-3 py-2 rounded-full shadow-md">
+                    {{ tag.name }}
+                  </span>
+                </div>
+              </div>
+              <div *ngIf="tags.length > 2" class="text-xs text-[#3240B2] font-semibold">
+                +{{ tags.length - 2 }} more tags
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>

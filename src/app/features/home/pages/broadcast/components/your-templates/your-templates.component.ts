@@ -13,14 +13,6 @@ import {
   TemplateDialogData,
 } from './components/edit-temp-dialog/edit-temp-dialog.component';
 
-interface TemplateItem {
-  id: string;
-  name: string;
-  category: string;
-  language: string;
-  status: string;
-  created_at: string;
-}
 
 @Component({
   standalone: true,

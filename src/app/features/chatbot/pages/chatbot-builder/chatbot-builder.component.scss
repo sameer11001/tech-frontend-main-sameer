@@ -1,0 +1,181 @@
+.smooth-grid {
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.smooth-drag {
+  will-change: transform, left, top;
+  backface-visibility: hidden;
+  transform: translateZ(0); // Force hardware acceleration
+}
+
+// Node container optimizations
+.node-container {
+  position: absolute;
+
+  // Smooth transitions when not dragging
+  &:not(.dragging) {
+    transition:
+      transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1),
+      box-shadow 0.2s ease;
+  }
+
+  &.dragging {
+    z-index: 1000 !important;
+    cursor: grabbing !important;
+    user-select: none;
+
+    // Enhanced visual feedback
+    filter: brightness(1.05) saturate(1.1);
+    transform: translateZ(0) scale(1.02) !important;
+
+    // Dramatic shadow during drag
+    box-shadow:
+      0 25px 50px -12px rgba(0, 0, 0, 0.25),
+      0 0 0 1px rgba(59, 130, 246, 0.1),
+      0 0 20px rgba(59, 130, 246, 0.1) !important;
+
+    // Disable interactions during drag except connection buttons
+    * {
+      pointer-events: none;
+    }
+
+    .connection-button {
+      pointer-events: auto;
+    }
+  }
+
+  // No transition class for immediate updates during drag
+  &.no-transition {
+    transition: none !important;
+  }
+}
+
+// Smooth connection lines with hardware acceleration
+.connection-overlay {
+  will-change: contents;
+  transform: translateZ(0);
+}
+
+.connection-line {
+  will-change: d, stroke, stroke-width;
+  transition: stroke-width 0.15s ease, stroke 0.15s ease;
+
+  &:hover {
+    stroke-width: 3 !important;
+    filter: brightness(1.2);
+  }
+}
+
+.connection-preview-line {
+  will-change: d;
+  stroke-dasharray: 8, 4;
+  animation: dash 1.5s linear infinite;
+
+  // Smooth animation
+  transition: d 0.016s linear; // 60fps
+}
+
+// Button optimizations
+.connection-button {
+  will-change: transform, background-color, box-shadow;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0); // Hardware acceleration
+
+  &:hover {
+    transform: translateZ(0) scale(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateZ(0) scale(0.95);
+    transition-duration: 0.05s;
+  }
+}
+
+// Smooth zoom transitions
+.transition-transform {
+  will-change: transform;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Grid background with better performance
+  background-image:
+    linear-gradient(to right, rgba(229, 231, 235, 0.8) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(229, 231, 235, 0.8) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-attachment: local;
+}
+
+// Performance optimizations
+@media (prefers-reduced-motion: no-preference) {
+  .node-container {
+    &.dragging {
+      // Subtle breathing animation during drag
+      animation: dragPulse 2s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes dragPulse {
+  0%, 100% {
+    filter: brightness(1.05) saturate(1.1);
+  }
+  50% {
+    filter: brightness(1.08) saturate(1.15);
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+// Touch device optimizations
+@media (hover: none) and (pointer: coarse) {
+  .node-container {
+    &.dragging {
+      transform: translateZ(0) scale(1.05) !important;
+    }
+  }
+
+  .connection-button {
+    min-width: 44px;
+    min-height: 44px;
+
+    &:hover {
+      transform: translateZ(0) scale(1.05); // Smaller scale on touch
+    }
+  }
+}
+
+// High DPI display optimizations
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .connection-line {
+    stroke-width: 1.5;
+
+    &:hover {
+      stroke-width: 2.5 !important;
+    }
+  }
+
+  .connection-preview-line {
+    stroke-width: 2;
+  }
+}
+
+// Reduce motion for accessibility
+@media (prefers-reduced-motion: reduce) {
+  .node-container,
+  .connection-button,
+  .connection-line {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .connection-preview-line {
+    animation: none !important;
+    stroke-dasharray: none !important;
+  }
+}

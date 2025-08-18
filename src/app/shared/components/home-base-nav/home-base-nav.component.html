@@ -31,12 +31,12 @@
               <span class="ml-1">Contacts</span>
             </a>
           </li>
-          <!-- <li>
-            <a href="/defaultAction"
+          <li>
+            <a [routerLink]="['/dashboard', 'automations']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}"
               class="flex items-center nav-link transition-colors duration-200">
               <span class="ml-1">Automations</span>
             </a>
-          </li> -->
+          </li>
           <!-- <li>
             <a href="/dashboard"
               class="flex items-center nav-link transition-colors duration-200">
@@ -56,11 +56,11 @@
     <!-- Right Section - Status and User Options -->
     <div class="flex items-center space-x-4">
       <!-- Connection Status - Only visible on larger screens -->
-      <div class="hidden md:flex items-center space-x-2">
+      <!-- <div class="hidden md:flex items-center space-x-2">
         <span class="text-green-600 font-medium">CONNECTED</span>
         <div class="w-px h-2 bg-gray-200"></div>
         <span class="text-gray-600">+966126773877</span>
-      </div>
+      </div> -->
 
       <div class="hidden md:block w-px h-6 bg-gray-200"></div>
 
@@ -122,7 +122,7 @@
         class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
         Contacts
       </a>
-      <a href="/defaultAction" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
+      <a [routerLink]="['/dashboard', 'automations']" routerLinkActive="nav-link active" [routerLinkActiveOptions]="{exact: false}" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">
         Automations
       </a>
       <a href="/dashboard" class="block px-3 py-2 nav-link hover:bg-gray-100 rounded-md">

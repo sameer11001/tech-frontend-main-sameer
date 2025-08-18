@@ -1,0 +1,276 @@
+<div
+  class="node-card bg-white rounded-lg shadow-lg p-4 border border-gray-200 cursor-grab active:cursor-grabbing select-none relative will-change-transform transition-shadow duration-200 hover:shadow-xl"
+  [class.dragging]="isDragging"
+  [class.no-transition]="isDragging"
+  (mousedown)="onMouseDown($event)"
+  (touchstart)="onTouchStart($event)"
+>
+  <app-node-header
+    [title]="node.title || 'Interactive Buttons'"
+    icon="widgets"
+    color="yellow"
+    (addNode)="onAddNode.emit()"
+    (delete)="onDelete.emit()"
+  >
+  </app-node-header>
+
+  <form [formGroup]="buttonsForm" class="space-y-4">
+    <!-- Interactive Type -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Interactive Type</label
+      >
+      <select
+        formControlName="type"
+        class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+      >
+        <option *ngFor="let option of typeOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Header Section -->
+    <div class="border border-gray-200 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-sm font-medium text-gray-700"
+          >Header (Optional)</label
+        >
+        <input
+          type="checkbox"
+          [(ngModel)]="headerEnabled"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="toggleHeader(headerEnabled)"
+          class="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+        />
+      </div>
+
+      <div *ngIf="headerEnabled" class="space-y-3">
+        <div>
+          <label class="block text-xs text-gray-600 mb-1">Header Type</label>
+          <select
+            [formControl]="$any(headerFormGroup.get('type'))"
+            class="w-full p-2 border border-gray-300 rounded text-sm"
+          >
+            <option value="text">Text</option>
+            <option value="media">Media</option>
+          </select>
+        </div>
+
+        <div *ngIf="headerFormGroup.get('type')?.value === 'text'">
+          <label class="block text-xs text-gray-600 mb-1"
+            >Header Text (max 60 chars)</label
+          >
+          <input
+            type="text"
+            [formControl]="$any(headerFormGroup.get('text'))"
+            maxlength="60"
+            placeholder="Header text..."
+            class="w-full p-2 border border-gray-300 rounded text-sm"
+          />
+        </div>
+
+        <div *ngIf="headerFormGroup.get('type')?.value === 'media'">
+          <label class="block text-xs text-gray-600 mb-1">Media</label>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            (change)="handleHeaderMedia($event)"
+            class="w-full p-2 border border-gray-300 rounded text-sm"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Body Section -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1"
+        >Body Text (Required, max 1024 chars)</label
+      >
+      <textarea
+        formControlName="bodyText"
+        placeholder="Enter your message body..."
+        maxlength="1024"
+        class="w-full p-3 border border-gray-300 rounded-lg text-sm resize-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+        rows="3"
+      >
+      </textarea>
+      <div class="text-xs text-gray-500 mt-1">
+        {{ buttonsForm.get("bodyText")?.value?.length || 0 }}/1024 characters
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="border border-gray-200 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-2">
+        <label class="text-sm font-medium text-gray-700"
+          >Footer (Optional)</label
+        >
+        <input
+          type="checkbox"
+          [(ngModel)]="footerEnabled"
+          [ngModelOptions]="{ standalone: true }"
+          (change)="toggleFooter(footerEnabled)"
+          class="w-4 h-4 text-yellow-600 rounded focus:ring-yellow-500"
+        />
+      </div>
+
+      <div *ngIf="footerEnabled">
+        <label class="block text-xs text-gray-600 mb-1"
+          >Footer Text (max 60 chars)</label
+        >
+        <input
+          type="text"
+          [formControl]="$any(footerFormGroup.get('text')!)"
+          maxlength="60"
+          placeholder="Footer text..."
+          class="w-full p-2 border border-gray-300 rounded text-sm"
+        />
+      </div>
+    </div>
+
+    <!-- Buttons Section -->
+    <div class="border border-gray-200 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-3">
+        <label class="text-sm font-medium text-gray-700"
+          >Buttons (1-3 buttons)</label
+        >
+        <button
+          type="button"
+          (click)="addButton()"
+          [disabled]="getButtonsCount() >= 3"
+          class="px-3 py-1 bg-yellow-500 text-white rounded text-xs hover:bg-yellow-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        >
+          Add Button
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div
+          *ngFor="let buttonControl of buttonsFormArray.controls; let i = index"
+          class="border border-gray-300 rounded-lg p-3 bg-gray-50 relative"
+        >
+          <button
+            class="connection-button absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full flex items-center justify-center text-white shadow-lg transition-colors z-10"
+            [ngClass]="{
+              'bg-blue-500 hover:bg-blue-600': i === 0,
+              'bg-green-500 hover:bg-green-600': i === 1,
+              'bg-orange-500 hover:bg-orange-600': i === 2
+            }"
+            (mousedown)="onButtonConnectionStart($event, i)"
+            (touchstart)="onButtonConnectionStart($event, i)"
+            [title]="
+              'Connect ' +
+              (buttonControl.get('title')?.value || 'Button ' + (i + 1)) +
+              ' to next node'
+            "
+          >
+            <span class="material-icons text-xs">arrow_forward</span>
+          </button>
+
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-700"
+              >Button {{ i + 1 }}</span
+            >
+            <button
+              type="button"
+              (click)="removeButton(i)"
+              class="w-5 h-5 bg-red-100 hover:bg-red-200 rounded-full flex items-center justify-center"
+            >
+              <span class="material-icons text-xs text-red-600">close</span>
+            </button>
+          </div>
+
+          <div class="space-y-2" [formGroup]="$any(buttonControl)">
+            <div>
+              <label class="block text-xs text-gray-600 mb-1"
+                >Button ID (max 256 chars)</label
+              >
+              <input
+                type="text"
+                formControlName="id"
+                maxlength="256"
+                [placeholder]="'button_id_' + (i + 1)"
+                class="w-full p-2 border border-gray-300 rounded text-sm"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs text-gray-600 mb-1"
+                >Button Title (max 20 chars)</label
+              >
+              <input
+                type="text"
+                formControlName="title"
+                maxlength="20"
+                placeholder="Button Text"
+                class="w-full p-2 border border-gray-300 rounded text-sm"
+              />
+              <div class="text-xs text-gray-500 mt-1">
+                {{ buttonControl.get("title")?.value?.length || 0 }}/20
+                characters
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div
+          *ngIf="getButtonsCount() === 0"
+          class="text-center py-4 text-gray-500 text-sm"
+        >
+          No buttons added yet. Click "Add Button" to create your first button.
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Message Preview -->
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+      <div class="text-xs text-gray-500 mb-2">Preview:</div>
+      <div class="bg-white border border-gray-200 rounded-lg p-3 space-y-2">
+        <!-- Header Preview -->
+        <div
+          *ngIf="headerEnabled && headerFormGroup.get('type')?.value"
+          class="text-sm font-semibold text-gray-800"
+        >
+          <span *ngIf="headerFormGroup.get('type')?.value === 'text'">
+            {{ headerFormGroup.get("text")?.value || "Header text..." }}
+          </span>
+          <span
+            *ngIf="headerFormGroup.get('type')?.value === 'media'"
+            class="flex items-center gap-1"
+          >
+            <span class="material-icons text-sm">image</span>
+            Media header
+          </span>
+        </div>
+
+        <!-- Body Preview -->
+        <div class="text-sm text-gray-700">
+          {{
+            buttonsForm.get("bodyText")?.value ||
+              "Enter your message body above..."
+          }}
+        </div>
+
+        <!-- Buttons Preview -->
+        <div *ngIf="getButtonsCount() > 0" class="space-y-1 pt-2">
+          <div
+            *ngFor="let buttonControl of buttonsFormArray.controls"
+            class="inline-block mr-2 mb-1 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs border border-blue-300"
+          >
+            {{ buttonControl.get("title")?.value || "Button" }}
+          </div>
+        </div>
+
+        <!-- Footer Preview -->
+        <div
+          *ngIf="footerEnabled && footerFormGroup.get('text')?.value"
+          class="text-xs text-gray-500 pt-1 border-t border-gray-200"
+        >
+          {{ footerFormGroup.get("text")?.value }}
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

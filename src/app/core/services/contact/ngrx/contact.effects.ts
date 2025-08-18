@@ -87,8 +87,8 @@ export class ContactEffects {
                 loadContactTags$ = createEffect(() =>
                 this.actions$.pipe(
                     ofType(getContactTags),
-                    mergeMap(({ contactId }) =>
-                        this.contactService.getContactTags(contactId).pipe(
+                    mergeMap(({ contact_id }) =>
+                        this.contactService.getContactTags(contact_id).pipe(
                             map((data) => getContactTagsSuccess({ data })),
                             catchError((error) =>
                                 of(getContactTagsError({ error }))

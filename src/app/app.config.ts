@@ -39,6 +39,8 @@ import { TagsEffects } from './core/services/tags/ngrx/tags.effects';
 import { SocketEffects } from './core/services/chat/ngrx/socket.effects';
 import { notesReducer } from './core/services/notes/ngrx/notes.reducer';
 import { NotesEffects } from './core/services/notes/ngrx/notes.effects';
+import { ChatbotEffects } from './core/services/chatbot/ngrx/chatbot.effects';
+import { chatbotReducer } from './core/services/chatbot/ngrx/chatbot.reducer';
 
 
 export const appConfig: ApplicationConfig = {
@@ -64,7 +66,8 @@ export const appConfig: ApplicationConfig = {
       messages: messageReducer,
       conversations: conversationsReducer,
       socket: socketReducer,
-      notes: notesReducer
+      notes: notesReducer,
+      chatbot: chatbotReducer
 
     }),
     provideEffects([
@@ -79,7 +82,8 @@ export const appConfig: ApplicationConfig = {
       ConversationsEffects,
       TagsEffects,
       SocketEffects,
-      NotesEffects
+      NotesEffects,
+      ChatbotEffects
     ]),
     provideAnimationsAsync(),
   ],

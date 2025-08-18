@@ -3,6 +3,7 @@ import { tagsAndAttributesRoutes } from "./components/tags-attribute/tags-attrib
 import { importExportChatsRoutes } from "./components/import-export-chats/import-export-chats.routes";
 import { generalRoutes } from "./components/general/general.routes";
 import { ProfileSettingsComponent } from "./profile-settings.component";
+import { personalProfile } from "./components/personal-profile/personal-profile.routes";
 
 export const profileSettingsRoutes = {
     path: 'settings',
@@ -10,7 +11,7 @@ export const profileSettingsRoutes = {
     children:[
       { path: '', redirectTo: 'business-profile', pathMatch: 'full' as const },
       businessProfile,
-      // personalProfile,
+      personalProfile,
       generalRoutes,
       tagsAndAttributesRoutes,
       importExportChatsRoutes

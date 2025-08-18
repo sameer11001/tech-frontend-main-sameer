@@ -8,10 +8,9 @@ export interface ContactTagsResponse {
   message: string;
   status_code: number;
   data: {
-    tags: ContactTag[];
-    total_count: number;
-    total_pages: number;
-    limit: number;
-    page: number;
+    tags: {
+      tags: ContactTag[];
+      total_count: number;
+    };
   };
 } 

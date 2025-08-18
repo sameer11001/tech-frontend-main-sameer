@@ -5,7 +5,7 @@ import { ChatListContactComponent } from "./components/chat-list-contact/chat-li
 import { ConversationsFacade } from '../../../../../../core/services/conversations/ngrx/conversations.facade';
 import { Conversation } from '../../../../../../core/models/conversation.model';
 import { SocketService } from '../../../../../../core/services/chat/socketio/socket.service';
-import { ClientToServerEventsEnum } from '../../../../../../core/models/socket-event.enum';
+
 
 @Component({
   selector: 'app-chat-list',

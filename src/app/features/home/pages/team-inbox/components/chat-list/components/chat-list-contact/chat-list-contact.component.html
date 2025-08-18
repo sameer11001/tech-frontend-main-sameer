@@ -1,13 +1,13 @@
 <!-- chat-list-contact.component.html -->
-<div
-  class="flex gap-4 p-4 cursor-pointer my-2 border-b border-gray-200"
+<!-- <div
+  class="flex gap-4 p-4 cursor-pointer select-none my-2 border-b border-gray-200"
   (click)="onClick()"
   [ngClass]="{
     'bg-blue-100': isSelected,
     'bg-white': !isSelected
   }"
 >
-  <div class="shrink-0">
+  <div class="shrink-0 select-none">
     <img
       src="/assets/placeholder.jpg"
       alt="avatar"
@@ -15,7 +15,7 @@
     />
   </div>
 
-  <div class="flex-1 min-w-0">
+  <div class="flex-1 min-w-0 select-none">
     <div class="flex justify-between items-center gap-2 mb-1">
       <h3
         class="text-sm font-semibold truncate"
@@ -27,7 +27,7 @@
         {{ conversation.contact_name }}
       </h3>
       <span
-        class="text-xs truncate"
+        class="text-xs truncate select-none"
         [ngClass]="{
           'text-blue-600': isSelected,
           'text-gray-500': !isSelected
@@ -70,4 +70,86 @@
       </span>
     </div>
   </div>
+</div> -->
+
+
+<!-- ChatListContactComponent -->
+<div
+  class="flex gap-4 p-4 cursor-pointer select-none border-b border-[#EEF0FF] transition-all duration-200"
+  (click)="onClick()"
+  [ngClass]="{
+    'bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-sm hover:from-blue-600 hover:to-purple-700 shadow-sm': isSelected,
+    'bg-white hover:bg-[#F5F6FF]': !isSelected
+  }"
+>
+  <div class="shrink-0 select-none">
+    <img
+      src="/assets/placeholder.jpg"
+      alt="avatar"
+      class="w-12 h-12 rounded-full bg-[#EEF0FF] border-2"
+      [ngClass]="{
+        'border-[#E6E8FF]': isSelected,
+        'border-[#EEF0FF]': !isSelected
+      }"
+    />
+  </div>
+
+  <div class="flex-1 min-w-0 select-none">
+
+  <div class="flex justify-between items-center gap-2 mb-1">
+    <h3 class="text-sm font-semibold truncate"
+      [ngClass]="{
+        'text-[#E6E8FF]': isSelected,
+        'text-[#1A2259]': !isSelected
+      }">
+      {{ conversation.contact_name }}
+    </h3>
+    <span class="text-xs truncate select-none font-medium"
+      [ngClass]="{
+        'text-[#E6E8FF]': isSelected,
+        'text-[#4A5BD1]': !isSelected
+      }">
+      {{ conversation.last_message_time | date : 'shortTime' }}
+    </span>
+  </div>
+
+
+  <div class="flex justify-between items-center mb-2">
+    <p class="text-sm truncate flex-1"
+      [ngClass]="{
+        'text-[#E6E8FF]': isSelected,
+        'text-[#4A5BD1]': !isSelected
+      }">
+      {{ conversation.last_message }}
+    </p>
+    <span *ngIf="conversation.unread_count > 0"
+      class="ml-2 px-1 text-xs rounded-full font-semibold bg-[#4A5BD1] text-white">
+      {{ conversation.unread_count }}
+    </span>
+  </div>
+
+
+  <div class="flex justify-between items-center">
+    <span class="px-2.5 py-1 text-xs rounded-full font-semibold"
+      [ngClass]="{
+        'bg-green-100 text-green-800': conversation.status === 'open' && !isSelected,
+        'bg-green-600 text-white': conversation.status === 'open' && isSelected,
+        'bg-orange-100 text-orange-800': conversation.status === 'pending' && !isSelected,
+        'bg-orange-600 text-white': conversation.status === 'pending' && isSelected,
+        'bg-red-100 text-red-800': conversation.status === 'expired' && !isSelected,
+        'bg-red-600 text-white': conversation.status === 'expired' && isSelected,
+        'bg-[#F5F6FF] text-[#3240B2]': conversation.status === 'solved' && !isSelected,
+        'bg-white text-[#3240B2]': conversation.status === 'solved' && isSelected
+      }">
+      {{ conversation.status | titlecase }}
+    </span>
+    <span class="text-xs font-medium"
+      [ngClass]="{
+        'text-[#E6E8FF]': isSelected,
+        'text-[#4A5BD1]': !isSelected
+      }">
+      {{ conversation.updated_at | date : 'shortDate' }}
+    </span>
+  </div>
+</div>
 </div>

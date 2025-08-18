@@ -90,4 +90,12 @@ export class UserManagementTableComponent implements OnInit, OnChanges {
   teamDeleteDialogHandler(teamName: string): void {
     this.deleteTeamDialog.emit(teamName);
   }
+
+  trackByUserId(index: number, user: User): string | number {
+    return user.id;
+  }
+
+  trackByTeamId(index: number, team: Team): string | number {
+    return team.id;
+  }
 }

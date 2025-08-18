@@ -5,8 +5,6 @@ import { ChatbotTabsComponent } from './components/chatbot-tabs/chatbot-tabs.com
 import { ChatbotSearchComponent } from './components/chatbot-search/chatbot-search.component';
 import { ChatbotTableComponent } from './components/chatbot-table/chatbot-table.component';
 import { ChatbotPaginationComponent } from './components/chatbot-pagination/chatbot-pagination.component';
-import { AuthNavbarComponent } from "../auth/components/auth-navbar/auth-navbar.component";
-import { HomeBaseNavComponent } from "../../shared/components/home-base-nav/home-base-nav.component";
 
 @Component({
   selector: 'app-chatbot',
@@ -17,8 +15,7 @@ import { HomeBaseNavComponent } from "../../shared/components/home-base-nav/home
     ChatbotTabsComponent,
     ChatbotSearchComponent,
     ChatbotTableComponent,
-    ChatbotPaginationComponent,
-    HomeBaseNavComponent
+    ChatbotPaginationComponent
 ],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.css'

@@ -3,7 +3,7 @@
 
 
         <div class="flex items-center justify-between p-4 border-b text-sm">
-            <h2 class="text-xl font-semibold text-gray-800">Edit Contact</h2>
+            <h2 class="text-xl font-semibold text-gray-800">{{contact?.name}}</h2>
             <button (click)="closeDialogHandler()"
                 class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
@@ -32,7 +32,10 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2 p-2 hover:bg-gray-50 rounded-md">
                     <div class="text-gray-500 font-medium">Source</div>
-                    <div class="text-gray-800 text-sm">WhatsApp</div>
+                    <div>
+  <img src="assets/features/w_icon.svg" alt="WhatsApp" class="w-5 h-5">
+</div>
+
                 </div>
             </div>
 

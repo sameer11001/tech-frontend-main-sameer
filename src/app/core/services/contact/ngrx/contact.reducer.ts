@@ -134,7 +134,7 @@ export const contactReducer = createReducer(
     on(getContactTagsSuccess, (state, { data }) => ({
         ...state,
         contactTagsLoading: false,
-        contactTags: data.data?.tags || []
+        contactTags: data.data?.tags?.tags || []
     })),
     on(getContactTagsError, (state, { error }) => ({
         ...state,

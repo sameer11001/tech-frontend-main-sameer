@@ -38,6 +38,7 @@ export class UserDashboardTableComponent {
   searchQuery: string = '';
   deleteTeamDialog: boolean = false;
   teamName: string = '';
+  sidebarOpen: boolean = false;
 
   constructor(private store: Store, private actions$: Actions) { }
 
@@ -90,5 +91,9 @@ export class UserDashboardTableComponent {
       // Refresh teams data after successful deletion
       this.store.dispatch(loadTeams({ query: '', page: 1, limit: 10 }));
     });
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 }

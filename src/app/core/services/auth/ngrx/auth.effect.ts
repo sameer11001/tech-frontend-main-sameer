@@ -9,6 +9,7 @@ import {
   AuthErrorType,
 } from '../../../../core/models/auth.types';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { UserService } from '../../../../core/services/auth/user.service';
 import * as AuthActions from './auth.action';
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +17,7 @@ export class AuthEffects {
   constructor(
     private actions$: Actions,
     private authService: AuthService,
+    private userService: UserService,
     private router: Router,
     private store: Store
   ) {}
@@ -51,7 +53,11 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.loginSuccess),
-        tap(() => this.router.navigate(['/dashboard/team-inbox']))
+        tap(() => {
+          this.router.navigate(['/dashboard/team-inbox']);
+          // Load user data and set it in store after successful login
+          this.userService.loadAndSetUser();
+        })
       ),
     { dispatch: false }
   );

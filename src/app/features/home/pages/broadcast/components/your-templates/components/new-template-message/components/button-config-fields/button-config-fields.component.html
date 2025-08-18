@@ -1,0 +1,69 @@
+<!-- Website Button Fields -->
+<div *ngIf="visitWebsiteButton" class="flex flex-row my-3 px-2 gap-2">
+  <input
+    type="text"
+    placeholder="button text"
+    formControlName="websiteButtonText"
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+  <input
+    type="text"
+    placeholder="https://example.com"
+    formControlName="websiteUrl"
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+</div>
+
+<!-- Phone Button Fields -->
+<div *ngIf="callPhoneButton" class="flex flex-row my-3 px-2 gap-2">
+  <input
+    type="text"
+    placeholder="button text"
+    formControlName="callButtonText"
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+  <input
+    type="text"
+    placeholder="phone number"
+    formControlName="phoneNumber"
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+</div>
+
+<!-- Copy Offer Button Fields -->
+<div *ngIf="copyOfferButton" class="flex flex-row my-3 px-2 gap-2">
+  <input
+    type="text"
+    value="Copy Offer Code"
+    disabled
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+  <input
+    type="text"
+    placeholder="enter coupon code to copy"
+    formControlName="offerCode"
+    class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+</div>
+
+<!-- Quick Reply Button Fields -->
+<div *ngIf="quickReplyButton > 0" class="my-3 px-2">
+  <div class="flex items-center gap-2 mb-2">
+    <div class="flex bg-green-100 border-2 border-green-300 rounded-md p-2">
+      <label class="block text-sm font-medium text-green-700">
+        Quick Reply Buttons ({{ quickReplyButton }}/4)
+      </label>
+    </div>
+  </div>
+
+  <div formArrayName="quickReplyTexts">
+    <div *ngFor="let control of getQuickReplyControls(); let i = index" class="flex flex-row my-3 px-2 gap-2">
+      <input
+        type="text"
+        placeholder="button text"
+        [formControlName]="i"
+        class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+      <button
+        (click)="onDeleteQuickReply(i)"
+        type="button"
+        [disabled]="isAuthenticationCategory"
+        class="flex text-sm text-white bg-red-500 rounded-md p-2 justify-center mx-4 shadow-md hover:bg-red-600 transition-all duration-200">
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div>
+  <label class="block text-sm font-medium text-gray-700 mb-2">
+    Broadcast title
+  </label>
+  <p class="text-sm text-gray-500 mb-2">
+    Choose a title for your broadcast message.
+  </p>
+
+  <div class="flex flex-wrap gap-4">
+    <label *ngFor="let option of broadcastOptions" class="flex items-center space-x-2 text-gray-700">
+      <input
+        type="radio"
+        formControlName="broadcastTitle"
+        [value]="option"
+        (change)="onBroadcastTitleChange($event)"
+        class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" />
+      <span>{{ option }}</span>
+    </label>
+  </div>
+
+  <div [ngSwitch]="form.get('broadcastTitle')?.value">
+    <!-- Text Option -->
+    <div *ngSwitchCase="'Text'" class="mt-4">
+      <input
+        id="text"
+        type="text"
+        formControlName="text"
+        class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+        placeholder="Enter text" />
+    </div>
+
+    <!-- Image Option -->
+    <div *ngSwitchCase="'Image'">
+      <app-media-type-upload
+        mediaType="image"
+        [form]="form"
+        [selectedMedia]="selectedMedia"
+        [mediaPreviewUrls]="mediaPreviewUrls"
+        [previewMediaType]="previewMediaType"
+        (mediaSelected)="onMediaSelected($event)"
+      ></app-media-type-upload>
+    </div>
+
+    <!-- Video Option -->
+    <div *ngSwitchCase="'Video'">
+      <app-media-type-upload
+        mediaType="video"
+        [form]="form"
+        [selectedMedia]="selectedMedia"
+        [mediaPreviewUrls]="mediaPreviewUrls"
+        [previewMediaType]="previewMediaType"
+        (mediaSelected)="onMediaSelected($event)"
+      ></app-media-type-upload>
+    </div>
+
+    <!-- Document Option -->
+    <div *ngSwitchCase="'Document'">
+      <app-media-type-upload
+        mediaType="document"
+        [form]="form"
+        [selectedMedia]="selectedMedia"
+        [mediaPreviewUrls]="mediaPreviewUrls"
+        [previewMediaType]="previewMediaType"
+        (mediaSelected)="onMediaSelected($event)"
+      ></app-media-type-upload>
+    </div>
+  </div>
+</div>

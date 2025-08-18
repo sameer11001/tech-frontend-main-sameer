@@ -1,0 +1,34 @@
+<div class="border border-[#EEF0FF] rounded-lg cursor-pointer hover:bg-[#F5F6FF] bg-white transition-colors shadow-md" (click)="openAttributesDialog()">
+      <div class="flex items-center justify-between p-3">
+        <div class="flex items-center gap-2">
+          <!-- icon -->
+          <span class="text-sm font-semibold text-black">Contact Attributes</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-[#4A5BD1]">Click to view</span>
+        </div>
+      </div>
+
+      <div class="px-4 pb-4">
+        <div *ngIf="loading$ | async">
+          <div class="mb-3" *ngFor="let item of [1,2,3]">
+            <app-skeleton-loader type="paragraph" width="w-16" height="h-3" class="mb-1"></app-skeleton-loader>
+            <app-skeleton-loader type="paragraph" width="w-32" height="h-4"></app-skeleton-loader>
+          </div>
+        </div>
+
+        <div *ngIf="!(loading$ | async)">
+          <ng-container *ngIf="attributes$ | async as attributes">
+            <div *ngIf="attributes.length === 0" class="text-sm text-[#4A5BD1]">No attributes found</div>
+            <div *ngIf="attributes.length > 0" class="space-y-2">
+              <div *ngFor="let attribute of attributes.slice(0, 2)" class="mb-2">
+                <div class="text-xs font-semibold text-[#3240B2] mb-1">{{ attribute.name }}</div>
+              </div>
+              <div *ngIf="attributes.length > 2" class="text-xs text-[#3240B2] font-semibold">
+                +{{ attributes.length - 2 }} more attributes
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>

@@ -1,36 +1,43 @@
-<div class="flex flex-row">
-<aside class="w-64 bg-white border-r border-gray-200 p-4">
-  <nav>
-    <ul class="space-y-4">
-      <li>
-        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
-           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
-          Template Messages
-        </a>
-      </li>
-      <li>
-        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
-           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
-          Template Library
-        </a>
-      </li>
-      <li>
-        <a routerLink="your-templates" routerLinkActive="font-medium text-blue-600" 
-           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
-          Your Templates
-        </a>
-      </li>
-      <li>
-        <a routerLink="scheduled-broadcasts" routerLinkActive="font-medium text-blue-600" 
-           class="block px-2 py-1 text-gray-700 hover:text-blue-600">
-          Scheduled Broadcasts
-        </a>
-      </li>
-    </ul>
-  </nav>
-</aside>
+<div class="flex flex-row min-h-screen bg-[#F5F6FF] border border-[#E6E8FF] shadow-md">
+  <aside class="w-80 bg-[#F5F6FF] border border-[#E6E8FF] shadow-md flex flex-col">
+    <!-- Header: Broadcast (placed above the menu) -->
+    <div class="h-24 px-6 border-b bg-[#F5F6FF] border border-[#E6E8FF] shadow-md flex flex-col justify-center">
+      <h2 class="text-2xl font-bold text-black">Broadcast</h2>
+      <p class="text-sm text-black">Manage your scheduled broadcasts</p>
+    </div>
+    <nav class="mt-4">
+      <ul class="space-y-3 ">
+        <li>
+          <a routerLink="your-templates" 
+             routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out">
+            Template Messages
+          </a>
+        </li>
+        <!-- <li>
+          <a routerLink="template-library" 
+             routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out">
+            Template Library
+          </a>
+        </li> -->
+        
+        <li>
+          <a routerLink="scheduled-broadcasts" 
+             routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out">
+            Scheduled Broadcasts
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
 
-<main class="flex-1 p-6">
-  <router-outlet></router-outlet>
-</main>
+  <main class="flex-1 p-0 bg-gray-50">
+    
+    <router-outlet></router-outlet>
+  </main>
 </div>

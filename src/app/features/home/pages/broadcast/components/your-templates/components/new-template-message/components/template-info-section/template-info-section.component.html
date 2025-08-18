@@ -1,0 +1,70 @@
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <!-- Template Name -->
+  <div>
+    <label
+      for="templateName"
+      class="block text-sm font-medium text-gray-700 mb-1"
+    >
+      Template Name
+    </label>
+    <input
+      id="templateName"
+      type="text"
+      [formControl]="templateNameControl"
+      class="block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+      placeholder="Enter template name"
+    />
+    <div
+      *ngIf="
+        form.get('templateName')?.invalid && form.get('templateName')?.touched
+      "
+      class="text-red-600 text-sm mt-1"
+    >
+      Template Name is required.
+    </div>
+  </div>
+
+  <!-- Category -->
+  <div>
+    <label for="category" class="block text-sm font-medium text-gray-700 mb-1">
+      Category
+    </label>
+    <select
+      id="category"
+      formControlName="category"
+      class="block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+    >
+      <option value="" disabled>Select a category</option>
+      <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+    </select>
+    <div
+      *ngIf="form.get('category')?.invalid && form.get('category')?.touched"
+      class="text-red-600 text-sm mt-1"
+    >
+      Category is required.
+    </div>
+  </div>
+
+  <!-- Language -->
+  <div>
+    <label for="language" class="block text-sm font-medium text-gray-700 mb-1">
+      Language
+    </label>
+    <select
+      id="language"
+      formControlName="language"
+      class="block w-full rounded-md border border-gray-300 px-3 py-2 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+    >
+      <option value="" disabled>Select a language</option>
+      <option *ngFor="let lang of languages" [value]="lang[1]">
+        {{ lang[0] }}
+      </option>
+    </select>
+    <div
+      *ngIf="form.get('language')?.invalid && form.get('language')?.touched"
+      class="text-red-600 text-sm mt-1"
+    >
+      Language is required.
+    </div>
+  </div>
+</div>

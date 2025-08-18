@@ -1,98 +1,132 @@
-<div class="bg-white p-6 rounded shadow-sm">
-  <h2 class="text-xl font-semibold mb-6">Personal Profile</h2>
+<div class="bg-white p-6 rounded-xl shadow-md max-w-2xl mx-auto">
+  <h2 class="text-xl font-bold text-gray-800 mb-4 cursor-default select-none">Personal Profile</h2>
 
   <!-- Form -->
   <form [formGroup]="profileForm" (ngSubmit)="onSave()">
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- First Name -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">First Name</label>
+      <div class="flex flex-col space-y-1">
+        <label for="firstName" class="font-medium text-gray-700 cursor-text">First Name</label>
         <input
+          id="firstName"
           type="text"
           formControlName="firstName"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
       </div>
 
       <!-- Last Name -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Last Name</label>
+      <div class="flex flex-col space-y-1">
+        <label for="lastName" class="font-medium text-gray-700 cursor-text">Last Name</label>
         <input
+          id="lastName"
           type="text"
           formControlName="lastName"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
       </div>
+      
       <!-- Phone Number -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Phone Number</label>
+      <div class="flex flex-col space-y-1">
+        <label for="phoneNumber" class="font-medium text-gray-700 cursor-text">Phone Number</label>
         <input
+          id="phoneNumber"
           type="text"
           formControlName="phoneNumber"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
       </div>
+      
       <!-- Email -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Email</label>
+      <div class="flex flex-col space-y-1">
+        <label for="email" class="font-medium text-gray-700 cursor-text">Email</label>
         <input
+          id="email"
           type="email"
           formControlName="email"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
         />
       </div>
-      <!-- new Password -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">New Password</label>
-        <input
-          type="password"
-          formControlName="newPassword"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      
+      <!-- Password Section -->
+      <div class="md:col-span-2">
+        <h3 class="text-md font-semibold text-gray-800 mb-2 mt-2  cursor-default select-none">Password Settings</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg">
+          <!-- New Password -->
+          <div class="flex flex-col space-y-1">
+            <label for="newPassword" class="font-medium text-gray-700 cursor-text">New Password</label>
+            <input
+              id="newPassword"
+              type="password"
+              formControlName="newPassword"
+              class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+          
+          <!-- Confirm Password -->
+          <div class="flex flex-col space-y-1">
+            <label for="confirmPassword" class="font-medium text-gray-700 cursor-text">Confirm Password <span class="text-red-500">*</span></label>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            />
+          </div>
+        </div>
       </div>
-      <!-- Confirm Password -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Confirm Password *</label>
-        <input
-          type="password"
-          formControlName="confirmPassword"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-      <!-- Roles -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Roles</label>
-        <input
-          type="text"
-          formControlName="roles"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-      <!-- Teams -->
-      <div class="flex flex-col">
-        <label class="font-medium mb-1">Teams</label>
-        <input
-          type="text"
-          formControlName="teams"
-          class="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+      
+      <!-- Read-only Section -->
+      <div class="md:col-span-2">
+        <h3 class="text-md font-semibold text-gray-800 mb-2 mt-2 cursor-default select-none">Account Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg">
+          <!-- Roles -->
+          <div class="flex flex-col space-y-1">
+            <label class="font-medium text-gray-700">Roles</label>
+            <input
+              [disabled]="true"
+              type="text"
+              formControlName="roles"
+              class="border border-gray-200 rounded-lg px-3 py-2 bg-gray-100 text-gray-600"
+            />
+          </div>
+          
+          <!-- Teams -->
+          <div class="flex flex-col space-y-1">
+            <label class="font-medium text-gray-700">Teams</label>
+            <input
+              [disabled]="true"
+              type="text"
+              formControlName="teams"
+              class="border border-gray-200 rounded-lg px-3 py-2 bg-gray-100 text-gray-600"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Actions -->
-    <div class="mt-6 flex justify-end space-x-4">
+    <div class="mt-6 pt-4 flex justify-end space-x-3 border-t border-gray-100">
       <button
         type="button"
-        class="px-4 py-2 border border-gray-400 rounded hover:bg-gray-100"
+        class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium transition-colors"
+        [disabled]="isSaving"
       >
         Cancel
       </button>
       <button
         type="submit"
-        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed font-medium transition-colors"
+        [disabled]="isSaving"
       >
-        Save
+        <span *ngIf="!isSaving">Save Changes</span>
+        <span *ngIf="isSaving" class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Saving...
+        </span>
       </button>
     </div>
   </form>

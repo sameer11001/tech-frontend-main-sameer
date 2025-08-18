@@ -1,61 +1,71 @@
-<div class="flex min-h-screen bg-gray-50">
-  <!-- Left Sidebar -->
-  <div class="w-64 bg-white border-r border-gray-200 p-4">
-    <!-- Menu List -->
-    <ul class="space-y-4">
-
-      <li>
-        <a
-          routerLink="business-profile"
-          routerLinkActive="text-blue-600 font-bold"
-          class="block px-2 py-1 text-gray-700 hover:text-blue-600"
-        >
-          Business Profile
-        </a>
-      </li>
-      <!-- <li>
-        <a
-          routerLink="personal-profile"
-          routerLinkActive="text-blue-600 font-bold"
-          class="block px-2 py-1 text-gray-700 hover:text-blue-600"
-        >
-          Personal Profile
-        </a>
-      </li> -->
-      <li>
-        <a
-          routerLink="general"
-          routerLinkActive="text-blue-600 font-bold"
-          class="block px-2 py-1 text-gray-700 hover:text-blue-600"
-        >
-          General
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="tags-and-attributes"
-          routerLinkActive="text-blue-600 font-bold"
-          class="block px-2 py-1 text-gray-700 hover:text-blue-600"
-        >
-          Tags &amp; Attributes
-        </a>
-      </li>
-      <li>
-        <a
-          routerLink="import-export-chats"
-          routerLinkActive="text-blue-600 font-bold"
-          class="block px-2 py-1 text-gray-700 hover:text-blue-600"
-        >
-          Import/Export Chats
-        </a>
-      </li>
-    </ul>
+<div class="flex flex-row min-h-screen bg-[#F5F6FF] border border-[#E6E8FF] shadow-md">
+  <aside class="w-80 bg-[#F5F6FF] border border-[#E6E8FF] shadow-md flex flex-col">
+    <!-- Header: Profile Settings (placed above the menu) -->
+    <div class="h-24 px-6 border-b bg-[#F5F6FF] border border-[#E6E8FF] shadow-md flex flex-col justify-center">
+      <h2 class="text-2xl font-bold text-black">Profile Settings</h2>
+      <p class="text-sm text-black">Manage your profile and preferences</p>
+    </div>
+    
+    <nav class="mt-4">
+      <ul class="space-y-3">
+        <li>
+          <a
+            routerLink="business-profile"
+            routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out"
+          >
+            Business Profile
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="personal-profile"
+            routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out"
+          >
+            Personal Profile
+          </a>
+        </li>
+        <!-- <li>
+          <a
+            routerLink="general"
+            routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out"
+          >
+            General
+          </a>
+        </li> -->
+        <li>
+          <a
+            routerLink="tags-and-attributes"
+            routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out"
+          >
+            Tags &amp; Attributes
+          </a>
+        </li>
+        <!-- <li>
+          <a
+            routerLink="import-export-chats"
+            routerLinkActive="font-semibold text-white bg-[#4A5BD1] shadow-md"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="block px-4 py-3 text-black hover:text-white hover:bg-[#4A5BD1] rounded-lg transition-all duration-200 ease-in-out"
+          >
+            Import/Export Chats
+          </a>
+        </li> -->
+      </ul>
+    </nav>
 
     <!-- Logout Button -->
-    <div class="mt-8 pt-4 border-t border-gray-200">
+    <div class="mt-40 p-6 ">
       <button
         (click)="onLogout()"
-        class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+        class="w-full flex items-center justify-center px-4 py-3 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200 shadow-md"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -63,10 +73,10 @@
         Logout
       </button>
     </div>
-  </div>
+  </aside>
 
   <!-- Right Content -->
-  <div class="flex-1">
+  <main class="flex-1 p-0 bg-gray-50">
     <router-outlet></router-outlet>
-  </div>
+  </main>
 </div>

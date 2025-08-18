@@ -12,7 +12,7 @@ export class TagsService {
    
   getTags(page: number, limit: number, searchTerm?: string): Observable<any> {
 
-    let params = new HttpParams().set('page', page).set('limit', limit).set('search', searchTerm || '');
+    let params = new HttpParams().set('page', page).set('limit', limit).set('query', searchTerm || '');
     return this.apiService.get(this.url, { params });
   }
 

@@ -1,0 +1,58 @@
+  <div
+      *ngIf="visible && selectedNode"
+      class="absolute top-12 left-0 flex flex-col gap-2 z-20 bg-white rounded-lg shadow-lg p-2 min-w-48"
+      [style.left.px]="selectedNode.position.x"
+      [style.top.px]="selectedNode.position.y + 130">
+
+      <div
+        *ngFor="let option of options"
+        class="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+        (click)="selectOption.emit(option)">
+        <div
+          class="w-8 h-8 flex items-center justify-center rounded-full text-white"
+          [ngClass]="option.bgColor">
+          <span class="material-icons text-sm">{{ option.icon }}</span>
+        </div>
+        <span class="font-medium text-gray-700">{{ option.title }}</span>
+      </div>
+
+      <hr class="my-1">
+
+      <div
+        class="flex items-center gap-3 p-3 rounded-lg cursor-pointer hover:bg-red-50 transition-colors"
+        (click)="deleteNode.emit(selectedNode)">
+        <div class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white">
+          <span class="material-icons text-sm">delete</span>
+        </div>
+        <span class="font-medium text-red-600">Delete</span>
+      </div>
+    </div>
+
+    <!-- Center menu for empty canvas -->
+    <div
+      *ngIf="visible && !selectedNode && showCenterMenu"
+      class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+
+      <button
+        (click)="toggleMenu.emit()"
+        class="w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition-colors">
+        <span class="material-icons">{{ visible ? 'close' : 'add' }}</span>
+      </button>
+
+      <div
+        *ngIf="visible"
+        class="absolute top-24 left-1/2 -translate-x-1/2 flex flex-col gap-3">
+        <div
+          *ngFor="let option of options"
+          class="flex items-center gap-3 p-4 rounded-lg shadow-lg text-white w-48 cursor-pointer hover:scale-105 transition-transform"
+          [ngClass]="option.bgColor"
+          (click)="selectOption.emit(option)">
+          <div
+            class="w-10 h-10 flex items-center justify-center rounded-full"
+            [ngClass]="option.iconBg">
+            <span class="material-icons">{{ option.icon }}</span>
+          </div>
+          <span class="font-medium">{{ option.title }}</span>
+        </div>
+      </div>
+    </div>

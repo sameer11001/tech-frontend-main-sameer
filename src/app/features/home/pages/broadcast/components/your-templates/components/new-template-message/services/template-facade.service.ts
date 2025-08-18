@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { TemplateFormService, TemplateFormData } from './template-form.service';
 import { ButtonManagerService, ButtonState } from './button-manager.service';
 import { MediaManagerService } from './media-manager.service';
@@ -226,10 +225,10 @@ export class TemplateFacadeService {
         .replace(/_/g, ' (') + (key.includes('_') ? ')' : '')
         .replace(/([A-Z])/g, ' $1')
         .trim();
-      
+
       return [displayName, value] as [string, string];
     });
-    
+
     return languages.sort((a, b) => a[0].localeCompare(b[0]));
   }
 
@@ -260,16 +259,16 @@ export class TemplateFacadeService {
   applyButtonState(buttonState: any): void {
     if (buttonState.visitWebsiteButton) {
       this.buttonManager.updateState({ visitWebsiteButton: true });
-      this.templateFormService.getForm().patchValue({ 
-        websiteButtonText: buttonState.websiteButtonText, 
-        websiteUrl: buttonState.websiteUrl 
+      this.templateFormService.getForm().patchValue({
+        websiteButtonText: buttonState.websiteButtonText,
+        websiteUrl: buttonState.websiteUrl
       });
     }
     if (buttonState.callPhoneButton) {
       this.buttonManager.updateState({ callPhoneButton: true });
-      this.templateFormService.getForm().patchValue({ 
-        callButtonText: buttonState.callButtonText, 
-        phoneNumber: buttonState.phoneNumber 
+      this.templateFormService.getForm().patchValue({
+        callButtonText: buttonState.callButtonText,
+        phoneNumber: buttonState.phoneNumber
       });
     }
     if (buttonState.copyOfferButton) {
@@ -287,4 +286,4 @@ export class TemplateFacadeService {
       });
     }
   }
-} 
+}

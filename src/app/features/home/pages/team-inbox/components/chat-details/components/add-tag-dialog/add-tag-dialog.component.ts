@@ -49,7 +49,7 @@ export class AddTagDialogComponent {
         next: (response) => {
           this.loading = false;
           // Refresh the tags list
-          this.store.dispatch(getContactTags({ contactId: this.data.contactId }));
+          this.store.dispatch(getContactTags({ contact_id: this.data.contactId }));
           this.dialogRef.close({ success: true, data: response });
         },
         error: (error) => {

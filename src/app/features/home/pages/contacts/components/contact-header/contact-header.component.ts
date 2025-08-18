@@ -12,8 +12,10 @@ export class ContactHeaderComponent {
   addContactDialog: boolean = false
   
   @Output() searchChanged = new EventEmitter<string>();
+  @Output() sortChanged = new EventEmitter<string>();
 
   private searchSubject$ = new Subject<string>();
+  private sortSubject$ = new Subject<string>();
   private destroy$ = new Subject<void>();
 
   constructor() {
@@ -23,6 +25,7 @@ export class ContactHeaderComponent {
     ).subscribe(
       value => this.searchChanged.emit(value)
     )
+    
   }
   onSearchChange(searchTerm: EventTarget | null) {
     if (!searchTerm) return;
@@ -32,6 +35,9 @@ export class ContactHeaderComponent {
 
   addContactDialogHandler() {
     this.addContactDialog = !this.addContactDialog;
+  }
+  onSortedByChange(value: string) {
+    this.sortChanged.emit(value);  
   }
 
 }

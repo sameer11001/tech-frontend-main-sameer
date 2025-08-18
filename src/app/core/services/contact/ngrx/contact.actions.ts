@@ -64,7 +64,7 @@ export const getContactAttributesError = createAction(
 // Contact Tags Actions
 export const getContactTags = createAction(
     '[Contact] Get Contact Tags',
-    props<{ contactId: string }>()
+    props<{ contact_id: string }>()
 );
 
 export const getContactTagsSuccess = createAction(

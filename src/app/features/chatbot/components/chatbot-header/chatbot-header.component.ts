@@ -13,6 +13,6 @@ export class ChatbotHeaderComponent {
   constructor(private router: Router) {}
 
   addChatbot() {
-    this.router.navigate(['/chatbot/builder']);
+    this.router.navigate(['/dashboard/chatbot/builder']);
   }
-} 
+}

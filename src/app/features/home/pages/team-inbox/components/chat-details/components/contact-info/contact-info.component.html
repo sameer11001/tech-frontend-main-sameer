@@ -1,0 +1,19 @@
+ <div class="border border-[#EEF0FF] rounded-lg bg-white shadow-md select-none">
+      <div class="flex items-center gap-2 p-3 bg-[#F5F6FF] rounded-t-lg">
+        <!-- SVG icon omitted for brevity; keep same as original if you like -->
+        <span class="text-sm font-semibold text-black">Contact Info</span>
+      </div>
+
+      <div class="px-4 pb-4 space-y-4">
+        <div>
+          <div class="text-xs text-[#4A5BD1]  font-medium mb-2 pt-4">Phone Number</div>
+          <div class="flex items-center gap-2">
+            <span class="text-black">{{conversation?.country_code_phone_number}} {{conversation?.contact_phone_number}}</span>
+          </div>
+        </div>
+        <!-- <div>
+          <div class="text-xs text-[#4A5BD1] mb-1 font-medium">User Name</div>
+          <div class="text-[#1A2259]">{{conversation?.contact_name}}</div>
+        </div> -->
+      </div>
+    </div>

@@ -5,7 +5,7 @@ import { Conversation, Meta } from '../../../models/conversation.model';
 
 export const loadConversations = createAction(
   '[Conversations] Load Conversations',
-  props<{ page: number; size: number }>()
+  props<{ page: number; size: number; search_terms?: string | null }>()
 );
 
 export const updateConversationExpiration = createAction(

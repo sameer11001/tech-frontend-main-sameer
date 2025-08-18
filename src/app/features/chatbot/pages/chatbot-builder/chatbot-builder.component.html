@@ -1,33 +1,86 @@
-<div class="h-screen flex flex-col bg-gray-50">
-  <!-- Header -->
-  <app-chatbot-builder-header
-    (save)="onSave()"
-    (testChatbot)="onTestChatbot()">
-  </app-chatbot-builder-header>
-  
-  <!-- Main Content -->
-  <div class="flex-1 flex overflow-hidden" style="min-height: 600px;">
-    <!-- Left Sidebar -->
-    <app-chatbot-builder-sidebar
-      (dragStart)="onSidebarDragStart($event)">
-    </app-chatbot-builder-sidebar>
-    
-    <!-- Canvas Area -->
-    <div class="flex-1 bg-yellow-200 relative">
-      <!-- Debug info for main container -->
-      <div class="absolute top-2 right-2 bg-blue-500 text-white p-1 text-xs rounded z-50">
-        Main Canvas Container - FlowBlocks: {{flowBlocks.length}}
-      </div>
-      
-      <app-chatbot-builder-canvas
-        [flowBlocks]="flowBlocks"
+<div class="flex h-screen">
+  <app-sidebar></app-sidebar>
+
+  <main class="flex-1 bg-gray-100 p-6 overflow-auto relative">
+    <!-- Zoom Controls -->
+    <app-zoom-controls
+      [config]="zoomConfig"
+      (zoomChange)="onZoomChange($event)">
+    </app-zoom-controls>
+
+    <!-- Zoomable Grid with hardware acceleration -->
+    <div
+      #gridContainer
+      class="transition-transform origin-top-left min-h-[1000px] p-6 relative smooth-grid"
+      [style.transform]="getTransformStyle()"
+      (click)="hideConnectionButtons($event)">
+
+      <!-- Connection Lines SVG Overlay -->
+      <app-connection-layer
         [connections]="connections"
-        (blockAdded)="onBlockAdded($event)"
-        (blockUpdated)="onBlockUpdated($event)"
-        (blockDeleted)="onBlockDeleted($event)"
-        (connectionCreated)="onConnectionCreated($event)"
-        (connectionsUpdated)="onConnectionsUpdated($event)">
-      </app-chatbot-builder-canvas>
+        [previewLine]="connectionPreviewLine"
+        [deleteButton]="connectionDeleteButton"
+        (connectionClick)="onConnectionClick($event.connection, $event.event)"
+        (deleteConnection)="onConnectionDelete()">
+      </app-connection-layer>
+
+      <!-- Render nodes with smooth positioning -->
+      <ng-container *ngFor="let node of nodes; trackBy: trackByNodeId">
+        <div
+          class="node-container smooth-drag"
+          [style.left.px]="node.position.x"
+          [style.top.px]="node.position.y"
+          [attr.data-node-id]="node.id"
+          [class.dragging]="isDragging && draggedNodeId === node.id">
+
+          <!-- Message Node -->
+          <app-message-node
+            *ngIf="node.type === 'message'"
+            [node]="node"
+            [isDragging]="isDragging && draggedNodeId === node.id"
+            [zoomLevel]="zoomConfig.level"
+            (onConnectionStart)="onConnectionStart(node, $event)"
+            (onAddNode)="openAddMenu(node)"
+            (onDelete)="onNodeDelete(node)"
+            (onContentChange)="onNodeContentChange()">
+          </app-message-node>
+
+          <!-- Question Node -->
+          <app-question-node
+            *ngIf="node.type === 'question'"
+            [node]="node"
+            [isDragging]="isDragging && draggedNodeId === node.id"
+            [zoomLevel]="zoomConfig.level"
+            (onConnectionStart)="onConnectionStart(node, $event)"
+            (onAddNode)="openAddMenu(node)"
+            (onDelete)="onNodeDelete(node)"
+            (onContentChange)="onNodeContentChange()">
+          </app-question-node>
+
+          <!-- Interactive Buttons Node -->
+          <app-interactive-buttons-node
+            *ngIf="node.type === 'interactive_buttons'"
+            [node]="node"
+            [isDragging]="isDragging && draggedNodeId === node.id"
+            [zoomLevel]="zoomConfig.level"
+            (onConnectionStart)="onConnectionStart(node, $event)"
+            (onAddNode)="openAddMenu(node)"
+            (onDelete)="onNodeDelete(node)"
+            (onContentChange)="onNodeContentChange()">
+          </app-interactive-buttons-node>
+        </div>
+      </ng-container>
+
+      <!-- Add Node Menu -->
+      <app-add-node-menu
+        [visible]="showAddMenu"
+        [selectedNode]="selectedNode"
+        [options]="nodeOptions"
+        [showCenterMenu]="nodes.length === 0"
+        (selectOption)="onAddNodeOption($event)"
+        (deleteNode)="onNodeDelete($event)"
+        (toggleMenu)="showAddMenu = !showAddMenu">
+      </app-add-node-menu>
     </div>
-  </div>
-</div> 
+  </main>
+</div>
